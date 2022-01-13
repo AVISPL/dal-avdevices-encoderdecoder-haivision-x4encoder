@@ -50,7 +50,7 @@ jobs:
       - name: PMD check
         run: mvn pmd:check
       - id: getfilename
-        run: echo "::set-output name=file::$(ls target/symphony-dal-avdevices-audionetworkinterface-qsc-undnemo-${{ needs.versiongenerate.outputs.version }}.jar)"
+        run: echo "::set-output name=file::$(ls target/symphony-dal-avdevices-encoderdecoder-haivision-x4encoder-${{ needs.versiongenerate.outputs.version }}.jar)"
       - uses: actions/upload-artifact@v1
         with:
           name: QSCUndnemo
