@@ -51,5 +51,5 @@ jobs:
         run: echo "::set-output name=file::$(ls target/symphony-dal-avdevices-encoderdecoder-haivision-x4encoder-${{ needs.versiongenerate.outputs.version }}.jar)"
       - uses: actions/upload-artifact@v1
         with:
-          name: QSCUndnemo
+          name: HaivisionX4EncoderCommunicator
           path: ${{ steps.getfilename.outputs.file }}
