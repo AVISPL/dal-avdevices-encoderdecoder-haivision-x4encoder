@@ -53,6 +53,7 @@ public enum HaivisionMonitoringMetric {
 	public static final String ENCODED_FRAMES_VIDEO = "EncodedFrames";
 	public static final String ENCODED_BYTES_VIDEO = "EncodedBytes";
 	public static final String ENCODED_FRAMERATE = "EncodedFrameRate";
+	public static final String DROPPED_FRAMERATE = "DroppedFrames";
 	public static final String ENCODER_RESETS = "EncoderResets";
 	public static final String ENCODED_BITRATE_VIDEO = "EncodedBitRate";
 	public static final String ENCODER_LOAD = "EncoderLoad";

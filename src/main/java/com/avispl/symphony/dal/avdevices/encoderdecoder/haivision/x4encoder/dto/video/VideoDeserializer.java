@@ -73,9 +73,10 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoStatistic.setEncoderLoad(checkNoneInformation(stateNode, "encoderLoad"));
 			videoStatistic.setEncodedBitRate(checkNoneInformation(stateNode, "encodedBitRate"));
 			videoStatistic.setEncoderResets(checkNoneInformation(stateNode, "encoderResets"));
-			videoStatistic.setEncodedFrameRate(checkNoneInformation(stateNode, "droppedFrames"));
+			videoStatistic.setEncodedFrameRate(checkNoneInformation(stateNode, "encodedFrameRate"));
 			videoStatistic.setEncodedBytes(checkNoneInformation(stateNode, "encodedBytes"));
-			videoStatistic.setEncodedFrames(checkNoneInformation(stateNode, "droppedFrames"));
+			videoStatistic.setEncodedFrames(checkNoneInformation(stateNode, "encodedFrames"));
+			videoStatistic.setDroppedFrames(checkNoneInformation(stateNode, "droppedFrames"));
 			videoStatistic.setAspectRatio(checkNoneInformation(stateNode, "aspectRatio"));
 			videoStatistic.setResolutionIsProgressive(checkNoneInformation(stateNode, "resolutionIsProgressive"));
 			videoStatistic.setResolutionIsInterlaced(checkNoneInformation(stateNode, "resolutionIsInterlaced"));
@@ -86,6 +87,7 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoStatistic.setResolution(checkNoneInformation(stateNode, "resolution"));
 			videoStatistic.setInputFormatIsProgressive(checkNoneInformation(stateNode, "inputFormatIsProgressive"));
 			videoStatistic.setInputFormatIsInterlaced(checkNoneInformation(stateNode, "inputFormatIsInterlaced"));
+			videoStatistic.setInputColorPrimaries(checkNoneInformation(stateNode, "inputColorPrimaries"));
 			videoStatistic.setInputFormatFrameRate(checkNoneInformation(stateNode, "inputFormatFrameRate"));
 			videoStatistic.setInputFormatHeight(checkNoneInformation(stateNode, "inputFormatHeight"));
 			videoStatistic.setInputFormatWidth(checkNoneInformation(stateNode, "inputFormatWidth"));
@@ -113,6 +115,7 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 	 * @return String is None or value
 	 */
 	private String checkNoneInformation(JsonNode stateNode, String name) {
+
 		return stateNode.get(name) == null ? HaivisionConstant.NONE : stateNode.get(name).asText();
 	}
 }

@@ -88,25 +88,45 @@ public class OutputDeserializer extends StdDeserializer<OutputResponse> {
 			outputStatistic.setSentPackets(checkNoneInformation(stateNode, "sentPackets"));
 			outputStatistic.setSentBytes(checkNoneInformation(stateNode, "sentBytes"));
 			outputStatistic.setBitrate(checkNoneInformation(stateNode, "bitrate"));
-			outputStatistic.setReconnections(checkNoneInformation(stateNode, "reconnections"));
-			outputStatistic.setResentPackets(checkNoneInformation(stateNode, "resentPackets"));
-			outputStatistic.setResentBytes(checkNoneInformation(stateNode, "resentBytes"));
-			outputStatistic.setDroppedPackets(checkNoneInformation(stateNode, "droppedPackets"));
-			outputStatistic.setDroppedBytes(checkNoneInformation(stateNode, "droppedBytes"));
-			outputStatistic.setMss(checkNoneInformation(stateNode, "mss"));
-			outputStatistic.setMaxBandwidth(checkNoneInformation(stateNode, "maxBandwidth"));
-			outputStatistic.setRemotePort(checkNoneInformation(stateNode, "remotePort"));
-			outputStatistic.setSourceAddress(checkNoneInformation(stateNode, "sourceAddress"));
-			outputStatistic.setRemoteAddress(checkNoneInformation(stateNode, "remoteAddress"));
-			outputStatistic.setPathMaxBandwidth(checkNoneInformation(stateNode, "pathMaxBandwidth"));
-			outputStatistic.setLostPackets(checkNoneInformation(stateNode, "lostPackets"));
-			outputStatistic.setRecvACK(checkNoneInformation(stateNode, "recvACK"));
-			outputStatistic.setRecvNAK(checkNoneInformation(stateNode, "recvNAK"));
-			outputStatistic.setRtt(checkNoneInformation(stateNode, "rtt"));
-			outputStatistic.setLatency(checkNoneInformation(stateNode, "latency"));
-			outputStatistic.setBuffer(checkNoneInformation(stateNode, "buffer"));
 			outputStatistic.setOccurred(checkNoneInformation(stateNode, "occurred"));
-
+			JsonNode srt = stateNode.get("srt");
+			if (srt != null) {
+				outputStatistic.setReconnections(checkNoneInformation(srt, "reconnections"));
+				outputStatistic.setResentPackets(checkNoneInformation(srt, "resentPackets"));
+				outputStatistic.setResentBytes(checkNoneInformation(srt, "resentBytes"));
+				outputStatistic.setDroppedPackets(checkNoneInformation(srt, "droppedPackets"));
+				outputStatistic.setDroppedBytes(checkNoneInformation(srt, "droppedBytes"));
+				outputStatistic.setMss(checkNoneInformation(srt, "mss"));
+				outputStatistic.setMaxBandwidth(checkNoneInformation(srt, "maxBandwidth"));
+				outputStatistic.setRemotePort(checkNoneInformation(srt, "remotePort"));
+				outputStatistic.setSourceAddress(checkNoneInformation(srt, "sourceAddress"));
+				outputStatistic.setRemoteAddress(checkNoneInformation(srt, "remoteAddress"));
+				outputStatistic.setPathMaxBandwidth(checkNoneInformation(srt, "pathMaxBandwidth"));
+				outputStatistic.setLostPackets(checkNoneInformation(srt, "lostPackets"));
+				outputStatistic.setRecvACK(checkNoneInformation(srt, "recvACK"));
+				outputStatistic.setRecvNAK(checkNoneInformation(srt, "recvNAK"));
+				outputStatistic.setRtt(checkNoneInformation(srt, "rtt"));
+				outputStatistic.setLatency(checkNoneInformation(srt, "latency"));
+				outputStatistic.setBuffer(checkNoneInformation(srt, "buffer"));
+			} else {
+				outputStatistic.setReconnections(HaivisionConstant.NONE);
+				outputStatistic.setResentPackets(HaivisionConstant.NONE);
+				outputStatistic.setResentBytes(HaivisionConstant.NONE);
+				outputStatistic.setDroppedPackets(HaivisionConstant.NONE);
+				outputStatistic.setDroppedBytes(HaivisionConstant.NONE);
+				outputStatistic.setMss(HaivisionConstant.NONE);
+				outputStatistic.setMaxBandwidth(HaivisionConstant.NONE);
+				outputStatistic.setRemotePort(HaivisionConstant.NONE);
+				outputStatistic.setSourceAddress(HaivisionConstant.NONE);
+				outputStatistic.setRemoteAddress(HaivisionConstant.NONE);
+				outputStatistic.setPathMaxBandwidth(HaivisionConstant.NONE);
+				outputStatistic.setLostPackets(HaivisionConstant.NONE);
+				outputStatistic.setRecvACK(HaivisionConstant.NONE);
+				outputStatistic.setRecvNAK(HaivisionConstant.NONE);
+				outputStatistic.setRtt(HaivisionConstant.NONE);
+				outputStatistic.setLatency(HaivisionConstant.NONE);
+				outputStatistic.setBuffer(HaivisionConstant.NONE);
+			}
 			outputResponse.setOutputStatistic(outputStatistic);
 		}
 

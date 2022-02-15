@@ -25,7 +25,7 @@ public class HaivisionConstant {
 	public static final String DAY = " day(s) ";
 	public static final String HOUR = " hour(s) ";
 	public static final String MINUTE = " minute(s) ";
-	public static final String SECOND = " second(s) ";
+	public static final String SECOND = " second(s)";
 	public static final String DASH = "-";
 
 }

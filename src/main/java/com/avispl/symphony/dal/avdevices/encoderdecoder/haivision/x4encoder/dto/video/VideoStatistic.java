@@ -45,6 +45,8 @@ public class VideoStatistic {
 	private String inputMatrixCoefficients;
 	private String state;
 	private String occurred;
+	private String droppedFrames;
+	private String inputColorPrimaries;
 
 	/**
 	 * Retrieves {@code {@link #uptime}}
@@ -656,5 +658,41 @@ public class VideoStatistic {
 	 */
 	public void setOccurred(String occurred) {
 		this.occurred = occurred;
+	}
+
+	/**
+	 * Retrieves {@code {@link #droppedFrames}}
+	 *
+	 * @return value of {@link #droppedFrames}
+	 */
+	public String getDroppedFrames() {
+		return droppedFrames;
+	}
+
+	/**
+	 * Sets {@code droppedFrames}
+	 *
+	 * @param droppedFrames the {@code java.lang.String} field
+	 */
+	public void setDroppedFrames(String droppedFrames) {
+		this.droppedFrames = droppedFrames;
+	}
+
+	/**
+	 * Retrieves {@code {@link #inputColorPrimaries}}
+	 *
+	 * @return value of {@link #inputColorPrimaries}
+	 */
+	public String getInputColorPrimaries() {
+		return inputColorPrimaries;
+	}
+
+	/**
+	 * Sets {@code inputColorPrimaries}
+	 *
+	 * @param inputColorPrimaries the {@code java.lang.String} field
+	 */
+	public void setInputColorPrimaries(String inputColorPrimaries) {
+		this.inputColorPrimaries = inputColorPrimaries;
 	}
 }
