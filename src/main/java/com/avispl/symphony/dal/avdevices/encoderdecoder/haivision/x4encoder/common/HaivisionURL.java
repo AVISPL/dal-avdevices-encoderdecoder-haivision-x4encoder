@@ -13,7 +13,8 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
 public class HaivisionURL {
 
 	public static final String AUDIO = "apis/audenc";
-	public static final String VIDEO = "/apis/videnc";
-	public static final String OUTPUTS = "/apis/streams";
+	public static final String VIDEO = "apis/videnc";
+	public static final String OUTPUTS = "apis/streams";
+	public static final String AUTHENTICATION = "/apis/authentication";
 
 }

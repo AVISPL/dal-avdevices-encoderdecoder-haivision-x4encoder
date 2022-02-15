@@ -15,7 +15,6 @@ public class HaivisionConstant {
 	public static final String USER_NAME = "username";
 	public static final String PASS_WORD = "password";
 	public static final String SET_COOKIE = "Set-Cookie";
-	public static final String LOGIN = "/apis/authentication";
 	public static final String COLON_SLASH = "://";
 	public static final String COLON = ":";
 	public static final String FORMAT = "%s#%s";
@@ -27,5 +26,6 @@ public class HaivisionConstant {
 	public static final String HOUR = " hour(s) ";
 	public static final String MINUTE = " minute(s) ";
 	public static final String SECOND = " second(s) ";
+	public static final String DASH = "-";
 
 }

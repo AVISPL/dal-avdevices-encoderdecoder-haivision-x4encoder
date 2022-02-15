@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -80,6 +81,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private ExtendedStatistics localExtendedStatistics;
 	private final Map<String, String> failedMonitor = new HashMap<>();
 	private String sessionID;
+	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
+	private final String uuidSeconds = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
 	/**
 	 * {@inheritDoc}
@@ -172,6 +175,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			if (headers == null) {
 				throw new ResourceNotReachableException("Login to the device failed,Device unauthorized");
 			}
+			stringBuilder.append(headers.getValue());
 			return stringBuilder.toString();
 		} catch (Exception e) {
 			throw new ResourceNotReachableException(e.getMessage());
@@ -189,7 +193,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		stringBuilder.append(getHost());
 		stringBuilder.append(HaivisionConstant.COLON);
 		stringBuilder.append(getPort());
-		stringBuilder.append(HaivisionConstant.LOGIN);
+		stringBuilder.append(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION));
 
 		return stringBuilder.toString();
 	}
@@ -203,6 +207,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		Objects.requireNonNull(stats);
 
 		for (HaivisionMonitoringMetric makitoMonitoringMetric : HaivisionMonitoringMetric.values()) {
+			if (HaivisionMonitoringMetric.AUTHENTICATION.equals(makitoMonitoringMetric)) {
+				continue;
+			}
 			retrieveDataByMetric(stats, makitoMonitoringMetric);
 		}
 		if (failedMonitor.size() == HaivisionMonitoringMetric.values().length) {
@@ -544,39 +551,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.NONE.equals(time)) {
 			return HaivisionConstant.NONE;
 		}
-		int index = time.indexOf("s");
+		int index = time.indexOf(HaivisionConstant.SPACE);
 		if (index > -1) {
 			time = time.substring(0, index + 1);
 		}
-		int indexDay = time.indexOf("d");
-		int indexHour = time.indexOf("h");
-		int indexMinute = time.indexOf("m");
-		StringBuilder stringBuilder = new StringBuilder();
-		if (indexDay > -1) {
-			stringBuilder.append(time, 0, indexDay);
-			stringBuilder.append(HaivisionConstant.DAY);
-			stringBuilder.append(time, indexDay + 1, indexHour);
-			stringBuilder.append(HaivisionConstant.HOUR);
-			stringBuilder.append(time, indexHour + 1, indexMinute);
-			stringBuilder.append(HaivisionConstant.MINUTE);
-			stringBuilder.append(time, indexMinute + 1, index);
-			stringBuilder.append(HaivisionConstant.SECOND);
-		} else if (indexHour > -1) {
-			stringBuilder.append(time, 0, indexHour);
-			stringBuilder.append(HaivisionConstant.HOUR);
-			stringBuilder.append(time, indexHour + 1, indexMinute);
-			stringBuilder.append(HaivisionConstant.MINUTE);
-			stringBuilder.append(time, indexMinute + 1, index);
-			stringBuilder.append(HaivisionConstant.SECOND);
-		} else if (indexMinute > -1) {
-			stringBuilder.append(time, 0, indexMinute);
-			stringBuilder.append(HaivisionConstant.MINUTE);
-			stringBuilder.append(time, indexMinute + 1, index);
-			stringBuilder.append(HaivisionConstant.SECOND);
-		} else {
-			stringBuilder.append(time, 0, index);
-			stringBuilder.append(HaivisionConstant.SECOND);
-		}
-		return String.valueOf(stringBuilder);
+		time.replace("d", uuidDay).replace("s", uuidSeconds);
+		return time.replace(uuidDay, HaivisionConstant.DAY).replace("h", HaivisionConstant.HOUR).replace("m", HaivisionConstant.MINUTE).replace(uuidSeconds, HaivisionConstant.SECOND);
 	}
 }

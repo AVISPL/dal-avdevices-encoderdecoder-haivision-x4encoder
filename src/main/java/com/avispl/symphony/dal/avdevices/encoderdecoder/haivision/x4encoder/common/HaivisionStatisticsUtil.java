@@ -30,6 +30,8 @@ public class HaivisionStatisticsUtil {
 				return HaivisionURL.VIDEO;
 			case OUTPUT_ENCODER:
 				return HaivisionURL.OUTPUTS;
+			case AUTHENTICATION:
+				return HaivisionURL.AUTHENTICATION;
 			default:
 				throw new IllegalArgumentException("Do not support axisStatisticsMetric: " + makitoMonitoringMetric.name());
 		}

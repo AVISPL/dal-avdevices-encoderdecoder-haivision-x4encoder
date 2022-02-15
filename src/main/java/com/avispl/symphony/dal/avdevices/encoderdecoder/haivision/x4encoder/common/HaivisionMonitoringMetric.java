@@ -14,7 +14,8 @@ public enum HaivisionMonitoringMetric {
 
 	AUDIO_ENCODER("Audio Encoder"),
 	VIDEO_ENCODER("Video Encoder"),
-	OUTPUT_ENCODER("Output Encoder");
+	OUTPUT_ENCODER("Output Encoder"),
+	AUTHENTICATION("Login");
 
 	public static final String STATISTICS = "Statistics";
 	//audio statistics
