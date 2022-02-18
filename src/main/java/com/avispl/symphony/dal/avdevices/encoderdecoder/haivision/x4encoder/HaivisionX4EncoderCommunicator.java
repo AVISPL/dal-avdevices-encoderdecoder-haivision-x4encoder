@@ -43,11 +43,15 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.SystemInfoResponse;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
 import com.avispl.symphony.dal.communicator.RestCommunicator;
+import com.avispl.symphony.dal.util.StringUtils;
 
 /**
  * An implementation of RestCommunicator to provide communication and interaction with Haivision Makito X4 Encoders
@@ -62,27 +66,100 @@ import com.avispl.symphony.dal.communicator.RestCommunicator;
  */
 public class HaivisionX4EncoderCommunicator extends RestCommunicator implements Monitorable, Controller {
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
-	/**
-	 * List of audio Response
-	 */
-	private final List<AudioResponse> audioResponseList = Collections.synchronizedList(new ArrayList<>());
-
-	/**
-	 * List of audio Response
-	 */
-	private final List<VideoResponse> videoResponseList = Collections.synchronizedList(new ArrayList<>());
-
-	/**
-	 * List of audio Response
-	 */
-	private final List<OutputResponse> outputResponseList = Collections.synchronizedList(new ArrayList<>());
-
-	private ExtendedStatistics localExtendedStatistics;
-	private final Map<String, String> failedMonitor = new HashMap<>();
 	private String sessionID;
+	private boolean isAdapterFilter;
+	private Integer countMonitoringNumber = null;
+	private ExtendedStatistics localExtendedStatistics;
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final Map<String, String> failedMonitor = new HashMap<>();
+	private final Map<String, String> errorFilter = new HashMap<>();
+
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 	private final String uuidSeconds = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
+
+	//The properties adapter
+	private String streamNameFilter;
+	private String portNumberFilter;
+	private String streamStatusFilter;
+
+	private final List<String> streamNameList = new ArrayList<>();
+	private final List<Integer> portNumberList = new ArrayList<>();
+	private final List<Integer> portNumberRangeList = new ArrayList<>();
+	private final List<String> streamStatusList = new ArrayList<>();
+
+	private final List<AudioResponse> audioStatisticsList = new ArrayList<>();
+	private final List<VideoResponse> videoStatisticsList = new ArrayList<>();
+	private List<OutputResponse> outputStatisticsList = new ArrayList<>();
+	private List<OutputResponse> portNumberAndStreamStatusList = new ArrayList<>();
+
+	/**
+	 * List of audio Response
+	 */
+	private List<AudioResponse> audioResponseList = Collections.synchronizedList(new ArrayList<>());
+
+	/**
+	 * List of audio Response
+	 */
+	private List<VideoResponse> videoResponseList = Collections.synchronizedList(new ArrayList<>());
+
+	/**
+	 * List of audio Response
+	 */
+	private List<OutputResponse> outputResponseList = Collections.synchronizedList(new ArrayList<>());
+
+	/**
+	 * Retrieves {@code {@link #streamNameFilter}}
+	 *
+	 * @return value of {@link #streamNameFilter}
+	 */
+	public String getStreamNameFilter() {
+		return streamNameFilter;
+	}
+
+	/**
+	 * Sets {@code streamNameFilter}
+	 *
+	 * @param streamNameFilter the {@code java.lang.String} field
+	 */
+	public void setStreamNameFilter(String streamNameFilter) {
+		this.streamNameFilter = streamNameFilter;
+	}
+
+	/**
+	 * Retrieves {@code {@link #portNumberFilter}}
+	 *
+	 * @return value of {@link #portNumberFilter}
+	 */
+	public String getPortNumberFilter() {
+		return portNumberFilter;
+	}
+
+	/**
+	 * Sets {@code portNumberFilter}
+	 *
+	 * @param portNumberFilter the {@code java.lang.String} field
+	 */
+	public void setPortNumberFilter(String portNumberFilter) {
+		this.portNumberFilter = portNumberFilter;
+	}
+
+	/**
+	 * Retrieves {@code {@link #streamStatusFilter}}
+	 *
+	 * @return value of {@link #streamStatusFilter}
+	 */
+	public String getStreamStatusFilter() {
+		return streamStatusFilter;
+	}
+
+	/**
+	 * Sets {@code streamStatusFilter}
+	 *
+	 * @param streamStatusFilter the {@code java.lang.String} field
+	 */
+	public void setStreamStatusFilter(String streamStatusFilter) {
+		this.streamStatusFilter = streamStatusFilter;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -108,7 +185,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (localExtendedStatistics == null) {
 			localExtendedStatistics = new ExtendedStatistics();
 		}
+
+		isAdapterFiltering();
 		populateInformationFromDevice(stats);
+
+		if (!errorFilter.isEmpty()) {
+			for (Map.Entry<String, String> errorMessage : errorFilter.entrySet()) {
+				stats.put(errorMessage.getKey(), errorMessage.getValue());
+			}
+		}
 		extendedStatistics.setStatistics(stats);
 		extendedStatistics.setControllableProperties(advancedControllableProperties);
 
@@ -200,44 +285,57 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	/**
 	 * Retrieve data and add to stats
-	 *
-	 * @param stats list statistics property
 	 */
 	private void populateInformationFromDevice(Map<String, String> stats) {
-		Objects.requireNonNull(stats);
-
 		for (HaivisionMonitoringMetric makitoMonitoringMetric : HaivisionMonitoringMetric.values()) {
 			if (HaivisionMonitoringMetric.AUTHENTICATION.equals(makitoMonitoringMetric)) {
 				continue;
 			}
 			retrieveDataByMetric(stats, makitoMonitoringMetric);
 		}
-		if (failedMonitor.size() == HaivisionMonitoringMetric.values().length -1) {
+		if (countMonitoringNumber == null) {
+			countMonitoringNumber = getNumberMonitoringMetric();
+		}
+		if (failedMonitor.size() == countMonitoringNumber) {
 			StringBuilder stringBuilder = new StringBuilder();
 			for (Map.Entry<String, String> messageFailed : failedMonitor.entrySet()) {
 				stringBuilder.append(messageFailed.getValue());
 			}
 			throw new ResourceNotReachableException("Get monitoring data failed: " + stringBuilder);
 		}
+		getFilteredForEncoderStatistics();
+		for (HaivisionMonitoringMetric makitoMonitoringMetric : HaivisionMonitoringMetric.values()) {
+			if (HaivisionMonitoringMetric.AUDIO_ENCODER.equals(makitoMonitoringMetric)) {
+				populateAudioData(stats);
+			}
+			if (HaivisionMonitoringMetric.VIDEO_ENCODER.equals(makitoMonitoringMetric)) {
+				populateVideoData(stats);
+			}
+			if (HaivisionMonitoringMetric.OUTPUT_ENCODER.equals(makitoMonitoringMetric)) {
+				populateOutputData(stats);
+			}
+		}
 	}
 
 	/**
 	 * Retrieve data from the device
 	 *
-	 * @param stats list statistics property
 	 * @param metric list metric of device
 	 */
 	private void retrieveDataByMetric(Map<String, String> stats, HaivisionMonitoringMetric metric) {
 		Objects.requireNonNull(metric);
 		switch (metric) {
 			case AUDIO_ENCODER:
-				retrieveAudioEncoder(stats);
+				retrieveAudioEncoder();
 				break;
 			case VIDEO_ENCODER:
-				retrieveVideoEncoder(stats);
+				retrieveVideoEncoder();
 				break;
 			case OUTPUT_ENCODER:
-				retrieveOutputEncoder(stats);
+				retrieveOutputEncoder();
+				break;
+			case SYSTEM_INFO_STATUS:
+				retrieveSystemInfoStatus(stats);
 				break;
 			default:
 				throw new IllegalStateException("Error the metric monitoring");
@@ -250,7 +348,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * @param stats list statistics property
 	 */
 	private void populateAudioData(Map<String, String> stats) {
-		if (!audioResponseList.isEmpty()) {
+		if (!audioStatisticsList.isEmpty()) {
+			for (AudioResponse audioResponses : audioStatisticsList) {
+				addAudioDataStatisticsToStatisticsProperty(stats, audioResponses);
+			}
+		} else if (!audioResponseList.isEmpty() && !isAdapterFilter) {
 			for (AudioResponse audioResponses : audioResponseList) {
 				addAudioDataStatisticsToStatisticsProperty(stats, audioResponses);
 			}
@@ -299,7 +401,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * @param stats list statistics property
 	 */
 	private void populateVideoData(Map<String, String> stats) {
-		if (!videoResponseList.isEmpty()) {
+		if (!videoStatisticsList.isEmpty()) {
+			for (VideoResponse videoResponses : videoStatisticsList) {
+				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
+			}
+		} else if (!videoResponseList.isEmpty() && !isAdapterFilter) {
 			for (VideoResponse videoResponses : videoResponseList) {
 				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
 			}
@@ -401,7 +507,23 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void populateOutputData(Map<String, String> stats) {
 		for (OutputResponse outputResponses : outputResponseList) {
 			addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
+			addOutputStreamDataControlToStatisticsProperty(stats, outputResponses);
 		}
+	}
+
+	/**
+	 * Add output stream data control to statistics property
+	 *
+	 * @param stats list statistics property
+	 * @param outputResponseList list of output response
+	 */
+	private void addOutputStreamDataControlToStatisticsProperty(Map<String, String> stats, OutputResponse outputResponseList) {
+		String name = convertStreamNameUnescapeHtml3(outputResponseList.getName());
+		OutputStatistic outputStatistic = outputResponseList.getOutputStatistic();
+		stats.put(String.format(HaivisionConstant.FORMAT, name, HaivisionMonitoringMetric.UPTIME),
+				String.valueOf(formatTimeData(outputStatistic.getUptime())));
+		stats.put(String.format(HaivisionConstant.FORMAT, name, HaivisionMonitoringMetric.SOURCE_PORT),
+				String.valueOf(outputStatistic.getSourcePort()));
 	}
 
 	/**
@@ -470,10 +592,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	/**
 	 * Retrieve audio encoder
-	 *
-	 * @param stats list statistics property
 	 */
-	private void retrieveAudioEncoder(Map<String, String> stats) {
+	private void retrieveAudioEncoder() {
 		try {
 			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER));
 			JsonNode audio = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
@@ -481,7 +601,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				AudioResponse audioItem = objectMapper.treeToValue(audio.get(i), AudioResponse.class);
 				audioResponseList.add(audioItem);
 			}
-			populateAudioData(stats);
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionMonitoringMetric.AUDIO_ENCODER.getName(), e.getMessage());
 		}
@@ -489,10 +608,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	/**
 	 * Retrieve video encoder
-	 *
-	 * @param stats list statistics property
 	 */
-	private void retrieveVideoEncoder(Map<String, String> stats) {
+	private void retrieveVideoEncoder() {
 		try {
 			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER));
 			JsonNode video = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
@@ -500,7 +617,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				VideoResponse videoItem = objectMapper.treeToValue(video.get(i), VideoResponse.class);
 				videoResponseList.add(videoItem);
 			}
-			populateVideoData(stats);
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionMonitoringMetric.VIDEO_ENCODER.getName(), e.getMessage());
 		}
@@ -508,10 +624,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	/**
 	 * Retrieve output stream encoder
-	 *
-	 * @param stats list statistics property
 	 */
-	private void retrieveOutputEncoder(Map<String, String> stats) {
+	private void retrieveOutputEncoder() {
 		try {
 			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER));
 			JsonNode output = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
@@ -519,9 +633,19 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				OutputResponse outputItem = objectMapper.treeToValue(output.get(i), OutputResponse.class);
 				outputResponseList.add(outputItem);
 			}
-			populateOutputData(stats);
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionMonitoringMetric.OUTPUT_ENCODER.getName(), e.getMessage());
+		}
+	}
+
+	/**
+	 * Retrieve system information status encoder
+	 */
+	private void retrieveSystemInfoStatus(Map<String, String> stats) {
+		try {
+			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
+		} catch (Exception e) {
+			failedMonitor.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName(), e.getMessage());
 		}
 	}
 
@@ -557,5 +681,250 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 		return time.replace("d", uuidDay).replace("s", uuidSeconds).replace(uuidDay, HaivisionConstant.DAY)
 				.replace("h", HaivisionConstant.HOUR).replace("m", HaivisionConstant.MINUTE).replace(uuidSeconds, HaivisionConstant.SECOND);
+	}
+
+	/**
+	 * Filter the list of aggregated devices based on filter option in Adapter Properties
+	 */
+	private void getFilteredForEncoderStatistics() {
+		filterStreamName();
+		filterPortNumber();
+		filterStreamStatus();
+		if (isAdapterFilter) {
+			filterAudioAndVideoStatisticsList();
+		}
+	}
+
+	/**
+	 * Filter the name of Stream
+	 */
+	private void filterStreamName() {
+		extractStreamNameList(this.streamNameFilter);
+		if (!streamNameList.isEmpty()) {
+			List<OutputResponse> outputResponseFilter = new ArrayList<>();
+			for (String streamName : streamNameList) {
+				for (OutputResponse outputResponse : outputResponseList) {
+					if (streamName.equals(convertStreamNameUnescapeHtml3(outputResponse.getName()))) {
+						outputResponseFilter.add(outputResponse);
+						break;
+					} else {
+						errorFilter.put(streamName + HaivisionConstant.ERROR_MESSAGE, streamName + " does not exits");
+					}
+				}
+			}
+			if (!outputResponseFilter.isEmpty()) {
+				outputStatisticsList.addAll(outputResponseFilter);
+			}
+		}
+	}
+
+	/**
+	 * Filter the port of Stream
+	 */
+	private void filterPortNumber() {
+		extractPortNumberList(this.portNumberFilter);
+		if (!portNumberList.isEmpty()) {
+			List<OutputResponse> outputResponseFilter = new ArrayList<>();
+			for (int portNumber : portNumberList) {
+				for (OutputResponse outputResponse : outputResponseList) {
+					if (portNumber == Integer.parseInt(outputResponse.getPort())) {
+						outputResponseFilter.add(outputResponse);
+						break;
+					}
+				}
+			}
+			filterPortNumberRange(outputResponseFilter);
+			if (!outputResponseFilter.isEmpty()) {
+				portNumberAndStreamStatusList.addAll(outputResponseFilter);
+			}
+		}
+	}
+
+	/**
+	 * Filter the port number range of Stream
+	 */
+	private void filterPortNumberRange(List<OutputResponse> outputResponseFilter) {
+		int i = 0;
+		while (i < portNumberRangeList.size()) {
+			for (OutputResponse outputResponse : outputResponseList) {
+				int mixPort = portNumberRangeList.get(i);
+				int maxPort = portNumberRangeList.get(i + 1);
+				int port = Integer.parseInt(outputResponse.getPort());
+				if (mixPort <= port && port <= maxPort) {
+					outputResponseFilter.add(outputResponse);
+					break;
+				}
+			}
+			i = i + 2;
+		}
+	}
+
+	/**
+	 * Filter the status of Stream
+	 */
+	private void filterStreamStatus() {
+		extractStreamStatus(this.streamStatusFilter);
+		if (!streamStatusList.isEmpty()) {
+			List<OutputResponse> outputStreamStatusFilter = new ArrayList<>();
+			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
+			for (String streamStatus : streamStatusList) {
+				if (!StringUtils.isNullOrEmpty(portNumberFilter)) {
+					//And Stream name and port number or port range
+					for (OutputResponse outputResponse : portNumberAndStreamStatusList) {
+						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
+						if (streamStatus.equals(stateOutput)) {
+							outputStreamStatusFilter.add(outputResponse);
+							break;
+						}
+					}
+				} else {
+					//Only stream status filter
+					for (OutputResponse outputResponse : outputResponseList) {
+						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
+						if (streamStatus.equals(stateOutput)) {
+							outputStreamStatusFilter.add(outputResponse);
+							break;
+						}
+					}
+				}
+			}
+			if (!outputStreamStatusFilter.isEmpty()) {
+				outputStatisticsList.addAll(outputStreamStatusFilter);
+			}
+		}
+	}
+
+	/**
+	 * Get streamName list from the streamNameFilter string
+	 *
+	 * @param streamName the portNumber is the name of stream
+	 */
+	private void extractStreamNameList(String streamName) {
+		if (!StringUtils.isNullOrEmpty(streamName)) {
+			String[] streamNameListString = streamName.split(HaivisionConstant.COMMA);
+			for (String streamNameItem : streamNameListString) {
+				streamNameList.add(streamNameItem.trim());
+			}
+		}
+	}
+
+	/**
+	 * Get portNumber list from the portNumber string
+	 *
+	 * @param portNumber the portNumber is the port of stream
+	 */
+	private void extractPortNumberList(String portNumber) {
+		if (!StringUtils.isNullOrEmpty(portNumber)) {
+			String[] portNumberListString = portNumberFilter.split(HaivisionConstant.COMMA);
+			for (String portNumberItem : portNumberListString) {
+				try {
+					portNumberList.add(Integer.valueOf(portNumberItem.trim()));
+				} catch (Exception e) {
+					try {
+						int index = portNumberItem.trim().indexOf(HaivisionConstant.DASH);
+						int mintPort = Integer.parseInt(portNumberItem.substring(0, index));
+						int maxPort = Integer.parseInt(portNumberItem.substring(index + 1));
+						if (mintPort < maxPort) {
+							portNumberRangeList.add(mintPort);
+							portNumberRangeList.add(maxPort);
+						} else {
+							portNumberRangeList.add(maxPort);
+							portNumberRangeList.add(mintPort);
+						}
+					} catch (Exception ex) {
+						throw new ResourceNotReachableException("The port range not correct format" + portNumberItem);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get streamStatus list from the streamStatusFilter string
+	 *
+	 * @param streamStatus the streamStatus is the state of stream
+	 */
+	private void extractStreamStatus(String streamStatus) {
+		if (!StringUtils.isNullOrEmpty(streamStatus)) {
+			String[] streamNameFilterString = streamStatusFilter.split(HaivisionConstant.COMMA);
+			for (String portNumberItem : streamNameFilterString) {
+				streamStatusList.add(portNumberItem.trim());
+			}
+		}
+	}
+
+	/**
+	 * Filter list Audio statistics by output stream response
+	 */
+	private void filterAudioAndVideoStatisticsList() {
+		if (!outputResponseList.isEmpty()) {
+			for (OutputResponse outputResponse : outputResponseList) {
+				List<Audio> audioList = outputResponse.getAudio();
+				if (audioList != null) {
+					for (Audio audio : audioList) {
+						filterTheAudioResponseByAudioStatistics(audio);
+					}
+				}
+				List<Video> videoList = outputResponse.getVideo();
+				if (videoList != null) {
+					for (Video video : videoList) {
+						filterVideoResponseByVideoStatistics(video);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Filter audio response by audio statistics
+	 *
+	 * @param audio the audio is audio DTO
+	 */
+	private void filterTheAudioResponseByAudioStatistics(Audio audio) {
+		for (AudioResponse audioResponse : audioResponseList) {
+			if (audioResponse.getId().equals(audio.getId())) {
+				audioStatisticsList.add(audioResponse);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Filter video response by video statistics
+	 *
+	 * @param video the video is video DTO
+	 */
+	private void filterVideoResponseByVideoStatistics(Video video) {
+		for (VideoResponse videoResponse : videoResponseList) {
+			if (videoResponse.getId().equals(video.getId())) {
+				videoStatisticsList.add(videoResponse);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Check the adapter filter
+	 */
+	private void isAdapterFiltering() {
+		isAdapterFilter = false;
+		if (!StringUtils.isNullOrEmpty(streamStatusFilter) || !StringUtils.isNullOrEmpty(portNumberFilter) || !StringUtils.isNullOrEmpty(streamNameFilter)) {
+			isAdapterFilter = true;
+		}
+	}
+
+	/**
+	 * Count metric monitoring in the metrics
+	 *
+	 * @return number monitoring in the metric
+	 */
+	private int getNumberMonitoringMetric() {
+		int countMonitoringMetric = 0;
+		for (HaivisionMonitoringMetric metric : HaivisionMonitoringMetric.values()) {
+			if (metric.isMonitor()) {
+				countMonitoringMetric++;
+			}
+		}
+		return countMonitoringMetric;
 	}
 }

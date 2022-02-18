@@ -32,6 +32,8 @@ public class HaivisionStatisticsUtil {
 				return HaivisionURL.OUTPUTS;
 			case AUTHENTICATION:
 				return HaivisionURL.AUTHENTICATION;
+			case SYSTEM_INFO_STATUS:
+				return HaivisionURL.SYSTEM_INFO_STATUS;
 			default:
 				throw new IllegalArgumentException("Do not support axisStatisticsMetric: " + makitoMonitoringMetric.name());
 		}

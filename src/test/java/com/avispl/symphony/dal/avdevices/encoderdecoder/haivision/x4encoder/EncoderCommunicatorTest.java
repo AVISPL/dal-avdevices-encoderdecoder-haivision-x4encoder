@@ -321,7 +321,7 @@ class EncoderCommunicatorTest {
 	 */
 	@Test
 	void testRetrieveOutStreamStatisticsSuccess() throws Exception {
-		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn("/abc");
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
@@ -431,5 +431,46 @@ class EncoderCommunicatorTest {
 		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
 		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
 		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
+	}
+
+	/**
+	 * Test filter exits stream name
+	 *
+	 * Expect retrieve successfully with audio encoder statistics
+	 */
+	@Test
+	void testFilterStreamNameWithNameExits() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setStreamNameFilter("Stream Output 0");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Working", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertEquals("0x1a0348d5c", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.ENCODER_PTS));
+		Assert.assertEquals("24,146,984,454", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.ENCODED_BYTES));
+		Assert.assertEquals("None", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STC_SOURCE_INTERFACE));
+		Assert.assertEquals("0", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.ENCODER_ERRORS));
+		Assert.assertEquals("128", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.ENCODED_BITRATE));
+		Assert.assertEquals("9693", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_SAMPLE_VALUE));
+		Assert.assertEquals("29", stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE));
+	}
+
+	/**
+	 * Test filter not exits stream name
+	 *
+	 * Expect in the statistics have data with key is stream name and the message the stream name is does not exit
+	 */
+	@Test
+	void testFilterStreamNameNotExits() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setStreamNameFilter("Stream Output 1");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Stream Output 1 does not exits", stats.get("Stream Output 1#Error Message"));
 	}
 }

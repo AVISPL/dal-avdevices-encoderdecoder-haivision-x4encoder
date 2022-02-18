@@ -27,5 +27,8 @@ public class HaivisionConstant {
 	public static final String MINUTE = " minute(s) ";
 	public static final String SECOND = " second(s)";
 	public static final String DASH = "-";
+	public static final String COMMA = ",";
+	public static final String ERROR_MESSAGE = "#Error Message";
+
 
 }

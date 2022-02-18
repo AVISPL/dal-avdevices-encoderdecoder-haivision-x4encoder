@@ -16,5 +16,6 @@ public class HaivisionURL {
 	public static final String VIDEO = "apis/videnc";
 	public static final String OUTPUTS = "apis/streams";
 	public static final String AUTHENTICATION = "/apis/authentication";
+	public static final String SYSTEM_INFO_STATUS = "apis/status";
 
 }

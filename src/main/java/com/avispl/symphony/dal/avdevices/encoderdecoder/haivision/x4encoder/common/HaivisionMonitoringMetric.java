@@ -3,6 +3,8 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 /**
  * HaivisionMonitoringMetric class defined the enum for the monitoring process
  *
@@ -12,10 +14,11 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
  */
 public enum HaivisionMonitoringMetric {
 
-	AUDIO_ENCODER("Audio Encoder"),
-	VIDEO_ENCODER("Video Encoder"),
-	OUTPUT_ENCODER("Output Encoder"),
-	AUTHENTICATION("Login");
+	AUDIO_ENCODER("Audio Encoder",true),
+	VIDEO_ENCODER("Video Encoder",true),
+	OUTPUT_ENCODER("Output Encoder",true),
+	SYSTEM_INFO_STATUS("System Info Status",true),
+	AUTHENTICATION("Authentication",false);
 
 	public static final String STATISTICS = "Statistics";
 	//audio statistics
@@ -88,15 +91,33 @@ public enum HaivisionMonitoringMetric {
 	public static final String LATENCY = "Latency";
 	public static final String OCCURRED = "Occurred";
 
+	//Info System
+	public static final String CARD_STATUS ="cardStatus";
+	public static final String SERIAL_NUMBER ="serialNumber";
+	public static final String HARDWARE_COMPATIBILITY ="hardwareCompatibility";
+	public static final String MEZZANINE_PRESENT ="mezzaninePresent";
+	public static final String HARDWARE_REVISION ="hardwareRevision";
+	public static final String CPL_REVISION ="cpldRevision";
+	public static final String BOOT_VERSION ="bootVersion";
+	public static final String CARD_TYPE ="cardType";
+	public static final String PART_NUMBER ="partNumber";
+	public static final String FIRMWARE_DATE ="firmwareDate";
+	public static final String FIRMWARE_VERSION ="firmwareVersion";
+	public static final String FIRMWARE_OPTIONS ="firmwareOptions";
+	public static final String CHIPSET_LOAD ="chipsetLoad";
+	public static final String TEMPERTURE ="temperature";
+
 	private final String name;
+	private boolean isMonitor;
 
 	/**
 	 * MakitoMonitoringMetric instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 */
-	HaivisionMonitoringMetric(String name) {
+	HaivisionMonitoringMetric(String name, boolean isMonitor) {
 		this.name = name;
+		this.isMonitor = isMonitor;
 	}
 
 	/**
@@ -108,4 +129,12 @@ public enum HaivisionMonitoringMetric {
 		return name;
 	}
 
+	/**
+	 * Retrieves {@code {@link #isMonitor}}
+	 *
+	 * @return value of {@link #isMonitor}
+	 */
+	public boolean isMonitor() {
+		return isMonitor;
+	}
 }
