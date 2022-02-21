@@ -84,13 +84,28 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	private final List<String> streamNameList = new ArrayList<>();
 	private final List<Integer> portNumberList = new ArrayList<>();
-	private final List<Integer> portNumberRangeList = new ArrayList<>();
+	private final List<String> portNumberRangeList = new ArrayList<>();
 	private final List<String> streamStatusList = new ArrayList<>();
 
+	/**
+	 * List of audio statistics filter
+	 */
 	private final List<AudioResponse> audioStatisticsList = new ArrayList<>();
+
+	/**
+	 * List of video statistics filter
+	 */
 	private final List<VideoResponse> videoStatisticsList = new ArrayList<>();
+
+	/**
+	 * List of output statistics if the adapter not filter
+	 */
 	private List<OutputResponse> outputStatisticsList = new ArrayList<>();
-	private List<OutputResponse> portNumberAndStreamStatusList = new ArrayList<>();
+
+	/**
+	 * List of output statistics for the adapter filter
+	 */
+	private List<OutputResponse> outputForPortAndStatusList = new ArrayList<>();
 
 	/**
 	 * List of audio Response
@@ -505,25 +520,21 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * @param stats list statistics property
 	 */
 	private void populateOutputData(Map<String, String> stats) {
-		for (OutputResponse outputResponses : outputResponseList) {
-			addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
-			addOutputStreamDataControlToStatisticsProperty(stats, outputResponses);
+		if (isAdapterFilter) {
+			if (!outputForPortAndStatusList.isEmpty()) {
+				for (OutputResponse outputResponses : outputForPortAndStatusList) {
+					addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
+				}
+			} else {
+				for (OutputResponse outputResponses : outputStatisticsList) {
+					addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
+				}
+			}
+		} else {
+			for (OutputResponse outputResponses : outputResponseList) {
+				addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
+			}
 		}
-	}
-
-	/**
-	 * Add output stream data control to statistics property
-	 *
-	 * @param stats list statistics property
-	 * @param outputResponseList list of output response
-	 */
-	private void addOutputStreamDataControlToStatisticsProperty(Map<String, String> stats, OutputResponse outputResponseList) {
-		String name = convertStreamNameUnescapeHtml3(outputResponseList.getName());
-		OutputStatistic outputStatistic = outputResponseList.getOutputStatistic();
-		stats.put(String.format(HaivisionConstant.FORMAT, name, HaivisionMonitoringMetric.UPTIME),
-				String.valueOf(formatTimeData(outputStatistic.getUptime())));
-		stats.put(String.format(HaivisionConstant.FORMAT, name, HaivisionMonitoringMetric.SOURCE_PORT),
-				String.valueOf(outputStatistic.getSourcePort()));
 	}
 
 	/**
@@ -644,9 +655,66 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void retrieveSystemInfoStatus(Map<String, String> stats) {
 		try {
 			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
+			if (responseData != null) {
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS, checkForNullData(responseData.getCardStatus()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER, checkForNullData(responseData.getSerialNumber()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY,
+						checkForNullData(responseData.getHardwareCompatibility()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT, checkForNullData(responseData.getMezzaninePresent()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION, checkForNullData(responseData.getHardwareRevision()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION, checkForNullData(responseData.getCpldRevision()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION, checkForNullData(responseData.getBootVersion()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE, checkForNullData(responseData.getCardType()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER, checkForNullData(responseData.getPartNumber()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE, checkForNullData(responseData.getFirmwareDate()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION, checkForNullData(responseData.getFirmwareVersion()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS, checkForNullData(responseData.getFirmwareOptions()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME, checkForNullData(responseData.getUptime()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD, checkForNullData(responseData.getChipsetLoad()));
+				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE, checkForNullData(responseData.getTemperature()));
+			} else {
+				contributeNoneValueForSystemInfo(stats);
+			}
 		} catch (Exception e) {
+			contributeNoneValueForSystemInfo(stats);
 			failedMonitor.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName(), e.getMessage());
 		}
+	}
+
+	/**
+	 * Value of list statistics property of system info is none
+	 *
+	 * @param stats list statistics
+	 */
+	private void contributeNoneValueForSystemInfo(Map<String, String> stats) {
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD, HaivisionConstant.NONE);
+		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE, HaivisionConstant.NONE);
+	}
+
+	/**
+	 * check for null data
+	 *
+	 * @param value the value of monitoring properties
+	 * @return String (none/value)
+	 */
+	private String checkForNullData(String value) {
+		if (StringUtils.isNullOrEmpty(value)) {
+			return HaivisionConstant.NONE;
+		}
+		return value;
 	}
 
 	/**
@@ -701,19 +769,17 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterStreamName() {
 		extractStreamNameList(this.streamNameFilter);
 		if (!streamNameList.isEmpty()) {
-			List<OutputResponse> outputResponseFilter = new ArrayList<>();
 			for (String streamName : streamNameList) {
+				OutputResponse outputResponseFilter = null;
 				for (OutputResponse outputResponse : outputResponseList) {
 					if (streamName.equals(convertStreamNameUnescapeHtml3(outputResponse.getName()))) {
-						outputResponseFilter.add(outputResponse);
+						outputResponseFilter = outputResponse;
 						break;
-					} else {
-						errorFilter.put(streamName + HaivisionConstant.ERROR_MESSAGE, streamName + " does not exits");
 					}
 				}
-			}
-			if (!outputResponseFilter.isEmpty()) {
-				outputStatisticsList.addAll(outputResponseFilter);
+				if (outputResponseFilter != null) {
+					outputStatisticsList.add(outputResponseFilter);
+				}
 			}
 		}
 	}
@@ -724,38 +790,44 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterPortNumber() {
 		extractPortNumberList(this.portNumberFilter);
 		if (!portNumberList.isEmpty()) {
-			List<OutputResponse> outputResponseFilter = new ArrayList<>();
+			OutputResponse outputResponseFilter = null;
 			for (int portNumber : portNumberList) {
 				for (OutputResponse outputResponse : outputResponseList) {
 					if (portNumber == Integer.parseInt(outputResponse.getPort())) {
-						outputResponseFilter.add(outputResponse);
+						outputResponseFilter = outputResponse;
 						break;
 					}
 				}
+				if (outputResponseFilter != null) {
+					outputForPortAndStatusList.add(outputResponseFilter);
+				}
 			}
-			filterPortNumberRange(outputResponseFilter);
-			if (!outputResponseFilter.isEmpty()) {
-				portNumberAndStreamStatusList.addAll(outputResponseFilter);
-			}
+			filterPortNumberRange();
 		}
 	}
 
 	/**
 	 * Filter the port number range of Stream
 	 */
-	private void filterPortNumberRange(List<OutputResponse> outputResponseFilter) {
-		int i = 0;
-		while (i < portNumberRangeList.size()) {
+	private void filterPortNumberRange() {
+		for (String portNumberRange : portNumberRangeList) {
+			String[] rangeList = portNumberRange.split(HaivisionConstant.DASH);
+			int mixPort = Integer.parseInt(rangeList[0]);
+			int maxPort = Integer.parseInt(rangeList[1]);
+			OutputResponse outputResponseRangeFilter = null;
 			for (OutputResponse outputResponse : outputResponseList) {
-				int mixPort = portNumberRangeList.get(i);
-				int maxPort = portNumberRangeList.get(i + 1);
 				int port = Integer.parseInt(outputResponse.getPort());
 				if (mixPort <= port && port <= maxPort) {
-					outputResponseFilter.add(outputResponse);
+					outputResponseRangeFilter = outputResponse;
 					break;
 				}
 			}
-			i = i + 2;
+			if (outputResponseRangeFilter != null) {
+				outputForPortAndStatusList.add(outputResponseRangeFilter);
+			}
+		}
+		if (!outputForPortAndStatusList.isEmpty()) {
+			outputStatisticsList.addAll(outputForPortAndStatusList);
 		}
 	}
 
@@ -765,31 +837,31 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterStreamStatus() {
 		extractStreamStatus(this.streamStatusFilter);
 		if (!streamStatusList.isEmpty()) {
-			List<OutputResponse> outputStreamStatusFilter = new ArrayList<>();
 			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
 			for (String streamStatus : streamStatusList) {
-				if (!StringUtils.isNullOrEmpty(portNumberFilter)) {
-					//And Stream name and port number or port range
-					for (OutputResponse outputResponse : portNumberAndStreamStatusList) {
+				OutputResponse outputStreamStatusFilter = null;
+
+				if (outputForPortAndStatusList.isEmpty()) {
+					for (OutputResponse outputResponse : outputResponseList) {
 						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
 						if (streamStatus.equals(stateOutput)) {
-							outputStreamStatusFilter.add(outputResponse);
+							outputStreamStatusFilter = outputResponse;
 							break;
 						}
 					}
 				} else {
-					//Only stream status filter
-					for (OutputResponse outputResponse : outputResponseList) {
+					//And port number or port range with stream status
+					for (OutputResponse outputResponse : outputForPortAndStatusList) {
 						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
 						if (streamStatus.equals(stateOutput)) {
-							outputStreamStatusFilter.add(outputResponse);
+							outputStreamStatusFilter = outputResponse;
 							break;
 						}
 					}
 				}
-			}
-			if (!outputStreamStatusFilter.isEmpty()) {
-				outputStatisticsList.addAll(outputStreamStatusFilter);
+				if (outputStreamStatusFilter != null) {
+					outputStatisticsList.add(outputStreamStatusFilter);
+				}
 			}
 		}
 	}
@@ -822,15 +894,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				} catch (Exception e) {
 					try {
 						int index = portNumberItem.trim().indexOf(HaivisionConstant.DASH);
-						int mintPort = Integer.parseInt(portNumberItem.substring(0, index));
-						int maxPort = Integer.parseInt(portNumberItem.substring(index + 1));
-						if (mintPort < maxPort) {
-							portNumberRangeList.add(mintPort);
-							portNumberRangeList.add(maxPort);
-						} else {
-							portNumberRangeList.add(maxPort);
-							portNumberRangeList.add(mintPort);
-						}
+						Integer.parseInt(portNumberItem.substring(0, index));
+						Integer.parseInt(portNumberItem.substring(index + 1));
+						portNumberRangeList.add(portNumberItem);
 					} catch (Exception ex) {
 						throw new ResourceNotReachableException("The port range not correct format" + portNumberItem);
 					}
@@ -857,20 +923,33 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Filter list Audio statistics by output stream response
 	 */
 	private void filterAudioAndVideoStatisticsList() {
-		if (!outputResponseList.isEmpty()) {
-			for (OutputResponse outputResponse : outputResponseList) {
-				List<Audio> audioList = outputResponse.getAudio();
-				if (audioList != null) {
-					for (Audio audio : audioList) {
-						filterTheAudioResponseByAudioStatistics(audio);
-					}
-				}
-				List<Video> videoList = outputResponse.getVideo();
-				if (videoList != null) {
-					for (Video video : videoList) {
-						filterVideoResponseByVideoStatistics(video);
-					}
-				}
+		if (!outputForPortAndStatusList.isEmpty()) {
+			for (OutputResponse outputResponse : outputForPortAndStatusList) {
+				filterAudioAndVideo(outputResponse);
+			}
+		} else {
+			for (OutputResponse outputResponse : outputStatisticsList) {
+				filterAudioAndVideo(outputResponse);
+			}
+		}
+	}
+
+	/**
+	 * Filter audio and video with output outputResponse
+	 *
+	 * @param outputResponse the outputResponse is DTO
+	 */
+	private void filterAudioAndVideo(OutputResponse outputResponse) {
+		List<Audio> audioList = outputResponse.getAudio();
+		if (audioList != null) {
+			for (Audio audio : audioList) {
+				filterTheAudioResponseByAudioStatistics(audio);
+			}
+		}
+		List<Video> videoList = outputResponse.getVideo();
+		if (videoList != null) {
+			for (Video video : videoList) {
+				filterVideoResponseByVideoStatistics(video);
 			}
 		}
 	}

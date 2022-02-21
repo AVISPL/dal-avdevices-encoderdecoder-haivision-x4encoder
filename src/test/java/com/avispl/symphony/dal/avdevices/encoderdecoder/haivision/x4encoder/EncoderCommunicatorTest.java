@@ -434,6 +434,92 @@ class EncoderCommunicatorTest {
 	}
 
 	/**
+	 * Test retrieving system info status with not null and not empty response data
+	 *
+	 * Expect retrieve successfully with response data
+	 */
+	@Test
+	void testRetrieveSystemInfoStatusWithResponseData() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS)).thenReturn(HaivisionURL.SYSTEM_INFO_STATUS);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("OK", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS));
+		Assert.assertEquals("HAI-031743040010", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER));
+		Assert.assertEquals("-001G", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY));
+		Assert.assertEquals("0", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT));
+		Assert.assertEquals("A", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION));
+		Assert.assertEquals("4 (Official, Internal flash)", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION));
+		Assert.assertEquals("U-Boot 2018.01 (May 24 2019 - 18:24:54 -0400)",
+				stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION));
+		Assert.assertEquals("Makito X4 SDI Encoder", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE));
+		Assert.assertEquals("B-MX4E-SDI4", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER));
+		Assert.assertEquals("Aug 24 2020", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE));
+		Assert.assertEquals("1.2.0-14", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION));
+		Assert.assertEquals("None", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS));
+		Assert.assertEquals("0 days 21:51:28", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals("4", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD));
+		Assert.assertEquals("54", stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE));
+	}
+
+	/**
+	 * Test retrieving system info status with the response data is null
+	 *
+	 * Expect return data with "None" in each field
+	 */
+	@Test
+	void testRetrieveSystemInfoStatusWithNullResponseData() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS)).thenReturn("/apis/status-empty-data");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE));
+	}
+
+	/**
+	 * Test retrieving system info status with error, access to unknown url
+	 *
+	 * Expect return data with "None" in each field
+	 */
+	@Test
+	void testRetrieveSystemInfoStatusWithError() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS)).thenReturn("/apis/status-unknown-url");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE));
+	}
+
+	/**
 	 * Test filter exits stream name
 	 *
 	 * Expect retrieve successfully with audio encoder statistics
@@ -458,12 +544,12 @@ class EncoderCommunicatorTest {
 	}
 
 	/**
-	 * Test filter not exits stream name
+	 * Test filter exits stream name
 	 *
-	 * Expect in the statistics have data with key is stream name and the message the stream name is does not exit
+	 * Expect retrieve successfully with output stream
 	 */
 	@Test
-	void testFilterStreamNameNotExits() throws Exception {
+	void testFilterStreamNameWithNameNotExits() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
@@ -471,6 +557,190 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.setStreamNameFilter("Stream Output 1");
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		Assert.assertEquals("Stream Output 1 does not exits", stats.get("Stream Output 1#Error Message"));
+		Assert.assertEquals(15, stats.size());
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_PORT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BITRATE));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECONNECTIONS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MSS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_BANDWIDTH));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_PORT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_ADDRESS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_ADDRESS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LOST_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_ACK));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_NAK));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RTT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
+	}
+
+	/**
+	 * Test filter exits port number
+	 * Expect retrieve successfully with output stream
+	 */
+	@Test
+	void testFilterWithPortNumberExit() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setPortNumberFilter("6064,6054-64065");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Connecting", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertEquals("17 day(s) 19 hour(s) 6 minute(s) 17 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_PORT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_BYTES));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BITRATE));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECONNECTIONS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MSS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_PORT));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_ADDRESS));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_ADDRESS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LOST_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_ACK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_NAK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RTT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
+		Assert.assertEquals("2 day(s) 23 hour(s) 31 minute(s) 32 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
+	}
+
+	/**
+	 * Test filter exits stream status connecting
+	 * Expect retrieve successfully with output stream
+	 */
+	@Test
+	void testFilterWithStreamStatusExits() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setStreamStatusFilter("Connecting");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Connecting", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertEquals("17 day(s) 19 hour(s) 6 minute(s) 17 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_PORT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_BYTES));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BITRATE));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECONNECTIONS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MSS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_PORT));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_ADDRESS));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_ADDRESS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LOST_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_ACK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_NAK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RTT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
+		Assert.assertEquals("2 day(s) 23 hour(s) 31 minute(s) 32 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
+	}
+
+	/**
+	 * Test filter exits stream status running
+	 * Expect retrieve successfully and have not data
+	 */
+	@Test
+	void testFilterWithStreamStatusNotExits() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setStreamStatusFilter("Running");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals(15, stats.size());
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_PORT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BITRATE));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECONNECTIONS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_BYTES));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MSS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_BANDWIDTH));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_PORT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_ADDRESS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_ADDRESS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LOST_PACKETS));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_ACK));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_NAK));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RTT));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
+		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
+	}
+
+	/**
+	 * Test filter exits stream status connecting and port number
+	 * Expect retrieve successfully
+	 */
+	@Test
+	void testFilterWithStreamStatusAndExits() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION);
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUTS);
+		haivisionX4EncoderCommunicator.setStreamStatusFilter("Connecting");
+		haivisionX4EncoderCommunicator.setPortNumberFilter("6064");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Connecting", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.STATE));
+		Assert.assertEquals("17 day(s) 19 hour(s) 6 minute(s) 17 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.UPTIME));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_PORT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SENT_BYTES));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BITRATE));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECONNECTIONS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RESENT_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.DROPPED_BYTES));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MSS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_PORT));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.SOURCE_ADDRESS));
+		Assert.assertEquals("None", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.REMOTE_ADDRESS));
+		Assert.assertEquals("0 kbps", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LOST_PACKETS));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_ACK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RECV_NAK));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.RTT));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.BUFFER));
+		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.LATENCY));
+		Assert.assertEquals("2 day(s) 23 hour(s) 31 minute(s) 32 second(s)",
+				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS + "#" + HaivisionMonitoringMetric.OCCURRED));
 	}
 }

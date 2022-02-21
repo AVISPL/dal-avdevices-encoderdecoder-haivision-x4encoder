@@ -3,8 +3,6 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
 /**
  * HaivisionMonitoringMetric class defined the enum for the monitoring process
  *
@@ -92,20 +90,20 @@ public enum HaivisionMonitoringMetric {
 	public static final String OCCURRED = "Occurred";
 
 	//Info System
-	public static final String CARD_STATUS ="cardStatus";
-	public static final String SERIAL_NUMBER ="serialNumber";
-	public static final String HARDWARE_COMPATIBILITY ="hardwareCompatibility";
-	public static final String MEZZANINE_PRESENT ="mezzaninePresent";
-	public static final String HARDWARE_REVISION ="hardwareRevision";
-	public static final String CPL_REVISION ="cpldRevision";
-	public static final String BOOT_VERSION ="bootVersion";
-	public static final String CARD_TYPE ="cardType";
-	public static final String PART_NUMBER ="partNumber";
-	public static final String FIRMWARE_DATE ="firmwareDate";
-	public static final String FIRMWARE_VERSION ="firmwareVersion";
-	public static final String FIRMWARE_OPTIONS ="firmwareOptions";
-	public static final String CHIPSET_LOAD ="chipsetLoad";
-	public static final String TEMPERTURE ="temperature";
+	public static final String CARD_STATUS = "CardStatus";
+	public static final String SERIAL_NUMBER = "SerialNumber";
+	public static final String HARDWARE_COMPATIBILITY = "HardwareCompatibility";
+	public static final String MEZZANINE_PRESENT = "MezzaninePresent";
+	public static final String HARDWARE_REVISION = "HardwareRevision";
+	public static final String CPL_REVISION = "CpldRevision";
+	public static final String BOOT_VERSION = "BootVersion";
+	public static final String CARD_TYPE = "CardType";
+	public static final String PART_NUMBER = "PartNumber";
+	public static final String FIRMWARE_DATE = "FirmwareDate";
+	public static final String FIRMWARE_VERSION = "FirmwareVersion";
+	public static final String FIRMWARE_OPTIONS = "FirmwareOptions";
+	public static final String CHIPSET_LOAD = "ChipsetLoad";
+	public static final String TEMPERATURE = "Temperature";
 
 	private final String name;
 	private boolean isMonitor;

@@ -182,6 +182,19 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/status-empty-data"
+      },
+      "response": {
+        "status": 200,
+        "body": null,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }
