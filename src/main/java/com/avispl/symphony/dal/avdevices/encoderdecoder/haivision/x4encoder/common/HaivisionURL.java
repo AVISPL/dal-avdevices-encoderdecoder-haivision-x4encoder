@@ -10,12 +10,54 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
  * @version 1.0
  * @since 1.0
  */
-public class HaivisionURL {
+public enum HaivisionURL {
 
-	public static final String AUDIO = "apis/audenc";
-	public static final String VIDEO = "apis/videnc";
-	public static final String OUTPUTS = "apis/streams";
-	public static final String AUTHENTICATION = "/apis/authentication";
-	public static final String SYSTEM_INFO_STATUS = "apis/status";
+	AUDIO_ENCODER("Audio Encoder",true,"apis/audenc"),
+	VIDEO_ENCODER("Video Encoder",true,"apis/videnc"),
+	OUTPUT_ENCODER("Output Encoder",true,"apis/streams"),
+	SYSTEM_INFO_STATUS("System Info Status",true,"apis/status"),
+	AUTHENTICATION("Role Based",false,"/apis/authentication"),
+	ROLE_BASED("Authentication",false,"apis/accounts/");
 
+	private final String name;
+	private boolean isMonitor;
+	private String url;
+
+	/**
+	 * MakitoMonitoringMetric instantiation
+	 *
+	 * @param name {@code {@link #name}}
+	 */
+	HaivisionURL(String name, boolean isMonitor,String url) {
+		this.name = name;
+		this.isMonitor = isMonitor;
+		this.url = url;
+	}
+
+	/**
+	 * Retrieves {@code {@link #name}}
+	 *
+	 * @return value of {@link #name}
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Retrieves {@code {@link #isMonitor}}
+	 *
+	 * @return value of {@link #isMonitor}
+	 */
+	public boolean isMonitor() {
+		return isMonitor;
+	}
+
+	/**
+	 * Retrieves {@code {@link #url}}
+	 *
+	 * @return value of {@link #url}
+	 */
+	public String getUrl() {
+		return url;
+	}
 }

@@ -68,7 +68,7 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 
 			VideoStatistic videoStatistic = new VideoStatistic();
 			videoStatistic.setExtractedCSDBytes(checkNoneInformation(stateNode, "extractedCSDBytes"));
-			videoStatistic.setCCErrors(checkNoneInformation(stateNode, "CCErrors"));
+			videoStatistic.setcCErrors(checkNoneInformation(stateNode, "CCErrors"));
 			videoStatistic.setClosedCaptioning(checkNoneInformation(stateNode, "closedCaptioning"));
 			videoStatistic.setEncoderLoad(checkNoneInformation(stateNode, "encoderLoad"));
 			videoStatistic.setEncodedBitRate(checkNoneInformation(stateNode, "encodedBitRate"));
@@ -88,6 +88,7 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoStatistic.setInputFormatIsProgressive(checkNoneInformation(stateNode, "inputFormatIsProgressive"));
 			videoStatistic.setInputFormatIsInterlaced(checkNoneInformation(stateNode, "inputFormatIsInterlaced"));
 			videoStatistic.setInputColorPrimaries(checkNoneInformation(stateNode, "inputColorPrimaries"));
+			videoStatistic.setInputColourPrimaries(checkNoneInformation(stateNode, "inputColourPrimaries"));
 			videoStatistic.setInputFormatFrameRate(checkNoneInformation(stateNode, "inputFormatFrameRate"));
 			videoStatistic.setInputFormatHeight(checkNoneInformation(stateNode, "inputFormatHeight"));
 			videoStatistic.setInputFormatWidth(checkNoneInformation(stateNode, "inputFormatWidth"));
@@ -115,7 +116,6 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 	 * @return String is None or value
 	 */
 	private String checkNoneInformation(JsonNode stateNode, String name) {
-
 		return stateNode.get(name) == null ? HaivisionConstant.NONE : stateNode.get(name).asText();
 	}
 }

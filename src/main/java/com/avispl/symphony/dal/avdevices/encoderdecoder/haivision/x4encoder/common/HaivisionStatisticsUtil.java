@@ -17,25 +17,25 @@ public class HaivisionStatisticsUtil {
 	/**
 	 * Retrieves the URL for monitoring process
 	 *
-	 * @param makitoMonitoringMetric is instance of makitoMonitoringMetric
-	 * @return URL is instance of AxisURL
+	 * @param haivisionURL is instance of haivisionURL
+	 * @return URL is instance of haivisionURL
 	 * @throws Exception if the name is not supported
 	 */
-	public static String getMonitorURL(HaivisionMonitoringMetric makitoMonitoringMetric) {
-		Objects.requireNonNull(makitoMonitoringMetric);
-		switch (makitoMonitoringMetric) {
+	public static String getMonitorURL(HaivisionURL haivisionURL) {
+		Objects.requireNonNull(haivisionURL);
+		switch (haivisionURL) {
 			case AUDIO_ENCODER:
-				return HaivisionURL.AUDIO;
+				return HaivisionURL.AUDIO_ENCODER.getUrl();
 			case VIDEO_ENCODER:
-				return HaivisionURL.VIDEO;
+				return HaivisionURL.VIDEO_ENCODER.getUrl();
 			case OUTPUT_ENCODER:
-				return HaivisionURL.OUTPUTS;
+				return HaivisionURL.OUTPUT_ENCODER.getUrl();
 			case AUTHENTICATION:
-				return HaivisionURL.AUTHENTICATION;
+				return HaivisionURL.AUTHENTICATION.getUrl();
 			case SYSTEM_INFO_STATUS:
-				return HaivisionURL.SYSTEM_INFO_STATUS;
+				return HaivisionURL.SYSTEM_INFO_STATUS.getUrl();
 			default:
-				throw new IllegalArgumentException("Do not support axisStatisticsMetric: " + makitoMonitoringMetric.name());
+				throw new IllegalArgumentException("Do not support HaivisionStatisticsMetric: " + haivisionURL.name());
 		}
 	}
 }

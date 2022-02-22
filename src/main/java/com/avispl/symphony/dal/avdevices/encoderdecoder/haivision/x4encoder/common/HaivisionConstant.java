@@ -12,8 +12,9 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
  */
 public class HaivisionConstant {
 
+	public static final String STATISTICS = "Statistics";
 	public static final String USER_NAME = "username";
-	public static final String PASS_WORD = "password";
+	public static final String PASSWORD = "password";
 	public static final String SET_COOKIE = "Set-Cookie";
 	public static final String COLON_SLASH = "://";
 	public static final String COLON = ":";
@@ -29,5 +30,7 @@ public class HaivisionConstant {
 	public static final String DASH = "-";
 	public static final String COMMA = ",";
 	public static final String HASH = "#";
+	public static final String COOKIE = "Cookie";
+	public static final String SYSTEM_INFO_STATUS = "System Info Status";
 
 }

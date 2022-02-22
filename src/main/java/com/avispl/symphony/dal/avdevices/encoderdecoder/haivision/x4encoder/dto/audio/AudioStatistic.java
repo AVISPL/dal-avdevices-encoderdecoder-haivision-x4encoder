@@ -3,6 +3,9 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
+
 /**
  * Audio Statistic DTO class
  *
@@ -182,5 +185,36 @@ public class AudioStatistic {
 	 */
 	public void setMaxSampleValuePercentage(String maxSampleValuePercentage) {
 		this.maxSampleValuePercentage = maxSampleValuePercentage;
+	}
+
+	/**
+	 * Get the value by the metric monitoring
+	 *
+	 * @param metric the metric is metric monitoring
+	 * @return String value of encoder monitoring properties by metric
+	 */
+	public String getValueByMetric(AudioMonitoringMetric metric) {
+		switch (metric) {
+			case STATE:
+				return getState();
+			case ENCODER_PTS:
+				return getEncoderPTS();
+			case ENCODED_BYTES:
+				return getEncodedBytes();
+			case ENCODED_FRAMES:
+				return getEncodedFrames();
+			case STC_SOURCE_INTERFACE:
+				return getsTCSourceInterface();
+			case ENCODER_ERRORS:
+				return getEncoderErrors();
+			case ENCODED_BITRATE:
+				return getEncodedBitrate();
+			case MAX_SAMPLE_VALUE:
+				return getMaxSampleValue();
+			case MAX_SAMPLE_VALUE_PERCENTAGE:
+				return getMaxSampleValuePercentage();
+			default:
+				return HaivisionConstant.NONE;
+		}
 	}
 }

@@ -3,6 +3,9 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
+
 /**
  * Video Statistic DTO class
  *
@@ -38,7 +41,7 @@ public class VideoStatistic {
 	private String encodedBitRate;
 	private String encoderLoad;
 	private String closedCaptioning;
-	private String CCErrors;
+	private String cCErrors;
 	private String extractedCSDBytes;
 	private String inputColourPrimaries;
 	private String inputTransferCharacteristics;
@@ -535,21 +538,21 @@ public class VideoStatistic {
 	}
 
 	/**
-	 * Retrieves {@code {@link #CCErrors}}
+	 * Retrieves {@code {@link #cCErrors }}
 	 *
-	 * @return value of {@link #CCErrors}
+	 * @return value of {@link #cCErrors}
 	 */
-	public String getCCErrors() {
-		return CCErrors;
+	public String getcCErrors() {
+		return cCErrors;
 	}
 
 	/**
 	 * Sets {@code CCErrors}
 	 *
-	 * @param CCErrors the {@code java.lang.String} field
+	 * @param cCErrors the {@code java.lang.String} field
 	 */
-	public void setCCErrors(String CCErrors) {
-		this.CCErrors = CCErrors;
+	public void setcCErrors(String cCErrors) {
+		this.cCErrors = cCErrors;
 	}
 
 	/**
@@ -694,5 +697,90 @@ public class VideoStatistic {
 	 */
 	public void setInputColorPrimaries(String inputColorPrimaries) {
 		this.inputColorPrimaries = inputColorPrimaries;
+	}
+
+	/**
+	 * Get the value by the metric monitoring
+	 *
+	 * @param metric the metric is metric monitoring
+	 * @return String value of encoder monitoring properties by metric
+	 */
+	public String getValueByMetric(VideoMonitoringMetric metric) {
+		switch (metric) {
+			case STATE:
+				return getState();
+			case UPTIME:
+				return getUptime();
+			case INPUT_PRESENT:
+				return getInputPresent();
+			case INPUT_FORMAT:
+				return getInputFormat();
+			case INPUT_FORMAT_SHORT:
+				return getInputFormatShort();
+			case INPUT_FORMAT_U64:
+				return getInputFormatU64();
+			case INPUT_FORMAT_WITHOUT_FRAMERATE_U64:
+				return getInputFormatWithoutFramerateU64();
+			case INPUT_FORMAT_IS_DETAILED:
+				return getInputFormatIsDetailed();
+			case INPUT_FORMAT_WIDTH:
+				return getInputFormatWidth();
+			case INPUT_FORMAT_HEIGHT:
+				return getInputFormatHeight();
+			case INPUT_FORMAT_FRAMERATE:
+				return getInputFormatFrameRate();
+			case INPUT_FORMAT_IS_INTERLACED:
+				return getInputFormatIsInterlaced();
+			case RESOLUTION:
+				return getResolution();
+			case RESOLUTION_IS_DETAILED:
+				return getResolutionIsDetailed();
+			case RESOLUTION_WIDTH:
+				return getResolutionWidth();
+			case RESOLUTION_HEIGHT:
+				return getResolutionHeight();
+			case RESOLUTION_FRAMERATE:
+				return getResolutionFrameRate();
+			case RESOLUTION_IS_INTERLACED:
+				return getResolutionIsInterlaced();
+			case RESOLUTION_IS_PROGRESSIVE:
+				return getResolutionIsProgressive();
+			case ASPECT_RATIO:
+				return getAspectRatio();
+			case ENCODED_FRAMES_VIDEO:
+				return getEncodedFrames();
+			case ENCODED_BYTES_VIDEO:
+				return getEncodedBytes();
+			case ENCODED_FRAMERATE:
+				return getEncodedFrameRate();
+			case DROPPED_FRAMERATE:
+				return getDroppedFrames();
+			case ENCODER_RESETS:
+				return getEncoderResets();
+			case ENCODED_BITRATE_VIDEO:
+				return getEncodedBitRate();
+			case ENCODER_LOAD:
+				return getEncoderLoad();
+			case CLOSED_CAPTIONING:
+				return getClosedCaptioning();
+			case EXTRACTED_CSD_BYTES:
+				return getExtractedCSDBytes();
+			case INPUT_COLOUR_PRIMARIES:
+				return getInputColourPrimaries();
+			case INPUT_COLOR_PRIMARIES:
+			return getInputColorPrimaries();
+			case CC_ERRORS:
+				return getcCErrors();
+			case INPUT_TRANSFER_CHARACTERISTICS:
+				return getInputTransferCharacteristics();
+			case INPUT_MATRIX_COEFFICIENTS:
+				return getInputMatrixCoefficients();
+			case OCCURRED:
+				return getOccurred();
+			case INPUT_FORMAT_IS_PROGRESSIVE:
+				return getInputFormatIsProgressive();
+			default:
+				return HaivisionConstant.NONE;
+		}
 	}
 }

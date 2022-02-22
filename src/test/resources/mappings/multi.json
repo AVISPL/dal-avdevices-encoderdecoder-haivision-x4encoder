@@ -195,6 +195,19 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/accounts/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"operator\",\n        \"role\": \"Operator\",\n        \"state\": 0,\n        \"expiration\": 0,\n        \"expirationDays\": 0,\n        \"pwd\": 1\n    },\n    \"keys\": {\n        \"accountName\": \"operator\",\n        \"data\": []\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

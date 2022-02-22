@@ -6,6 +6,9 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
+
 
 /**
  * SystemInfoResponse Response DTO class
@@ -330,5 +333,48 @@ public class SystemInfoResponse {
 	 */
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
+	}
+
+	/**
+	 * Get the value by the metric monitoring
+	 *
+	 * @param metric the metric is metric monitoring
+	 * @return String value of encoder monitoring properties by metric
+	 */
+	public String getValueByMetric(SystemMonitoringMetric metric) {
+		switch (metric) {
+			case CARD_STATUS:
+				return getCardStatus();
+			case UPTIME:
+				return getUptime();
+			case SERIAL_NUMBER:
+				return getSerialNumber();
+			case HARDWARE_COMPATIBILITY:
+				return getHardwareCompatibility();
+			case MEZZANINE_PRESENT:
+				return getMezzaninePresent();
+			case HARDWARE_REVISION:
+				return getHardwareRevision();
+			case CPL_REVISION:
+				return getCpldRevision();
+			case BOOT_VERSION:
+				return getBootVersion();
+			case CARD_TYPE:
+				return getCardType();
+			case PART_NUMBER:
+				return getPartNumber();
+			case FIRMWARE_DATE:
+				return getFirmwareDate();
+			case FIRMWARE_VERSION:
+				return getFirmwareVersion();
+			case FIRMWARE_OPTIONS:
+				return getFirmwareOptions();
+			case CHIPSET_LOAD:
+				return getChipsetLoad();
+			case TEMPERATURE:
+				return getTemperature();
+			default:
+				return HaivisionConstant.NONE;
+		}
 	}
 }

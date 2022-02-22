@@ -35,9 +35,13 @@ import com.avispl.symphony.api.dal.dto.monitor.ExtendedStatistics;
 import com.avispl.symphony.api.dal.dto.monitor.Statistics;
 import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.api.dal.monitor.Monitorable;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AudioStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
@@ -58,8 +62,15 @@ import com.avispl.symphony.dal.util.StringUtils;
  * Supported features are:
  * <p>
  * Monitoring:
+ * <li>Info System</li>
+ * <li>Audio encoder statistics</li>
+ * <li>Video encoder statistics</li>
+ * <li>Output stream encoder statistics</li>
  * <p>
  * Controlling:
+ * <li>Start/Stop /Edit audio encoder config</li>
+ * <li>Start/Stop /Edit video encoder config</li>
+ * <li>Create/ Edit/ Delete / Start/Stop /Edit output stream </li>
  *
  * @author Ivan
  * @since 1.0.0
@@ -72,10 +83,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private ExtendedStatistics localExtendedStatistics;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final Map<String, String> failedMonitor = new HashMap<>();
-	private final Map<String, String> errorFilter = new HashMap<>();
 
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
-	private final String uuidSeconds = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
 	//The properties adapter
 	private String streamNameFilter;
@@ -194,7 +203,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		List<AdvancedControllableProperty> advancedControllableProperties = new ArrayList<>();
 
 		if (sessionID == null) {
-			sessionID = retrieveSessionID();
+			if (!StringUtils.isNullOrEmpty(getPassword()) && !StringUtils.isNullOrEmpty(getLogin())) {
+				sessionID = retrieveSessionID();
+			} else {
+				sessionID = HaivisionConstant.AUTHORIZED;
+			}
 		}
 
 		if (localExtendedStatistics == null) {
@@ -204,11 +217,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		isAdapterFiltering();
 		populateInformationFromDevice(stats);
 
-		if (!errorFilter.isEmpty()) {
-			for (Map.Entry<String, String> errorMessage : errorFilter.entrySet()) {
-				stats.put(errorMessage.getKey(), errorMessage.getValue());
-			}
-		}
 		extendedStatistics.setStatistics(stats);
 		extendedStatistics.setControllableProperties(advancedControllableProperties);
 
@@ -224,6 +232,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			logger.debug("controlProperty value" + value);
 			logger.debug("controlProperty value" + property);
 		}
+		//TODO
 	}
 
 	@Override
@@ -264,7 +273,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 		ObjectNode request = JsonNodeFactory.instance.objectNode();
 		request.put(HaivisionConstant.USER_NAME, getLogin());
-		request.put(HaivisionConstant.PASS_WORD, getPassword());
+		request.put(HaivisionConstant.PASSWORD, getPassword());
 
 		StringEntity entity = new StringEntity(request.toString());
 		httpPost.setEntity(entity);
@@ -293,7 +302,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		stringBuilder.append(getHost());
 		stringBuilder.append(HaivisionConstant.COLON);
 		stringBuilder.append(getPort());
-		stringBuilder.append(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUTHENTICATION));
+		stringBuilder.append(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION));
 
 		return stringBuilder.toString();
 	}
@@ -302,11 +311,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Retrieve data and add to stats
 	 */
 	private void populateInformationFromDevice(Map<String, String> stats) {
-		for (HaivisionMonitoringMetric makitoMonitoringMetric : HaivisionMonitoringMetric.values()) {
-			if (HaivisionMonitoringMetric.AUTHENTICATION.equals(makitoMonitoringMetric)) {
+		for (HaivisionURL haivisionURL : HaivisionURL.values()) {
+			if (HaivisionURL.AUTHENTICATION.equals(haivisionURL)) {
 				continue;
 			}
-			retrieveDataByMetric(stats, makitoMonitoringMetric);
+			retrieveDataByURL(stats, haivisionURL);
 		}
 		if (countMonitoringNumber == null) {
 			countMonitoringNumber = getNumberMonitoringMetric();
@@ -319,14 +328,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			throw new ResourceNotReachableException("Get monitoring data failed: " + stringBuilder);
 		}
 		getFilteredForEncoderStatistics();
-		for (HaivisionMonitoringMetric makitoMonitoringMetric : HaivisionMonitoringMetric.values()) {
-			if (HaivisionMonitoringMetric.AUDIO_ENCODER.equals(makitoMonitoringMetric)) {
+		for (HaivisionURL haivisionURL : HaivisionURL.values()) {
+			if (HaivisionURL.AUDIO_ENCODER.equals(haivisionURL)) {
 				populateAudioData(stats);
 			}
-			if (HaivisionMonitoringMetric.VIDEO_ENCODER.equals(makitoMonitoringMetric)) {
+			if (HaivisionURL.VIDEO_ENCODER.equals(haivisionURL)) {
 				populateVideoData(stats);
 			}
-			if (HaivisionMonitoringMetric.OUTPUT_ENCODER.equals(makitoMonitoringMetric)) {
+			if (HaivisionURL.OUTPUT_ENCODER.equals(haivisionURL)) {
 				populateOutputData(stats);
 			}
 		}
@@ -335,11 +344,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Retrieve data from the device
 	 *
-	 * @param metric list metric of device
+	 * @param url list URL of device
 	 */
-	private void retrieveDataByMetric(Map<String, String> stats, HaivisionMonitoringMetric metric) {
-		Objects.requireNonNull(metric);
-		switch (metric) {
+	private void retrieveDataByURL(Map<String, String> stats, HaivisionURL url) {
+		Objects.requireNonNull(url);
+		switch (url) {
 			case AUDIO_ENCODER:
 				retrieveAudioEncoder();
 				break;
@@ -351,6 +360,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case SYSTEM_INFO_STATUS:
 				retrieveSystemInfoStatus(stats);
+				break;
+			case ROLE_BASED:
 				break;
 			default:
 				throw new IllegalStateException("Error the metric monitoring");
@@ -383,31 +394,20 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void addAudioDataStatisticsToStatisticsProperty(Map<String, String> stats, AudioResponse audioResponseList) {
 		String audioName = audioResponseList.getName();
 		AudioStatistic audioStatistic = audioResponseList.getAudioStatistic();
-
 		Map<Integer, String> audioMap = AudioStateDropdown.getNameToValueMap();
 		String state = audioResponseList.getState();
-		if (HaivisionConstant.NONE.equals(state)) {
-			stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE), state);
-		} else {
-			stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE),
-					String.valueOf(audioMap.get(Integer.valueOf(state))));
+		for (AudioMonitoringMetric audioMetric : AudioMonitoringMetric.values()) {
+			if (audioMetric.equals(AudioMonitoringMetric.STATE)) {
+				if (HaivisionConstant.NONE.equals(state)) {
+					stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, audioMetric.getName()), state);
+				} else {
+					stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, audioMetric.getName()),
+							String.valueOf(audioMap.get(Integer.valueOf(state))));
+				}
+				continue;
+			}
+			stats.put(audioName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + HaivisionConstant.HASH + audioMetric.getName(), audioStatistic.getValueByMetric(audioMetric));
 		}
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODER_PTS),
-				String.valueOf(audioStatistic.getEncoderPTS()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_BYTES),
-				String.valueOf(audioStatistic.getEncodedBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODER_ERRORS),
-				String.valueOf(audioStatistic.getEncoderErrors()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_FRAMES),
-				String.valueOf(audioStatistic.getEncodedFrames()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STC_SOURCE_INTERFACE),
-				String.valueOf(audioStatistic.getsTCSourceInterface()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_BITRATE),
-				String.valueOf(audioStatistic.getEncodedBitrate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.MAX_SAMPLE_VALUE),
-				String.valueOf(audioStatistic.getMaxSampleValue()));
-		stats.put(String.format(HaivisionConstant.FORMAT, audioName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE),
-				String.valueOf(audioStatistic.getMaxSampleValuePercentage()));
 	}
 
 	/**
@@ -438,80 +438,23 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		VideoStatistic videoStatistic = videoResponseList.getVideoStatistic();
 		Map<Integer, String> videoMap = VideoStateDropdown.getNameToValueMap();
 		String state = videoResponseList.getState();
-		if (HaivisionConstant.NONE.equals(state)) {
-			stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE), HaivisionConstant.NONE);
-		} else {
-			stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE),
-					String.valueOf(videoMap.get(Integer.valueOf(state))));
+		for (VideoMonitoringMetric videoMetric : VideoMonitoringMetric.values()) {
+			if (VideoMonitoringMetric.UPTIME.equals(videoMetric) || VideoMonitoringMetric.OCCURRED.equals(videoMetric)) {
+				stats.put(videoName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + HaivisionConstant.HASH + videoMetric.getName(),
+						formatTimeData(videoStatistic.getValueByMetric(videoMetric)));
+				continue;
+			}
+			if (VideoMonitoringMetric.STATE.equals(videoMetric)) {
+				if (HaivisionConstant.NONE.equals(state)) {
+					stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, videoMetric.getName()), state);
+				} else {
+					stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, videoMetric.getName()),
+							String.valueOf(videoMap.get(Integer.valueOf(state))));
+				}
+			} else {
+				stats.put(videoName + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + HaivisionConstant.HASH + videoMetric.getName(), videoStatistic.getValueByMetric(videoMetric));
+			}
 		}
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.UPTIME),
-				String.valueOf(formatTimeData(videoStatistic.getUptime())));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_PRESENT),
-				String.valueOf(videoStatistic.getInputPresent()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT),
-				String.valueOf(videoStatistic.getInputFormat()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_SHORT),
-				String.valueOf(videoStatistic.getInputFormatShort()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_U64),
-				String.valueOf(videoStatistic.getInputFormatU64()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_WITHOUT_FRAMERATE_U64),
-				String.valueOf(videoStatistic.getInputFormatWithoutFramerateU64()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_IS_DETAILED),
-				String.valueOf(videoStatistic.getInputFormatIsDetailed()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_COLOUR_PRIMARIES),
-				String.valueOf(videoStatistic.getInputColorPrimaries()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_WIDTH),
-				String.valueOf(videoStatistic.getInputFormatWidth()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_HEIGHT),
-				String.valueOf(videoStatistic.getInputFormatHeight()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_FRAMERATE),
-				String.valueOf(videoStatistic.getInputFormatFrameRate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_IS_INTERLACED),
-				String.valueOf(videoStatistic.getInputFormatIsInterlaced()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_FORMAT_IS_PROGRESSIVE),
-				String.valueOf(videoStatistic.getInputFormatIsProgressive()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION),
-				String.valueOf(videoStatistic.getResolution()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_IS_DETAILED),
-				String.valueOf(videoStatistic.getResolutionIsDetailed()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_WIDTH),
-				String.valueOf(videoStatistic.getResolutionWidth()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_HEIGHT),
-				String.valueOf(videoStatistic.getResolutionHeight()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_FRAMERATE),
-				String.valueOf(videoStatistic.getResolutionFrameRate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_IS_INTERLACED),
-				String.valueOf(videoStatistic.getResolutionIsInterlaced()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESOLUTION_IS_PROGRESSIVE),
-				String.valueOf(videoStatistic.getResolutionIsProgressive()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ASPECT_RATIO),
-				String.valueOf(videoStatistic.getAspectRatio()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_FRAMES_VIDEO),
-				String.valueOf(videoStatistic.getEncodedFrames()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_BYTES_VIDEO),
-				String.valueOf(videoStatistic.getEncodedBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_FRAMERATE),
-				String.valueOf(videoStatistic.getEncodedFrameRate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.DROPPED_FRAMERATE),
-				String.valueOf(videoStatistic.getDroppedFrames()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODER_RESETS),
-				String.valueOf(videoStatistic.getEncoderResets()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODED_BITRATE_VIDEO),
-				String.valueOf(videoStatistic.getEncodedBitRate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.ENCODER_LOAD),
-				String.valueOf(videoStatistic.getEncoderLoad()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.CLOSED_CAPTIONING),
-				String.valueOf(videoStatistic.getClosedCaptioning()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.CC_ERRORS),
-				String.valueOf(videoStatistic.getCCErrors()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.EXTRACTED_CSD_BYTES),
-				String.valueOf(videoStatistic.getExtractedCSDBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_TRANSFER_CHARACTERISTICS),
-				String.valueOf(videoStatistic.getInputTransferCharacteristics()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.INPUT_MATRIX_COEFFICIENTS),
-				String.valueOf(videoStatistic.getInputMatrixCoefficients()));
-		stats.put(String.format(HaivisionConstant.FORMAT, videoName + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.OCCURRED),
-				String.valueOf(formatTimeData(videoStatistic.getOccurred())));
 	}
 
 	/**
@@ -548,57 +491,23 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		OutputStatistic outputStatistic = outputResponseList.getOutputStatistic();
 		Map<Integer, String> outputMap = OutputStateDropdown.getNameToValueMap();
 		String state = outputResponseList.getState();
-		if (HaivisionConstant.NONE.equals(state)) {
-			stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE), state);
-		} else {
-			stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.STATE),
-					String.valueOf(outputMap.get(Integer.valueOf(state))));
+		for (OutputMonitoringMetric outputStreamMetric : OutputMonitoringMetric.values()) {
+			if (OutputMonitoringMetric.UPTIME.equals(outputStreamMetric) || OutputMonitoringMetric.OCCURRED.equals(outputStreamMetric)) {
+				stats.put(name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + HaivisionConstant.HASH + outputStreamMetric.getName(),
+						formatTimeData(outputStatistic.getValueByMetric(outputStreamMetric)));
+				continue;
+			}
+			if (OutputMonitoringMetric.STATE.equals(outputStreamMetric)) {
+				if (HaivisionConstant.NONE.equals(state)) {
+					stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()), state);
+				} else {
+					stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()),
+							String.valueOf(outputMap.get(Integer.valueOf(state))));
+				}
+			} else {
+				stats.put(name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + HaivisionConstant.HASH + outputStreamMetric.getName(), outputStatistic.getValueByMetric(outputStreamMetric));
+			}
 		}
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.UPTIME),
-				String.valueOf(formatTimeData(outputStatistic.getUptime())));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.SOURCE_PORT),
-				String.valueOf(outputStatistic.getSourcePort()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.SENT_PACKETS),
-				String.valueOf(outputStatistic.getSentPackets()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.SENT_BYTES),
-				String.valueOf(outputStatistic.getSentBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.BITRATE),
-				String.valueOf(outputStatistic.getBitrate()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RECONNECTIONS),
-				String.valueOf(outputStatistic.getReconnections()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESENT_PACKETS),
-				String.valueOf(outputStatistic.getResentPackets()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RESENT_BYTES),
-				String.valueOf(outputStatistic.getResentBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.DROPPED_PACKETS),
-				String.valueOf(outputStatistic.getDroppedPackets()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.DROPPED_BYTES),
-				String.valueOf(outputStatistic.getDroppedBytes()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.MSS), String.valueOf(outputStatistic.getMss()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.MAX_BANDWIDTH),
-				String.valueOf(outputStatistic.getMaxBandwidth()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.REMOTE_PORT),
-				String.valueOf(outputStatistic.getRemotePort()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.SOURCE_ADDRESS),
-				String.valueOf(outputStatistic.getSourceAddress()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.REMOTE_ADDRESS),
-				String.valueOf(outputStatistic.getRemoteAddress()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.PATH_MAX_BANDWIDTH),
-				String.valueOf(outputStatistic.getPathMaxBandwidth()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.LOST_PACKETS),
-				String.valueOf(outputStatistic.getLostPackets()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RECV_ACK),
-				String.valueOf(outputStatistic.getRecvACK()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RECV_NAK),
-				String.valueOf(outputStatistic.getRecvNAK()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.RTT),
-				String.valueOf(outputStatistic.getRtt()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.BUFFER),
-				String.valueOf(outputStatistic.getBuffer()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.LATENCY),
-				String.valueOf(outputStatistic.getLatency()));
-		stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionMonitoringMetric.STATISTICS, HaivisionMonitoringMetric.OCCURRED),
-				String.valueOf(formatTimeData(outputStatistic.getOccurred())));
 	}
 
 	/**
@@ -606,14 +515,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveAudioEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.AUDIO_ENCODER));
+			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER));
 			JsonNode audio = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
 			for (int i = 0; i < audio.size(); i++) {
 				AudioResponse audioItem = objectMapper.treeToValue(audio.get(i), AudioResponse.class);
 				audioResponseList.add(audioItem);
 			}
 		} catch (Exception e) {
-			failedMonitor.put(HaivisionMonitoringMetric.AUDIO_ENCODER.getName(), e.getMessage());
+			failedMonitor.put(HaivisionURL.AUDIO_ENCODER.getName(), e.getMessage());
 		}
 	}
 
@@ -622,14 +531,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveVideoEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.VIDEO_ENCODER));
+			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER));
 			JsonNode video = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
 			for (int i = 0; i < video.size(); i++) {
 				VideoResponse videoItem = objectMapper.treeToValue(video.get(i), VideoResponse.class);
 				videoResponseList.add(videoItem);
 			}
 		} catch (Exception e) {
-			failedMonitor.put(HaivisionMonitoringMetric.VIDEO_ENCODER.getName(), e.getMessage());
+			failedMonitor.put(HaivisionURL.VIDEO_ENCODER.getName(), e.getMessage());
 		}
 	}
 
@@ -638,14 +547,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveOutputEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.OUTPUT_ENCODER));
+			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER));
 			JsonNode output = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
 			for (int i = 0; i < output.size(); i++) {
 				OutputResponse outputItem = objectMapper.treeToValue(output.get(i), OutputResponse.class);
 				outputResponseList.add(outputItem);
 			}
 		} catch (Exception e) {
-			failedMonitor.put(HaivisionMonitoringMetric.OUTPUT_ENCODER.getName(), e.getMessage());
+			failedMonitor.put(HaivisionURL.OUTPUT_ENCODER.getName(), e.getMessage());
 		}
 	}
 
@@ -654,30 +563,18 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveSystemInfoStatus(Map<String, String> stats) {
 		try {
-			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
+			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
 			if (responseData != null) {
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS, checkForNullData(responseData.getCardStatus()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER, checkForNullData(responseData.getSerialNumber()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY,
-						checkForNullData(responseData.getHardwareCompatibility()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT, checkForNullData(responseData.getMezzaninePresent()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION, checkForNullData(responseData.getHardwareRevision()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION, checkForNullData(responseData.getCpldRevision()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION, checkForNullData(responseData.getBootVersion()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE, checkForNullData(responseData.getCardType()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER, checkForNullData(responseData.getPartNumber()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE, checkForNullData(responseData.getFirmwareDate()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION, checkForNullData(responseData.getFirmwareVersion()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS, checkForNullData(responseData.getFirmwareOptions()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME, checkForNullData(responseData.getUptime()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD, checkForNullData(responseData.getChipsetLoad()));
-				stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE, checkForNullData(responseData.getTemperature()));
+				String name = HaivisionConstant.SYSTEM_INFO_STATUS;
+				for (SystemMonitoringMetric systemInfoMetric : SystemMonitoringMetric.values()) {
+					stats.put(name + HaivisionConstant.HASH + systemInfoMetric.getName(), checkForNullData(responseData.getValueByMetric(systemInfoMetric)));
+				}
 			} else {
 				contributeNoneValueForSystemInfo(stats);
 			}
 		} catch (Exception e) {
 			contributeNoneValueForSystemInfo(stats);
-			failedMonitor.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName(), e.getMessage());
+			failedMonitor.put(HaivisionConstant.SYSTEM_INFO_STATUS, e.getMessage());
 		}
 	}
 
@@ -687,21 +584,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * @param stats list statistics
 	 */
 	private void contributeNoneValueForSystemInfo(Map<String, String> stats) {
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_STATUS, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.SERIAL_NUMBER, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_COMPATIBILITY, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.MEZZANINE_PRESENT, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.HARDWARE_REVISION, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CPL_REVISION, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.BOOT_VERSION, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CARD_TYPE, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.PART_NUMBER, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_DATE, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_VERSION, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.FIRMWARE_OPTIONS, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.UPTIME, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.CHIPSET_LOAD, HaivisionConstant.NONE);
-		stats.put(HaivisionMonitoringMetric.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + HaivisionMonitoringMetric.TEMPERATURE, HaivisionConstant.NONE);
+		for (SystemMonitoringMetric systemInfoMetric : SystemMonitoringMetric.values()) {
+			stats.put(HaivisionConstant.SYSTEM_INFO_STATUS + HaivisionConstant.HASH + systemInfoMetric.getName(), HaivisionConstant.NONE);
+		}
 	}
 
 	/**
@@ -747,8 +632,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (index > -1) {
 			time = time.substring(0, index);
 		}
-		return time.replace("d", uuidDay).replace("s", uuidSeconds).replace(uuidDay, HaivisionConstant.DAY)
-				.replace("h", HaivisionConstant.HOUR).replace("m", HaivisionConstant.MINUTE).replace(uuidSeconds, HaivisionConstant.SECOND);
+		return time.replace("d", uuidDay).replace("s", HaivisionConstant.SECOND).replace(uuidDay, HaivisionConstant.DAY)
+				.replace("h", HaivisionConstant.HOUR).replace("m", HaivisionConstant.MINUTE);
 	}
 
 	/**
@@ -999,7 +884,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private int getNumberMonitoringMetric() {
 		int countMonitoringMetric = 0;
-		for (HaivisionMonitoringMetric metric : HaivisionMonitoringMetric.values()) {
+		for (HaivisionURL metric : HaivisionURL.values()) {
 			if (metric.isMonitor()) {
 				countMonitoringMetric++;
 			}

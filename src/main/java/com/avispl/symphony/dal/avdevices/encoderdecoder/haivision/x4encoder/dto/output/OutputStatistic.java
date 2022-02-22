@@ -3,6 +3,9 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
+
 /**
  * Output Statistic DTO class
  *
@@ -466,5 +469,66 @@ public class OutputStatistic {
 	 */
 	public void setOccurred(String occurred) {
 		this.occurred = occurred;
+	}
+
+	/**
+	 * Get the value by the metric monitoring
+	 *
+	 * @param metric the metric is metric monitoring
+	 * @return String value of encoder monitoring properties by metric
+	 */
+	public String getValueByMetric(OutputMonitoringMetric metric) {
+		switch (metric) {
+			case STATE:
+				return getState();
+			case UPTIME:
+				return getUptime();
+			case SOURCE_PORT:
+				return getSourcePort();
+			case SENT_PACKETS:
+				return getSentPackets();
+			case SENT_BYTES:
+				return getSentBytes();
+			case BITRATE:
+				return getBitrate();
+			case RECONNECTIONS:
+				return getReconnections();
+			case RESENT_PACKETS:
+				return getResentPackets();
+			case RESENT_BYTES:
+				return getResentBytes();
+			case DROPPED_PACKETS:
+				return getDroppedPackets();
+			case DROPPED_BYTES:
+				return getDroppedBytes();
+			case MSS:
+				return getMss();
+			case MAX_BANDWIDTH:
+				return getMaxBandwidth();
+			case REMOTE_PORT:
+				return getRemotePort();
+			case SOURCE_ADDRESS:
+				return getSourceAddress();
+			case REMOTE_ADDRESS:
+				return getRemoteAddress();
+			case PATH_MAX_BANDWIDTH:
+				return getPathMaxBandwidth();
+			case LOST_PACKETS:
+				return getLostPackets();
+			case RECV_ACK:
+				return getRecvACK();
+			case RECV_NAK:
+				return getRecvNAK();
+			case RTT:
+				return getRtt();
+			case BUFFER:
+				return getBuffer();
+			case LATENCY:
+				return getLatency();
+			case OCCURRED:
+				return getOccurred();
+			default:
+				return HaivisionConstant.NONE;
+		}
 	}
 }
