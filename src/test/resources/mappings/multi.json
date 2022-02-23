@@ -1,0 +1,213 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/apis/authentication"
+      },
+      "response": {
+        "status": 200,
+        "body": "OK",
+        "headers": {
+          "Content-Type": "application/json",
+          "Set-Cookie" : "SessionID=SESSID16448589016542"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/videnc"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"data\": [\n        {\n            \"info\": {\n                \"name\": \"Video Encoder 0\",\n                \"id\": 0,\n                \"interface\": 0,\n                \"codecAlgorithm\": 1,\n                \"resolution\": \"9223372044908392448\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionText\": \"1920x1080p\",\n                \"resolutionWidth\": 1920,\n                \"resolutionHeight\": 1080,\n                \"encodingProfile\": 2,\n                \"chromaSubSampling\": 1,\n                \"dynamicRangeMode\": 0,\n                \"ratecontrol\": 0,\n                \"bitrate\": 3000,\n                \"maxBitrate\": 0,\n                \"pictureRate\": 0,\n                \"gopSize\": 120,\n                \"closedCaption\": 0,\n                \"aspectRatio\": 0,\n                \"timeCode\": 2,\n                \"countingMode\": 1,\n                \"dailyResync\": true,\n                \"resyncHour\": 0,\n                \"gopStructure\": 0,\n                \"slices\": 1,\n                \"intraRefresh\": 0,\n                \"partialFrameSkip\": 0,\n                \"dynamicPartialImageSkip\": false,\n                \"cropping\": 0\n            },\n            \"stats\": {\n                \"uptime\": \"17d13h4m5s\",\n                \"inputPresent\": 1,\n                \"inputType\": 1,\n                \"inputFormat\": \"3840x2160p60\",\n                \"inputFormatShort\": \"3840x2160p60\",\n                \"inputFormatU64\": \"9223372052962009208\",\n                \"inputFormatWithoutFramerateU64\": \"9223372052962009088\",\n                \"inputFormatIsDetailed\": true,\n                \"inputFormatResolution\": \"3840x2160\",\n                \"inputFormatWidth\": 3840,\n                \"inputFormatHeight\": 2160,\n                \"inputFormatFrameRate\": 60,\n                \"inputFormatIsInterlaced\": false,\n                \"inputFormatIsProgressive\": true,\n                \"resolution\": \"1920x1080p\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionWidth\": 1920,\n                \"resolutionHeight\": 1080,\n                \"resolutionFrameRate\": 0,\n                \"resolutionIsInterlaced\": false,\n                \"resolutionIsProgressive\": true,\n                \"aspectRatio\": \"16:9\",\n                \"encodedFrames\": \"26,406,030\",\n                \"encodedBytes\": \"166,222,146,368\",\n                \"encodedFrameRate\": 60,\n                \"droppedFrames\": \"0\",\n                \"encoderResets\": 0,\n                \"encodedBitRate\": \"2,954\",\n                \"encoderPTS\": \"0x1c3cf3876\",\n                \"encoderLoad\": 25,\n                \"closedCaptioning\": 0,\n                \"h265Profile\": \"Main\",\n                \"h265Tier\": \"Main\",\n                \"h265Level\": \"4.1\",\n                \"timecodeSource\": \"SYSTEM\",\n                \"timecode\": \"08:33:56:59\",\n                \"UTC\": \"1644914037166414 (2022-Feb-15-8h33m57s166414us)\",\n                \"numberOfSlices\": \"1\",\n                \"inputColorPrimaries\": \"BT.709\",\n                \"inputTransferCharacteristics\": \"BT.709\",\n                \"inputMatrixCoefficients\": \"BT.709\",\n                \"state\": 7\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Video Encoder 1\",\n                \"id\": 1,\n                \"interface\": 0,\n                \"codecAlgorithm\": 0,\n                \"resolution\": \"9223372042223853568\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionText\": \"1280x720p\",\n                \"resolutionWidth\": 1280,\n                \"resolutionHeight\": 720,\n                \"encodingProfile\": 2,\n                \"chromaSubSampling\": 1,\n                \"dynamicRangeMode\": 0,\n                \"ratecontrol\": 0,\n                \"bitrate\": 1500,\n                \"maxBitrate\": 0,\n                \"pictureRate\": 0,\n                \"gopSize\": 120,\n                \"closedCaption\": 0,\n                \"aspectRatio\": 0,\n                \"timeCode\": 0,\n                \"countingMode\": 1,\n                \"dailyResync\": true,\n                \"resyncHour\": 0,\n                \"gopStructure\": 0,\n                \"slices\": 1,\n                \"intraRefresh\": 0,\n                \"partialFrameSkip\": 0,\n                \"dynamicPartialImageSkip\": false,\n                \"cropping\": 0\n            },\n            \"stats\": {\n                \"inputPresent\": 1,\n                \"inputType\": 1,\n                \"inputFormat\": \"3840x2160p60\",\n                \"inputFormatShort\": \"3840x2160p60\",\n                \"inputFormatU64\": \"9223372052962009208\",\n                \"inputFormatWithoutFramerateU64\": \"9223372052962009088\",\n                \"inputFormatIsDetailed\": true,\n                \"inputFormatResolution\": \"3840x2160\",\n                \"inputFormatWidth\": 3840,\n                \"inputFormatHeight\": 2160,\n                \"inputFormatFrameRate\": 60,\n                \"inputFormatIsInterlaced\": false,\n                \"inputFormatIsProgressive\": true,\n                \"resolution\": \"1280x720p\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionWidth\": 1280,\n                \"resolutionHeight\": 720,\n                \"resolutionFrameRate\": 0,\n                \"resolutionIsInterlaced\": false,\n                \"resolutionIsProgressive\": true,\n                \"aspectRatio\": \"16:9\",\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedFrameRate\": 0,\n                \"droppedFrames\": \"0\",\n                \"encoderResets\": 0,\n                \"encodedBitRate\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"closedCaptioning\": 0,\n                \"numberOfSlices\": \"1\",\n                \"inputColorPrimaries\": \"BT.709\",\n                \"inputTransferCharacteristics\": \"BT.709\",\n                \"inputMatrixCoefficients\": \"BT.709\",\n                \"state\": 0\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Video Encoder 2\",\n                \"id\": 2,\n                \"interface\": 0,\n                \"codecAlgorithm\": 0,\n                \"resolution\": \"9223372044908392448\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionText\": \"1920x1080p\",\n                \"resolutionWidth\": 1920,\n                \"resolutionHeight\": 1080,\n                \"encodingProfile\": 2,\n                \"chromaSubSampling\": 1,\n                \"dynamicRangeMode\": 0,\n                \"ratecontrol\": 0,\n                \"bitrate\": 3000,\n                \"maxBitrate\": 0,\n                \"pictureRate\": 30,\n                \"gopSize\": 120,\n                \"closedCaption\": 0,\n                \"aspectRatio\": 0,\n                \"timeCode\": 0,\n                \"countingMode\": 1,\n                \"dailyResync\": true,\n                \"resyncHour\": 0,\n                \"gopStructure\": 0,\n                \"slices\": 1,\n                \"intraRefresh\": 0,\n                \"partialFrameSkip\": 0,\n                \"dynamicPartialImageSkip\": false,\n                \"cropping\": 0\n            },\n            \"stats\": {\n                \"inputPresent\": 1,\n                \"inputType\": 1,\n                \"inputFormat\": \"3840x2160p60\",\n                \"inputFormatShort\": \"3840x2160p60\",\n                \"inputFormatU64\": \"9223372052962009208\",\n                \"inputFormatWithoutFramerateU64\": \"9223372052962009088\",\n                \"inputFormatIsDetailed\": true,\n                \"inputFormatResolution\": \"3840x2160\",\n                \"inputFormatWidth\": 3840,\n                \"inputFormatHeight\": 2160,\n                \"inputFormatFrameRate\": 60,\n                \"inputFormatIsInterlaced\": false,\n                \"inputFormatIsProgressive\": true,\n                \"resolution\": \"1920x1080p\",\n                \"resolutionIsDetailed\": true,\n                \"resolutionWidth\": 1920,\n                \"resolutionHeight\": 1080,\n                \"resolutionFrameRate\": 0,\n                \"resolutionIsInterlaced\": false,\n                \"resolutionIsProgressive\": true,\n                \"aspectRatio\": \"16:9\",\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedFrameRate\": 0,\n                \"droppedFrames\": \"0\",\n                \"encoderResets\": 0,\n                \"encodedBitRate\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"closedCaptioning\": 0,\n                \"numberOfSlices\": \"1\",\n                \"inputColorPrimaries\": \"BT.709\",\n                \"inputTransferCharacteristics\": \"BT.709\",\n                \"inputMatrixCoefficients\": \"BT.709\",\n                \"state\": 0\n            }\n        }\n    ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/streams"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"data\": [\n        {\n            \"info\": {\n                \"name\": \"Stream&#32;Output&#32;0\",\n                \"id\": 1,\n                \"type\": \"1\",\n                \"encapsulation\": \"34\",\n                \"userData\": \"\",\n                \"address\": \"144.76.104.227\",\n                \"port\": \"6064\",\n                \"networkInterface\": \"\",\n                \"latency\": 250,\n                \"srtMode\": 0,\n                \"sourceport\": \"0\",\n                \"adaptive\": \"0\",\n                \"encKeyLength\": 0,\n                \"passphrase\": \"\",\n                \"passphraseSet\": false,\n                \"srtAccessControlPublishingIdType\": \"standard\",\n                \"srtAccessResourceName\": \"\",\n                \"srtAccessUserName\": \"\",\n                \"srtAccessPublishingID\": \"\",\n                \"srtRedundancyMode\": \"none\",\n                \"srtRedundancyPath2NetworkInterface\": \"\",\n                \"srtRedundancyPath1Address\": \"144.76.104.227\",\n                \"srtRedundancyPath2Address\": \"0.0.0.0\",\n                \"srtRedundancyPath1Role\": \"primary\",\n                \"LinkWeight\": 0,\n                \"SecLinkWeight\": 0,\n                \"srtRedundancyPath1Name\": \"\",\n                \"srtRedundancyPath2Name\": \"\",\n                \"srtRedundancyPath1Port\": 6064,\n                \"srtRedundancyPath2Port\": 0,\n                \"srtListenerSecondPort\": 0,\n                \"srtRedundancyPath1SourcePort\": 0,\n                \"srtRedundancyPath2SourcePort\": 0,\n                \"pcrPid\": \"33\",\n                \"pmtPid\": \"32\",\n                \"tsStreamId\": \"1\",\n                \"programNumber\": \"1\",\n                \"pcrPidAutoAssigned\": true,\n                \"pmtPidAutoAssigned\": true,\n                \"programNumberAutoAssigned\": true,\n                \"video\": [\n                    {\n                        \"id\": \"0\",\n                        \"name\": \"Video Encoder 0\",\n                        \"pid\": \"33\",\n                        \"autoassigned\": true\n                    }\n                ],\n                \"audio\": [],\n                \"metadata\": [],\n                \"sap\": {},\n                \"mtu\": \"1496\",\n                \"tos\": \"0x80\",\n                \"ttl\": \"64\",\n                \"shaping\": \"vbr\",\n                \"overheadPercentage\": \"25\",\n                \"bandwithEstimate\": \"1681\",\n                \"metadataBandwidth\": \"0\",\n                \"metadataBandwidthAutoAssigned\": false,\n                \"encryption\": \"0\",\n                \"fec\": \"0\",\n                \"idleCells\": \"0\",\n                \"delayedAudio\": \"0\",\n                \"metadataEncapsulation\": 0,\n                \"persistent\": 1,\n                \"stillImage\": \"\"\n            },\n            \"stats\": {\n                \"uptime\": \"17d19h6m17s\",\n                \"sourcePort\": \"0\",\n                \"sentPackets\": \"0\",\n                \"sentBytes\": \"0\",\n                \"bitrate\": \"0 kbps\",\n                \"occurred\": \"2d23h31m32s ago\",\n                \"srt\": {\n                    \"state\": 3,\n                    \"detectedRedundancyMode\": \"none\",\n                    \"reconnections\": \"0\",\n                    \"resentPackets\": \"0\",\n                    \"resentBytes\": \"0\",\n                    \"droppedPackets\": \"0\",\n                    \"droppedBytes\": \"0\",\n                    \"mss\": 0,\n                    \"maxBandwidth\": \"0 kbps\",\n                    \"localPort\": 0,\n                    \"remotePort\": 0,\n                    \"pathMaxBandwidth\": \"0 kbps\",\n                    \"lostPackets\": \"0\",\n                    \"recvACK\": \"0\",\n                    \"recvNAK\": \"0\",\n                    \"rtt\": 0,\n                    \"buffer\": 0,\n                    \"latency\": 0\n                },\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"SRT&#32;Listen&#32;&#40;6001&#41;\",\n                \"id\": 2,\n                \"type\": \"1\",\n                \"encapsulation\": \"34\",\n                \"userData\": \"\",\n                \"address\": \"Any\",\n                \"port\": \"6001\",\n                \"networkInterface\": \"\",\n                \"latency\": 20,\n                \"srtMode\": 1,\n                \"sourceport\": \"0\",\n                \"adaptive\": \"0\",\n                \"encKeyLength\": 0,\n                \"passphrase\": \"\",\n                \"passphraseSet\": false,\n                \"srtAccessControlPublishingIdType\": \"standard\",\n                \"srtAccessResourceName\": \"\",\n                \"srtAccessUserName\": \"\",\n                \"srtAccessPublishingID\": \"\",\n                \"srtRedundancyMode\": \"optional\",\n                \"srtRedundancyPath2NetworkInterface\": \"\",\n                \"srtRedundancyPath1Address\": \"\",\n                \"srtRedundancyPath2Address\": \"\",\n                \"srtRedundancyPath1Role\": \"primary\",\n                \"LinkWeight\": 1,\n                \"SecLinkWeight\": 0,\n                \"srtRedundancyPath1Name\": \"\",\n                \"srtRedundancyPath2Name\": \"\",\n                \"srtRedundancyPath1Port\": 6001,\n                \"srtRedundancyPath2Port\": 0,\n                \"srtListenerSecondPort\": 0,\n                \"srtRedundancyPath1SourcePort\": 0,\n                \"srtRedundancyPath2SourcePort\": 0,\n                \"pcrPid\": \"33\",\n                \"pmtPid\": \"32\",\n                \"tsStreamId\": \"1\",\n                \"programNumber\": \"1\",\n                \"pcrPidAutoAssigned\": true,\n                \"pmtPidAutoAssigned\": true,\n                \"programNumberAutoAssigned\": true,\n                \"video\": [\n                    {\n                        \"id\": \"0\",\n                        \"name\": \"Video Encoder 0\",\n                        \"pid\": \"33\",\n                        \"autoassigned\": true\n                    }\n                ],\n                \"audio\": [\n                    {\n                        \"id\": \"0\",\n                        \"name\": \"Audio Encoder 0\",\n                        \"pid\": \"36\",\n                        \"autoassigned\": true\n                    }\n                ],\n                \"metadata\": [],\n                \"sap\": {},\n                \"mtu\": \"1496\",\n                \"tos\": \"0x80\",\n                \"ttl\": \"64\",\n                \"shaping\": \"vbr\",\n                \"overheadPercentage\": \"25\",\n                \"bandwithEstimate\": \"3524\",\n                \"metadataBandwidth\": \"0\",\n                \"metadataBandwidthAutoAssigned\": false,\n                \"encryption\": \"0\",\n                \"fec\": \"0\",\n                \"idleCells\": \"0\",\n                \"delayedAudio\": \"0\",\n                \"metadataEncapsulation\": 0,\n                \"persistent\": 1,\n                \"stillImage\": \"\"\n            },\n            \"stats\": {\n                \"uptime\": \"17d19h6m17s\",\n                \"sourcePort\": \"0\",\n                \"sentPackets\": \"2,690\",\n                \"sentBytes\": \"3,130,308\",\n                \"bitrate\": \"0 kbps\",\n                \"unsentPackets\": \"364\",\n                \"unsentBytes\": \"423,412\",\n                \"lastError\": \"104, (Connection reset by peer)\",\n                \"occurred\": \"2d23h31m32s ago\",\n                \"srt\": {\n                    \"state\": 5,\n                    \"detectedRedundancyMode\": \"none\",\n                    \"reconnections\": \"1\",\n                    \"resentPackets\": \"2\",\n                    \"resentBytes\": \"2,720\",\n                    \"droppedPackets\": \"0\",\n                    \"droppedBytes\": \"0\",\n                    \"maxBandwidth\": \"4,405 kbps\",\n                    \"localPort\": 0,\n                    \"remotePort\": 0,\n                    \"sourceAddress\": \"4,405\",\n                    \"remoteAddress\": \"Any\",\n                    \"pathMaxBandwidth\": \"90,537 kbps\",\n                    \"lostPackets\": \"2\",\n                    \"recvACK\": \"403\",\n                    \"recvNAK\": \"1\",\n                    \"rtt\": 155193,\n                    \"buffer\": 151,\n                    \"latency\": 250\n                },\n                \"state\": 5\n            }\n        }\n    ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/authorized"
+      },
+      "response": {
+        "status": 401,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/audio"
+      },
+      "response": {
+        "status": 200,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/audio-none-data"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                 \"name\": \"Audio Encoder 0\"\n            },\n            \"stats\": {\n               \n            }\n        },\n        {\n            \"info\": {\n                \n            },\n            \"stats\": {\n               \n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\"\n            },\n            \"stats\": {\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/video"
+      },
+      "response": {
+        "status": 200,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/video-none-data"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                 \"name\": \"Video Encoder 0\"\n            },\n            \"stats\": {\n               \n            }\n        },\n        {\n            \"info\": {\n                \n            },\n            \"stats\": {\n               \n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Video Encoder 1\"\n            },\n            \"stats\": {\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/output-none-data"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"data\": [\n        {\n            \"info\": {\n                \"name\": \"Stream&#32;Output&#32;0\",\n                \n                \"video\": [\n                   \n                ],\n                \"audio\": [],\n                \"metadata\": []\n                \n            },\n            \"stats\": {\n               \n                \"srt\": {\n                   \n                }\n            }\n        }\n    ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/audio-error"
+      },
+      "response": {
+        "status": 400,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/video-error"
+      },
+      "response": {
+        "status": 400,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/output-error"
+      },
+      "response": {
+        "status": 400,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/status"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n   \"cardStatus\":\"OK\",\n   \"serialNumber\":\"HAI-031743040010\",\n   \"hardwareCompatibility\":\"-001G\",\n   \"mezzaninePresent\":0,\n   \"hardwareRevision\":\"A\",\n   \"cpldRevision\":\"4 (Official, Internal flash)\",\n   \"bootVersion\":\"U-Boot 2018.01 (May 24 2019 - 18:24:54 -0400)\",\n   \"cardType\":\"Makito X4 SDI Encoder\",\n   \"partNumber\":\"B-MX4E-SDI4\",\n   \"firmwareDate\":\"Aug 24 2020\",\n   \"firmwareVersion\":\"1.2.0-14\",\n   \"firmwareOptions\":\"\",\n   \"uptime\":\"0 days 21:51:28\",\n   \"chipsetLoad\":\"4\",\n   \"temperature\":\"54\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/status-empty-data"
+      },
+      "response": {
+        "status": 200,
+        "body": null,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/accounts/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"operator\",\n        \"role\": \"Operator\",\n        \"state\": 0,\n        \"expiration\": 0,\n        \"expirationDays\": 0,\n        \"pwd\": 1\n    },\n    \"keys\": {\n        \"accountName\": \"operator\",\n        \"data\": []\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
