@@ -16,8 +16,6 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.swing.text.html.HTMLDocument;
@@ -46,9 +44,12 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.SystemInfoResponse;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
@@ -81,9 +82,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private boolean isAdapterFilter;
 	private Integer countMonitoringNumber = null;
 	private ExtendedStatistics localExtendedStatistics;
-	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final Map<String, String> failedMonitor = new HashMap<>();
-
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
 	//The properties adapter
@@ -515,12 +514,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveAudioEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER));
-			JsonNode audio = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
-			for (int i = 0; i < audio.size(); i++) {
-				AudioResponse audioItem = objectMapper.treeToValue(audio.get(i), AudioResponse.class);
-				audioResponseList.add(audioItem);
-			}
+			AudioResponseWrapper audioResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER), AudioResponseWrapper.class);
+			audioResponseList.addAll(audioResponse.getData());
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionURL.AUDIO_ENCODER.getName(), e.getMessage());
 		}
@@ -531,12 +526,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveVideoEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER));
-			JsonNode video = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
-			for (int i = 0; i < video.size(); i++) {
-				VideoResponse videoItem = objectMapper.treeToValue(video.get(i), VideoResponse.class);
-				videoResponseList.add(videoItem);
-			}
+			VideoResponseWrapper videoResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER), VideoResponseWrapper.class);
+			videoResponseList.addAll(videoResponse.getData());
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionURL.VIDEO_ENCODER.getName(), e.getMessage());
 		}
@@ -547,12 +538,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveOutputEncoder() {
 		try {
-			String responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER));
-			JsonNode output = objectMapper.readTree(responseData).get(HaivisionConstant.DATA);
-			for (int i = 0; i < output.size(); i++) {
-				OutputResponse outputItem = objectMapper.treeToValue(output.get(i), OutputResponse.class);
-				outputResponseList.add(outputItem);
-			}
+			OutputResponseWrapper outputResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER), OutputResponseWrapper.class);
+			outputResponseList.addAll(outputResponse.getData());
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionURL.OUTPUT_ENCODER.getName(), e.getMessage());
 		}
