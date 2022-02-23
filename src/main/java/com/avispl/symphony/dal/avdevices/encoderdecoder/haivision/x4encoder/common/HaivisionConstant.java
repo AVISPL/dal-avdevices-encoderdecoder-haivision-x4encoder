@@ -20,7 +20,6 @@ public class HaivisionConstant {
 	public static final String COLON = ":";
 	public static final String FORMAT = "%s#%s";
 	public static final String SPACE = " ";
-	public static final String DATA = "data";
 	public static final String NONE = "None";
 	public static final String AUTHORIZED = "Authorized";
 	public static final String DAY = " day(s) ";
@@ -32,5 +31,9 @@ public class HaivisionConstant {
 	public static final String HASH = "#";
 	public static final String COOKIE = "Cookie";
 	public static final String SYSTEM_INFO_STATUS = "System Info Status";
+	public static final String OPERATOR = "Operator";
+	public static final String ADMIN = "Admin";
+	public static final String INFO = "info";
+	public static final String ROLE = "role";
 
 }

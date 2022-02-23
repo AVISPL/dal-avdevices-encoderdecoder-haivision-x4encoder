@@ -34,6 +34,8 @@ public class HaivisionStatisticsUtil {
 				return HaivisionURL.AUTHENTICATION.getUrl();
 			case SYSTEM_INFO_STATUS:
 				return HaivisionURL.SYSTEM_INFO_STATUS.getUrl();
+			case ROLE_BASED:
+				return HaivisionURL.ROLE_BASED.getUrl();
 			default:
 				throw new IllegalArgumentException("Do not support HaivisionStatisticsMetric: " + haivisionURL.name());
 		}

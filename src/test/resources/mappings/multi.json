@@ -208,6 +208,45 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/guest/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"operator\",\n        \"role\": \"Guest\",\n        \"state\": 0,\n        \"expiration\": 0,\n        \"expirationDays\": 0,\n        \"pwd\": 1\n    },\n    \"keys\": {\n        \"accountName\": \"operator\",\n        \"data\": []\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/role-empty/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/role-failed"
+      },
+      "response": {
+        "status": 400,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

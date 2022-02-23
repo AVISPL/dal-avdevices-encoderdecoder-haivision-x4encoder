@@ -563,7 +563,6 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.setStreamNameFilter("Stream Output 1");
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		Assert.assertEquals(15, stats.size());
 		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + OutputMonitoringMetric.STATE.getName()));
 		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + OutputMonitoringMetric.UPTIME.getName()));
 		Assert.assertNull(stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + OutputMonitoringMetric.SOURCE_PORT.getName()));
@@ -748,5 +747,85 @@ class EncoderCommunicatorTest {
 		Assert.assertEquals("0", stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + OutputMonitoringMetric.LATENCY.getName()));
 		Assert.assertEquals("2 day(s) 23 hour(s) 31 minute(s) 32 second(s)",
 				stats.get("Stream Output 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + OutputMonitoringMetric.OCCURRED.getName()));
+	}
+
+	/**
+	 * Test getting user role when it is Administrator
+	 *
+	 * Expect response data contains controlling part
+	 */
+	@Test
+	void testRetrievingUserRoleWithAdministrator() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn(HaivisionURL.ROLE_BASED.getUrl());
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		System.out.println(extendedStatistics.getControllableProperties());
+		Assert.assertNotNull(extendedStatistics.getControllableProperties());
+	}
+
+	/**
+	 * Test getting user role when it is Operator
+	 *
+	 * Expect response data contains controlling part
+	 */
+	@Test
+	void testRetrieveUserRoleWithOperator() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn(HaivisionURL.ROLE_BASED.getUrl());
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		extendedStatistics.getControllableProperties();
+		Assert.assertNotNull(extendedStatistics.getControllableProperties());
+	}
+
+	/**
+	 * Test getting user role when it is Guest
+	 *
+	 * Expect response data does not contain controlling part
+	 */
+	@Test
+	void testRetrieveUserRoleWithGuest() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn("/guest/");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Assert.assertNull(extendedStatistics.getControllableProperties());
+	}
+
+	/**
+	 * Test getting user role when role is null or empty
+	 *
+	 * Expect an exception will be thrown
+	 */
+	@Test
+	void testRetrievingUserRoleWithNullOrEmpty() {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn("/role-empty/");
+		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.getMultipleStatistics(), "Expect failed because retrieve roleBased empty");
+	}
+
+	/**
+	 * Test getting user role fail
+	 *
+	 * Expect an exception will be thrown
+	 */
+	@Test
+	void testRetrievingUserRoleFailed() {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn("/role-failed/");
+		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.getMultipleStatistics(), "Expect failed because retrieve roleBased failed");
 	}
 }
