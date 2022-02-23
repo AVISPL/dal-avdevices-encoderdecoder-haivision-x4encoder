@@ -3,7 +3,6 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
@@ -20,49 +19,20 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.comm
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SystemInfoResponse {
 
-	@JsonAlias("cardStatus")
 	private String cardStatus;
-
-	@JsonAlias("audioPairMode")
 	private String serialNumber;
-
-	@JsonAlias("audioPairMode")
 	private String hardwareCompatibility;
-
-	@JsonAlias("audioPairMode")
 	private String mezzaninePresent;
-
-	@JsonAlias("audioPairMode")
 	private String hardwareRevision;
-
-	@JsonAlias("audioPairMode")
 	private String cpldRevision;
-
-	@JsonAlias("audioPairMode")
 	private String bootVersion;
-
-	@JsonAlias("audioPairMode")
 	private String cardType;
-
-	@JsonAlias("audioPairMode")
 	private String partNumber;
-
-	@JsonAlias("audioPairMode")
 	private String firmwareDate;
-
-	@JsonAlias("audioPairMode")
 	private String firmwareVersion;
-
-	@JsonAlias("audioPairMode")
 	private String firmwareOptions;
-
-	@JsonAlias("audioPairMode")
 	private String uptime;
-
-	@JsonAlias("audioPairMode")
 	private String chipsetLoad;
-
-	@JsonAlias("audioPairMode")
 	private String temperature;
 
 	/**

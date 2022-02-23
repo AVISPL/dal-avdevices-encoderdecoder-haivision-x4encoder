@@ -16,8 +16,8 @@ public enum HaivisionURL {
 	VIDEO_ENCODER("Video Encoder",true,"apis/videnc"),
 	OUTPUT_ENCODER("Output Encoder",true,"apis/streams"),
 	SYSTEM_INFO_STATUS("System Info Status",true,"apis/status"),
-	AUTHENTICATION("Role Based",false,"/apis/authentication"),
-	ROLE_BASED("Authentication",false,"apis/accounts/");
+	AUTHENTICATION("Authentication",false,"/apis/authentication"),
+	ROLE_BASED("Role Based",false,"apis/accounts/");
 
 	private final String name;
 	private boolean isMonitor;
