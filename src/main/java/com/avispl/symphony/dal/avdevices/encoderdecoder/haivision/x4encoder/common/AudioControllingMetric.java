@@ -18,6 +18,8 @@ public enum AudioControllingMetric {
 	BITRATE("BitRate"),
 	SAMPLE_RATE("SampleRate"),
 	ALGORITHM("ACC-LC Algorithm"),
+	ACTION("Action"),
+	APPLY_CHANGE("ApplyChange"),
 	LANGUAGE("Language");
 
 	private final String name;

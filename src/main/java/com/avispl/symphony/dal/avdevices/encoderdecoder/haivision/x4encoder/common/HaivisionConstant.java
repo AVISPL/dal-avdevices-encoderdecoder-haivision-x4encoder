@@ -35,5 +35,10 @@ public class HaivisionConstant {
 	public static final String ADMIN = "Admin";
 	public static final String INFO = "info";
 	public static final String ROLE = "role";
+	public static final String APPLY = "Apply";
+	public static final String[] START_AUDIO_VIDEO = {"Stop","None"};
+	public static final String[] STOP_AUDIO_VIDEO = {"Start","None"};
+	public static final String[] START_STREAM = {"Stop","None","Delete"};
+	public static final String[] STOP_STREAM = {"Start","None","Delete"};
 
 }

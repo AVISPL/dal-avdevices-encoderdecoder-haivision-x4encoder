@@ -93,6 +93,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private Integer countMonitoringNumber = null;
 	private ExtendedStatistics localExtendedStatistics;
 	private final Map<String, String> failedMonitor = new HashMap<>();
+	private boolean emergencyDelivery;
 
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
@@ -233,8 +234,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
 			extendedStatistics.setControllableProperties(advancedControllableProperties);
 		}
+		extendedStatistics.setStatistics(stats);
 
-		localExtendedStatistics = extendedStatistics;
+		if (!emergencyDelivery) {
+			localExtendedStatistics = extendedStatistics;
+		}
 		return Collections.singletonList(localExtendedStatistics);
 	}
 
@@ -246,6 +250,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			logger.debug("controlProperty value" + value);
 			logger.debug("controlProperty value" + property);
 		}
+		emergencyDelivery = true;
 		//TODO
 	}
 
@@ -437,86 +442,112 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void addAudioDataControlToProperty(Map<String, String> stats, AudioResponse audioResponseList, List<AdvancedControllableProperty> advancedControllableProperties) {
 		String audioName = audioResponseList.getName();
+		Map<Integer, String> audioMap = AudioStateDropdown.getNameToValueMap();
+		Map<Integer, String> channelModeMap = ChannelModeDropdown.getNameToValueMap();
+		Map<Integer, String> channel = ChannelModeDropdown.getNameToValueMap();
+		Map<Integer, String> sampleRateMap = SampleRateDropdown.getNameToValueMap();
+		Map<Integer, String> codecAlgorithmDropdown = CodecAlgorithm.getNameToValueMap();
+		Map<String, String> languageDropdown = LanguageDropdown.getNameToValueMap();
+		Map<Integer, String> inputMap = InputDropdown.getNameToValueMap();
+		String[] dropdownInput = InputDropdown.names();
+		String[] dropdownMode = ChannelModeDropdown.names();
+		String[] dropdownAlgorithm = CodecAlgorithm.names();
+		String[] dropdownSampleRate = SampleRateDropdown.names();
+		String[] dropdownLanguage = LanguageDropdown.names();
+		String[] dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
+		String[] dropdownBitRate;
 		String value;
+		
 		for (AudioControllingMetric audioMetric : AudioControllingMetric.values()) {
 			switch (audioMetric) {
 				case STATE:
-					Map<Integer, String> audioMap = AudioStateDropdown.getNameToValueMap();
 					String stateAudio = audioResponseList.getState();
-					value = HaivisionConstant.NONE.equals(stateAudio) ? stateAudio : audioMap.get(Integer.parseInt(stateAudio));
+					value = compareNoneValueAndValueDeserializer(stateAudio, HaivisionConstant.NONE.equals(stateAudio), audioMap.get(Integer.parseInt(stateAudio)));
 					stats.put(audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
 					break;
 				case INPUT:
-					String[] dropdownInput = InputDropdown.names();
-					Map<Integer, String> inputMap = InputDropdown.getNameToValueMap();
 					String input = audioResponseList.getInterfaceName();
-					value = HaivisionConstant.NONE.equals(input) ? input : inputMap.get(Integer.parseInt(input));
+					value = compareNoneValueAndValueDeserializer(input, HaivisionConstant.NONE.equals(input), inputMap.get(Integer.parseInt(input)));
 					AdvancedControllableProperty inputDropdownControlProperty = controlDropdown(stats, dropdownInput, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (inputDropdownControlProperty != null) {
-						advancedControllableProperties.add(inputDropdownControlProperty);
-					}
+					addAdvanceControlProperties(advancedControllableProperties, inputDropdownControlProperty);
 					break;
 				case CHANGE_MODE:
-					String[] dropdownMode = ChannelModeDropdown.names();
-					Map<Integer, String> channelModeMap = ChannelModeDropdown.getNameToValueMap();
 					String changeMode = audioResponseList.getMode();
-					value = HaivisionConstant.NONE.equals(changeMode) ? changeMode : channelModeMap.get(Integer.parseInt(changeMode));
+					value = compareNoneValueAndValueDeserializer(changeMode, HaivisionConstant.NONE.equals(changeMode), channelModeMap.get(Integer.parseInt(changeMode)));
 					AdvancedControllableProperty channelModeControlProperty = controlDropdown(stats, dropdownMode, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (channelModeControlProperty != null) {
-						advancedControllableProperties.add(channelModeControlProperty);
-					}
+					addAdvanceControlProperties(advancedControllableProperties, channelModeControlProperty);
 					break;
 				case BITRATE:
-					Map<Integer, String> channel = ChannelModeDropdown.getNameToValueMap();
 					String bitRate = audioResponseList.getInterfaceName();
-					value = HaivisionConstant.NONE.equals(bitRate) ? bitRate : channel.get(Integer.parseInt(bitRate));
+					value = compareNoneValueAndValueDeserializer(bitRate, HaivisionConstant.NONE.equals(bitRate), channel.get(Integer.parseInt(bitRate)));
 					String mode = audioResponseList.getMode();
 					mode = HaivisionConstant.NONE.equals(audioResponseList.getMode()) ? mode : channel.get(Integer.parseInt(audioResponseList.getMode()));
-					String[] dropdownBitRate;
 					if (mode.equals(ChannelModeDropdown.STEREO.getName())) {
 						dropdownBitRate = BitRateDropdown.namesIsStereo();
 					} else {
 						dropdownBitRate = BitRateDropdown.namesIsMono();
 					}
 					AdvancedControllableProperty bitRateControlProperty = controlDropdown(stats, dropdownBitRate, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (bitRateControlProperty != null) {
-						advancedControllableProperties.add(bitRateControlProperty);
-					}
+					addAdvanceControlProperties(advancedControllableProperties, bitRateControlProperty);
 					break;
 				case SAMPLE_RATE:
-					String[] dropdownSampleRate = SampleRateDropdown.names();
-					Map<Integer, String> sampleRateMap = SampleRateDropdown.getNameToValueMap();
 					String sampleRate = audioResponseList.getSampleRate();
-					value = HaivisionConstant.NONE.equals(sampleRate) ? sampleRate : sampleRateMap.get(Integer.parseInt(sampleRate));
+					value = compareNoneValueAndValueDeserializer(sampleRate, HaivisionConstant.NONE.equals(sampleRate), sampleRateMap.get(Integer.parseInt(sampleRate)));
 					AdvancedControllableProperty samPleRateControlProperty = controlDropdown(stats, dropdownSampleRate, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (samPleRateControlProperty != null) {
-						advancedControllableProperties.add(samPleRateControlProperty);
-					}
+					addAdvanceControlProperties(advancedControllableProperties, samPleRateControlProperty);
 					break;
 				case ALGORITHM:
-					String[] dropdownAlgorithm = CodecAlgorithm.names();
-					Map<Integer, String> codecAlgorithmDropdown = CodecAlgorithm.getNameToValueMap();
 					String codecAlgorithm = audioResponseList.getAlgorithm();
-					value = HaivisionConstant.NONE.equals(codecAlgorithm) ? codecAlgorithm : codecAlgorithmDropdown.get(Integer.parseInt(codecAlgorithm));
+					value = compareNoneValueAndValueDeserializer(codecAlgorithm, HaivisionConstant.NONE.equals(codecAlgorithm), codecAlgorithmDropdown.get(Integer.parseInt(codecAlgorithm)));
 					AdvancedControllableProperty codecAlgorithmControlProperty = controlDropdown(stats, dropdownAlgorithm, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (codecAlgorithmControlProperty != null) {
-						advancedControllableProperties.add(codecAlgorithmControlProperty);
-					}
+					addAdvanceControlProperties(advancedControllableProperties, codecAlgorithmControlProperty);
 					break;
 				case LANGUAGE:
-					String[] dropdownLanguage = LanguageDropdown.names();
-					Map<String, String> languageDropdown = LanguageDropdown.getNameToValueMap();
 					String language = audioResponseList.getLang();
-					value = StringUtils.isNullOrEmpty(language) ? HaivisionConstant.NONE : languageDropdown.get(audioResponseList.getLang());
+					value = compareNoneValueAndValueDeserializer(HaivisionConstant.NONE, StringUtils.isNullOrEmpty(language), languageDropdown.get(audioResponseList.getLang()));
 					AdvancedControllableProperty languageControlProperty = controlDropdownLanguage(stats, dropdownLanguage, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
-					if (languageControlProperty != null) {
-						advancedControllableProperties.add(languageControlProperty);
+					addAdvanceControlProperties(advancedControllableProperties, languageControlProperty);
+					break;
+				case ACTION:
+					stateAudio = audioResponseList.getState();
+					value = compareNoneValueAndValueDeserializer(stateAudio, HaivisionConstant.NONE.equals(stateAudio), audioMap.get(Integer.parseInt(stateAudio)));
+					stats.put(audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
+					if (!value.equals(HaivisionConstant.STOP_AUDIO_VIDEO[0])) {
+						dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
 					}
+					AdvancedControllableProperty actionDropdownControlProperty = controlDropdown(stats, dropdownAction, audioName + HaivisionConstant.HASH + audioMetric.getName(), value);
+					addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
+					break;
+				case APPLY_CHANGE:
+					stats.put(audioName + HaivisionConstant.HASH + audioMetric.getName(), "");
+					advancedControllableProperties.add(createButton(audioName + HaivisionConstant.HASH + audioMetric.getName(), HaivisionConstant.APPLY, "Applying", 0));
 					break;
 				default:
 					break;
 			}
 		}
+
+	}
+
+	/**
+	 * Add advancedControllableProperties if  advancedControllableProperties different empty
+	 *
+	 * @param advancedControllableProperties advancedControllableProperties is the list that store all controllable properties
+	 * @param property the property is item advancedControllableProperties
+	 */
+	private void addAdvanceControlProperties(List<AdvancedControllableProperty> advancedControllableProperties, AdvancedControllableProperty property) {
+		if (property != null) {
+			advancedControllableProperties.add(property);
+		}
+	}
+
+	/**
+	 * Compare valueDeserializer is equal with noneValue
+	 *
+	 * @return String is the value
+	 */
+	private String compareNoneValueAndValueDeserializer(String noneValue, boolean compareNoneValueAndValueDeserializer, String valueDeserializer) {
+		return compareNoneValueAndValueDeserializer ? noneValue : valueDeserializer;
 	}
 
 	/**
@@ -880,7 +911,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						Integer.parseInt(portNumberItem.substring(index + 1));
 						portNumberRangeList.add(portNumberItem);
 					} catch (Exception ex) {
-						throw new ResourceNotReachableException("The port range not correct format" + portNumberItem);
+						if (logger.isDebugEnabled()) {
+							logger.debug("The port range not correct format" + portNumberItem);
+						}
 					}
 				}
 			}
@@ -1055,5 +1088,22 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private AdvancedControllableProperty controlDropdownLanguage(Map<String, String> stats, String[] options, String name, String value) {
 		stats.put(name, value);
 		return createDropdown(name, options, value);
+	}
+
+	/**
+	 * Create a button.
+	 *
+	 * @param name name of the button
+	 * @param label label of the button
+	 * @param labelPressed label of the button after pressing it
+	 * @param gracePeriod grace period of button
+	 * @return This returns the instance of {@link AdvancedControllableProperty} type Button.
+	 */
+	private AdvancedControllableProperty createButton(String name, String label, String labelPressed, long gracePeriod) {
+		AdvancedControllableProperty.Button button = new AdvancedControllableProperty.Button();
+		button.setLabel(label);
+		button.setLabelPressed(labelPressed);
+		button.setGracePeriod(gracePeriod);
+		return new AdvancedControllableProperty(name, new Date(), button, "");
 	}
 }
