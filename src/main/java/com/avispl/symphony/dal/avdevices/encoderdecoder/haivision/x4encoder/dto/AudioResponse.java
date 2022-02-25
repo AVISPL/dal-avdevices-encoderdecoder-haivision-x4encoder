@@ -207,4 +207,19 @@ public class AudioResponse {
 	public void setAudioStatistic(AudioStatistic audioStatistic) {
 		this.audioStatistic = audioStatistic;
 	}
+
+	@Override
+	public String toString() {
+		return "AudioResponse{" +
+				"id='" + id + '\'' +
+				", interface='" + interfaceName + '\'' +
+				", bitRate='" + bitRate + '\'' +
+				", sampleRate='" + sampleRate + '\'' +
+				", mode='" + mode + '\'' +
+				", state='" + state + '\'' +
+				", algorithm='" + algorithm + '\'' +
+				", name='" + name + '\'' +
+				", lang='" + lang + '\'' +
+				'}';
+	}
 }

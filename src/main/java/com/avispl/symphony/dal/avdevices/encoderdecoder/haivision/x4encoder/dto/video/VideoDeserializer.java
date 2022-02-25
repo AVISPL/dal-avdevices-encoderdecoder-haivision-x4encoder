@@ -58,7 +58,9 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoResponse.setTimeCode(checkNoneInformation(infoNode, "timeCode"));
 			videoResponse.setAspectRatio(checkNoneInformation(infoNode, "aspectRatio"));
 			videoResponse.setGopStructure(checkNoneInformation(infoNode, "gopStructure"));
-			videoResponse.setResolution(checkNoneInformation(infoNode, "resolution"));
+			videoResponse.setResolution(checkNoneInformation(infoNode, "resolutionText"));
+			videoResponse.setCropping(checkNoneInformation(infoNode, "cropping"));
+			videoResponse.setFrameRate(checkNoneInformation(infoNode, "pictureRate"));
 		}
 
 		JsonNode stateNode = jsonNode.get("stats");

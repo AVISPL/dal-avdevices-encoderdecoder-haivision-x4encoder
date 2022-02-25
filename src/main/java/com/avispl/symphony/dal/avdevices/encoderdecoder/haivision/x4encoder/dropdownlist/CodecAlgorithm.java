@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public enum CodecAlgorithm {
 
-	H_264("H.264", 10),
-	H_265("H.265", 21);
+	H_264("AVC/H.264", 0),
+	H_265("HEVC/H.265", 1);
 
 	private final String name;
 	private final int value;

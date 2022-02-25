@@ -40,5 +40,6 @@ public class HaivisionConstant {
 	public static final String[] STOP_AUDIO_VIDEO = {"Start","None"};
 	public static final String[] START_STREAM = {"Stop","None","Delete"};
 	public static final String[] STOP_STREAM = {"Start","None","Delete"};
+	public static final String INPUT_AUTO = "Input/Auto";
 
 }

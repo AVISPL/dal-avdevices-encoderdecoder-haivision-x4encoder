@@ -15,28 +15,28 @@ import java.util.List;
  */
 public enum BitRateDropdown {
 
-	Number_12("12 kbps", 12, false, true),
-	Number_14("14 kbps", 14, true, false),
-	Number_16("16 kbps", 16, false, true),
-	Number_24("24 kbps", 24, false, true),
-	Number_32("32 kbps", 32, true, true),
-	Number_40("40 kbps", 40, true, true),
-	Number_48("48 kbps", 48, true, true),
-	Number_56("56 kbps", 56, true, true),
-	Number_64("64 kbps", 64, true, true),
-	Number_80("80 kbps", 80, true, false),
-	Number_96("96 kbps", 96, true, true),
-	Number_128("128 kbps", 128, true, true),
-	Number_160("160 kbps", 160, true, true),
-	Number_192("192 kbps", 192, true, true),
-	Number_224("224 kbps", 224, true, true),
-	Number_256("256 kbps", 256, true, true),
-	Number_288("288 kbps", 288, true, true),
-	Number_320("320 kbps", 320, true, false),
-	Number_384("384 kbps", 384, true, false),
-	Number_448("448 kbps", 448, true, false),
-	Number_512("512 kbps", 512, true, false),
-	Number_576("576 kbps", 576, true, false);
+	NUMBER_12("12 kbps", 12, false, true),
+	NUMBER_14("14 kbps", 14, true, false),
+	NUMBER_16("16 kbps", 16, false, true),
+	NUMBER_24("24 kbps", 24, false, true),
+	NUMBER_32("32 kbps", 32, true, true),
+	NUMBER_40("40 kbps", 40, true, true),
+	NUMBER_48("48 kbps", 48, true, true),
+	NUMBER_56("56 kbps", 56, true, true),
+	NUMBER_64("64 kbps", 64, true, true),
+	NUMBER_80("80 kbps", 80, true, false),
+	NUMBER_96("96 kbps", 96, true, true),
+	NUMBER_128("128 kbps", 128, true, true),
+	NUMBER_160("160 kbps", 160, true, true),
+	NUMBER_192("192 kbps", 192, true, true),
+	NUMBER_224("224 kbps", 224, true, true),
+	NUMBER_256("256 kbps", 256, true, true),
+	NUMBER_288("288 kbps", 288, true, true),
+	NUMBER_320("320 kbps", 320, true, false),
+	NUMBER_384("384 kbps", 384, true, false),
+	NUMBER_448("448 kbps", 448, true, false),
+	NUMBER_512("512 kbps", 512, true, false),
+	NUMBER_576("576 kbps", 576, true, false);
 
 	private final String name;
 	private final int value;
@@ -117,10 +117,70 @@ public enum BitRateDropdown {
 	public static String[] namesIsMono() {
 		List<String> list = new LinkedList<>();
 		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
-			if(bitRateDropdown.isMono()){
+			if (bitRateDropdown.isMono()) {
 				list.add(bitRateDropdown.getName());
 			}
 		}
 		return list.toArray(new String[list.size()]);
+	}
+
+	/**
+	 * Check a BitRate is stereo or not
+	 *
+	 * @param value value of BitRate
+	 */
+	public static boolean checkIsStereoByValue(int value) {
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			if (bitRateDropdown.getValue() == value && bitRateDropdown.isStereo()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check a BitRate is mono or not
+	 *
+	 * @param value value of BitRate
+	 */
+	public static boolean checkIsMonoByValue(int value) {
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			if (bitRateDropdown.getValue() == value && bitRateDropdown.isMono()) {
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Get default bitrate value of mono
+	 *
+	 * @return default bitrate value of mono
+	 */
+	public static int getDefaultValueOfMono() {
+		int defaultValue = 0;
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			if (bitRateDropdown.isMono()) {
+				defaultValue = bitRateDropdown.value;
+				break;
+			}
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Get default bitrate value of stereo
+	 *
+	 * @return default bitrate value of stereo
+	 */
+	public static int getDefaultValueOfStereo() {
+		int defaultValue = 0;
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			if (bitRateDropdown.isStereo()) {
+				defaultValue = bitRateDropdown.value;
+				break;
+			}
+		}
+		return defaultValue;
 	}
 }

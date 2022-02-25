@@ -41,4 +41,19 @@ public enum AudioControllingMetric {
 	public String getName() {
 		return name;
 	}
+
+	/**
+	 *
+	 * @param name {@code {@link #name}}
+	 * @return name of metric
+	 * @throws Exception if can not find the enum with name
+	 */
+	public static AudioControllingMetric getByName(String name) {
+		for (AudioControllingMetric metric : AudioControllingMetric.values()) {
+			if (metric.getName().equals(name)) {
+				return metric;
+			}
+		}
+		throw new IllegalArgumentException("Can not find the enum with name: " + name);
+	}
 }

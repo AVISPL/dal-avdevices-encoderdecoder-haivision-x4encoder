@@ -12,18 +12,22 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
  */
 public enum VideoControllingMetric {
 
+	STATE("State"),
 	INPUT_FORMAT("InputFormat"),
-	CODEC_ALGORIHM("CodecAlgorithm"),
+	CODEC_ALGORITHM("CodecAlgorithm"),
 	ENCODING_PROFILE("EncodingProfile"),
 	CHROMA_SUBSAMPLING("ChromaSubSampling"),
 	RATE_CONTROL("RateControl"),
 	MAX_BITRATE("MaxBitRate"),
+	BITRATE("BitRate"),
 	RESOLUTION("Resolution"),
 	GOP_SIZE("GOPSize"),
 	TIME_CODE_SOURCE("TimeCodeSource"),
 	ASPECT_RATIO("AspectRatio"),
 	CLOSED_CAPTION("ClosedCaption"),
-	APPLY_CHANGE("ApplyChange");
+	APPLY_CHANGE("ApplyChange"),
+	CROPPING("Resizing"),
+	FRAME_RATE("FrameRate");
 
 	private final String name;
 

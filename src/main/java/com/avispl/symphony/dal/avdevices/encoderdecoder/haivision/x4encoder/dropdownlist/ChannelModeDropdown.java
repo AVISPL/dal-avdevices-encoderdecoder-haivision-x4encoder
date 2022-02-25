@@ -79,4 +79,17 @@ public enum ChannelModeDropdown {
 		}
 		return list.toArray(new String[list.size()]);
 	}
+
+	/**
+	 * Retrieves name to value map of ChannelModeDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (ChannelModeDropdown channelModeDropdown : ChannelModeDropdown.values()) {
+			valueToName.put(channelModeDropdown.getName(), channelModeDropdown.getValue());
+		}
+		return valueToName;
+	}
 }

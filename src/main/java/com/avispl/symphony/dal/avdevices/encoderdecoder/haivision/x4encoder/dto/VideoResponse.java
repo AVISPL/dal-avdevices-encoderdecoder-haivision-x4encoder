@@ -34,6 +34,8 @@ public class VideoResponse {
 	private String resolution;
 	private String inputFormat;
 	private String name;
+	private String cropping;
+	private String frameRate;
 	private VideoStatistic videoStatistic;
 
 	/**
@@ -358,5 +360,41 @@ public class VideoResponse {
 	 */
 	public void setVideoStatistic(VideoStatistic videoStatistic) {
 		this.videoStatistic = videoStatistic;
+	}
+
+	/**
+	 * Retrieves {@code {@link #cropping}}
+	 *
+	 * @return value of {@link #cropping}
+	 */
+	public String getCropping() {
+		return cropping;
+	}
+
+	/**
+	 * Sets {@code cropping}
+	 *
+	 * @param cropping the {@code java.lang.String} field
+	 */
+	public void setCropping(String cropping) {
+		this.cropping = cropping;
+	}
+
+	/**
+	 * Retrieves {@code {@link #frameRate}}
+	 *
+	 * @return value of {@link #frameRate}
+	 */
+	public String getFrameRate() {
+		return frameRate;
+	}
+
+	/**
+	 * Sets {@code frameRate}
+	 *
+	 * @param frameRate the {@code java.lang.String} field
+	 */
+	public void setFrameRate(String frameRate) {
+		this.frameRate = frameRate;
 	}
 }

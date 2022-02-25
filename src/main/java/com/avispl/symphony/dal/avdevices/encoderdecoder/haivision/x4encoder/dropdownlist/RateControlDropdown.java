@@ -4,32 +4,33 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * RateControlDropdown class defined the enum for monitoring and controlling process
  *
  * @author Ivan
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum AudioStateDropdown {
+public enum RateControlDropdown {
 
-	STOPPED("Stopped", 0),
-	WORKING("Working", 3),
-	MUTED("Muted", 67),
-	FAILED("Failed", 128);
+	CBR("CBR", 1),
+	CVBR("CVBR", 2);
 
 	private final String name;
+
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * RateControlDropdown instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	AudioStateDropdown(String name, int value) {
+	RateControlDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -53,28 +54,28 @@ public enum AudioStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateDropdown
+	 * Retrieves name to value map of RateControlDropdown
 	 *
 	 * @return Map<Integer, String> are name and value
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
-			nameToValue.put(stateDropdown.getValue(), stateDropdown.getName());
+		for (RateControlDropdown rateControlDropdown : RateControlDropdown.values()) {
+			nameToValue.put(rateControlDropdown.getValue(), rateControlDropdown.getName());
 		}
 		return nameToValue;
 	}
 
 	/**
-	 * Retrieves name to value map of StateDropdown
+	 * Retrieves all name of rateControlDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return list name of rateControlDropdown
 	 */
-	public static Map<String, Integer> getValueToNameMap() {
-		Map<String, Integer> valueToName = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
-			valueToName.put(stateDropdown.getName(), stateDropdown.getValue());
+	public static String[] names() {
+		List<String> list = new LinkedList<>();
+		for (RateControlDropdown rateControlDropdown : RateControlDropdown.values()) {
+			list.add(rateControlDropdown.getName());
 		}
-		return valueToName;
+		return list.toArray(new String[list.size()]);
 	}
 }
