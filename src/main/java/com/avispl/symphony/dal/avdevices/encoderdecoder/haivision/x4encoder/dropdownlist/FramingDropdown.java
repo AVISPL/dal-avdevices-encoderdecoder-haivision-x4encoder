@@ -9,27 +9,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Cropping class defined the enum for monitoring and controlling process
+ * FramingDropdown class defined the enum for monitoring and controlling process
  *
  * @author Ivan
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum Cropping {
+public enum FramingDropdown {
 
-	H_264("Scale", 0),
-	H_265("Crop", 1);
+	I("I", 0),
+	IP("IP", 1),
+	IBP("IBP", 2),
+	IBBP("IBBP", 3),
+	IBBBP("IBBBP", 4),
+	IBBBBP("IBBBBP", 5);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * Cropping instantiation
+	 * FramingDropdown instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	Cropping(String name, int value) {
+	FramingDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -53,27 +57,27 @@ public enum Cropping {
 	}
 
 	/**
-	 * Retrieves name to value map of Cropping
+	 * Retrieves name to value map of FramingDropdown
 	 *
 	 * @return Map<Integer, String> are name and value
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (Cropping cropping : Cropping.values()) {
-			nameToValue.put(cropping.getValue(), cropping.getName());
+		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+			nameToValue.put(framingDropdown.getValue(), framingDropdown.getName());
 		}
 		return nameToValue;
 	}
 
 	/**
-	 * Retrieves all name of Cropping
+	 * Retrieves all name of framingDropdown
 	 *
-	 * @return list name of Cropping
+	 * @return list name of framingDropdown
 	 */
 	public static String[] names() {
 		List<String> list = new LinkedList<>();
-		for (Cropping cropping : Cropping.values()) {
-			list.add(cropping.getName());
+		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+			list.add(framingDropdown.getName());
 		}
 		return list.toArray(new String[list.size()]);
 	}

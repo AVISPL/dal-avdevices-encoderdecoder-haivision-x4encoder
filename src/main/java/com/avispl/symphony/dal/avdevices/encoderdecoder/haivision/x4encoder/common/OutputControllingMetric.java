@@ -30,7 +30,8 @@ public enum OutputControllingMetric {
 	SOURCE_PORT("Source Port"),
 	DESTINATION_PORT("Destination Port"),
 	NETWORK_ADAPTER("Network Adapter"),
-	ENCRYPTION("Encryption");
+	ENCRYPTION("Encryption"),
+	NAME("Name");
 
 	private final String name;
 
@@ -50,5 +51,20 @@ public enum OutputControllingMetric {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 *
+	 * @param name {@code {@link #name}}
+	 * @return name of metric
+	 * @throws Exception if can not find the enum with name
+	 */
+	public static OutputControllingMetric getByName(String name) {
+		for (OutputControllingMetric metric : OutputControllingMetric.values()) {
+			if (metric.getName().equals(name)) {
+				return metric;
+			}
+		}
+		throw new IllegalArgumentException("Can not find the enum with name: " + name);
 	}
 }

@@ -27,7 +27,9 @@ public enum VideoControllingMetric {
 	CLOSED_CAPTION("ClosedCaption"),
 	APPLY_CHANGE("ApplyChange"),
 	CROPPING("Resizing"),
-	FRAME_RATE("FrameRate");
+	FRAME_RATE("FrameRate"),
+	ACTION("Action"),
+	FRAMING("Framing");
 
 	private final String name;
 
@@ -47,5 +49,20 @@ public enum VideoControllingMetric {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 *
+	 * @param name {@code {@link #name}}
+	 * @return name of metric
+	 * @throws Exception if can not find the enum with name
+	 */
+	public static VideoControllingMetric getByName(String name) {
+		for (VideoControllingMetric metric : VideoControllingMetric.values()) {
+			if (metric.getName().equals(name)) {
+				return metric;
+			}
+		}
+		throw new IllegalArgumentException("Can not find the enum with name: " + name);
 	}
 }

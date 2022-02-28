@@ -208,8 +208,12 @@ public class AudioResponse {
 		this.audioStatistic = audioStatistic;
 	}
 
-	@Override
-	public String toString() {
+	/**
+	 * Convert AudioResponse
+	 *
+	 * @return payLoad the payload is String by AudioResponse
+	 */
+	public String payLoad() {
 		return "AudioResponse{" +
 				"id='" + id + '\'' +
 				", interface='" + interfaceName + '\'' +
@@ -220,6 +224,7 @@ public class AudioResponse {
 				", algorithm='" + algorithm + '\'' +
 				", name='" + name + '\'' +
 				", lang='" + lang + '\'' +
+				", inputLevel='" + "6" + '\'' +
 				'}';
 	}
 }

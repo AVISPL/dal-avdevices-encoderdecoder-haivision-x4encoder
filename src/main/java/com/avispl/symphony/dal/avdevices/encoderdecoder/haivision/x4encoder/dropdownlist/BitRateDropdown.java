@@ -3,8 +3,10 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BitRateDropdown class defined the enum for monitoring and controlling process
@@ -122,6 +124,19 @@ public enum BitRateDropdown {
 			}
 		}
 		return list.toArray(new String[list.size()]);
+	}
+
+	/**
+	 * Retrieves name to value map of bitRateDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<Integer, String> getNameToValueMap() {
+		Map<Integer, String> nameToValue = new HashMap<>();
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			nameToValue.put(bitRateDropdown.getValue(), bitRateDropdown.getName());
+		}
+		return nameToValue;
 	}
 
 	/**

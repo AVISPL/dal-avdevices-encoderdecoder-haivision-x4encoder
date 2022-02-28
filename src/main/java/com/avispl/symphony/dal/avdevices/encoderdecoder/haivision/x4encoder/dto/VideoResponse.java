@@ -30,13 +30,18 @@ public class VideoResponse {
 	private String rateControl;
 	private String timeCode;
 	private String aspectRatio;
-	private String gopStructure;
 	private String resolution;
 	private String inputFormat;
 	private String name;
 	private String cropping;
 	private String frameRate;
 	private VideoStatistic videoStatistic;
+
+	/**
+	 * Framing Video
+	 */
+	private String gopStructure;
+
 
 	/**
 	 * Retrieves {@code {@link #id}}

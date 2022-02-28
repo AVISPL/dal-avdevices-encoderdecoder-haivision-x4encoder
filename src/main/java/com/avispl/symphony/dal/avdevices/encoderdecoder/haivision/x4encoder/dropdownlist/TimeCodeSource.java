@@ -9,27 +9,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Cropping class defined the enum for monitoring and controlling process
+ * TimeCodeSource class defined the enum for monitoring and controlling process
  *
  * @author Ivan
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum Cropping {
+public enum TimeCodeSource {
 
-	H_264("Scale", 0),
-	H_265("Crop", 1);
+	None("None", 0),
+	VIDEO("Video", 1),
+	SYSTEM("System", 2);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * Cropping instantiation
+	 * TimeCodeSource instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	Cropping(String name, int value) {
+	TimeCodeSource(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -53,27 +54,27 @@ public enum Cropping {
 	}
 
 	/**
-	 * Retrieves name to value map of Cropping
+	 * Retrieves name to value map of TimeCodeSource
 	 *
 	 * @return Map<Integer, String> are name and value
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (Cropping cropping : Cropping.values()) {
-			nameToValue.put(cropping.getValue(), cropping.getName());
+		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+			nameToValue.put(timeCodeSource.getValue(), timeCodeSource.getName());
 		}
 		return nameToValue;
 	}
 
 	/**
-	 * Retrieves all name of Cropping
+	 * Retrieves all name of TimeCodeSource
 	 *
-	 * @return list name of Cropping
+	 * @return list name of TimeCodeSource
 	 */
 	public static String[] names() {
 		List<String> list = new LinkedList<>();
-		for (Cropping cropping : Cropping.values()) {
-			list.add(cropping.getName());
+		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+			list.add(timeCodeSource.getName());
 		}
 		return list.toArray(new String[list.size()]);
 	}

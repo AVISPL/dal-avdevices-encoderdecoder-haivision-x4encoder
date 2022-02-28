@@ -41,5 +41,14 @@ public class HaivisionConstant {
 	public static final String[] START_STREAM = {"Stop","None","Delete"};
 	public static final String[] STOP_STREAM = {"Start","None","Delete"};
 	public static final String INPUT_AUTO = "Input/Auto";
+	public static final String STOP = "stop";
+	public static final String START = "start";
+	public static final String SLASH = "/";
+	public static final String NO_SET_ERROR_AUDIO = "Can't set configure audio";
+	public static final String ERR_SET_CONTROL = "Error when controlling: ";
+	public static final String NO_CHANGE_ACTION_ERROR = "Can't set state for the audio metric";
+	public static final String AUDIO = "Audio";
+	public static final String VIDEO = "Video";
+	public static final String STREAM = "Stream";
 
 }
