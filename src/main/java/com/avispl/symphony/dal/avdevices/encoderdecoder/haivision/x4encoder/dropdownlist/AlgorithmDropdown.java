@@ -67,6 +67,19 @@ public enum AlgorithmDropdown {
 	}
 
 	/**
+	 * Retrieves name to value map of algorithmDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (AlgorithmDropdown algorithmDropdown : AlgorithmDropdown.values()) {
+			valueToName.put(algorithmDropdown.getName(), algorithmDropdown.getValue());
+		}
+		return valueToName;
+	}
+
+	/**
 	 * Retrieves all name of AlgorithmDropdown
 	 *
 	 * @return list name of Algorithm

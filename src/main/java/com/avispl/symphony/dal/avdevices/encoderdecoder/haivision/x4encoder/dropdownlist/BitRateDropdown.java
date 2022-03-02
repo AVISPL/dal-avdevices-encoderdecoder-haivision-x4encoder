@@ -140,6 +140,19 @@ public enum BitRateDropdown {
 	}
 
 	/**
+	 * Retrieves name to value map of bitRateDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+			valueToName.put(bitRateDropdown.getName(), bitRateDropdown.getValue());
+		}
+		return valueToName;
+	}
+
+	/**
 	 * Check a BitRate is stereo or not
 	 *
 	 * @param value value of BitRate

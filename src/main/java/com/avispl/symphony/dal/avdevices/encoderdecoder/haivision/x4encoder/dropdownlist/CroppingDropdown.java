@@ -15,7 +15,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum Cropping {
+public enum CroppingDropdown {
 
 	H_264("Scale", 0),
 	H_265("Crop", 1);
@@ -29,7 +29,7 @@ public enum Cropping {
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	Cropping(String name, int value) {
+	CroppingDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -59,7 +59,7 @@ public enum Cropping {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (Cropping cropping : Cropping.values()) {
+		for (CroppingDropdown cropping : CroppingDropdown.values()) {
 			nameToValue.put(cropping.getValue(), cropping.getName());
 		}
 		return nameToValue;
@@ -72,7 +72,7 @@ public enum Cropping {
 	 */
 	public static String[] names() {
 		List<String> list = new LinkedList<>();
-		for (Cropping cropping : Cropping.values()) {
+		for (CroppingDropdown cropping : CroppingDropdown.values()) {
 			list.add(cropping.getName());
 		}
 		return list.toArray(new String[list.size()]);

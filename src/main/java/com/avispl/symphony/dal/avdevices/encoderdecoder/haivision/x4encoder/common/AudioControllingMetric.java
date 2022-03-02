@@ -20,7 +20,8 @@ public enum AudioControllingMetric {
 	ALGORITHM("ACC-LC Algorithm"),
 	ACTION("Action"),
 	APPLY_CHANGE("ApplyChange"),
-	LANGUAGE("Language");
+	LANGUAGE("Language"),
+	CANCEL("Cancel");
 
 	private final String name;
 

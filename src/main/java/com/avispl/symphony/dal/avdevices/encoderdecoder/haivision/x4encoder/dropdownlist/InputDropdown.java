@@ -112,4 +112,17 @@ public enum InputDropdown {
 		}
 		return nameToValue;
 	}
+
+	/**
+	 * Retrieves name to value map of inputDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (InputDropdown inputDropdown : InputDropdown.values()) {
+			valueToName.put(inputDropdown.getName(), inputDropdown.getValue());
+		}
+		return valueToName;
+	}
 }

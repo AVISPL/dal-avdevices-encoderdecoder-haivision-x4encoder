@@ -66,6 +66,19 @@ public enum SampleRateDropdown {
 	}
 
 	/**
+	 * Retrieves name to value map of sampleRateDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (SampleRateDropdown sampleRateDropdown : SampleRateDropdown.values()) {
+			valueToName.put(sampleRateDropdown.getName(), sampleRateDropdown.getValue());
+		}
+		return valueToName;
+	}
+
+	/**
 	 * Retrieves all name of SimpleRateDropdown
 	 *
 	 * @return list name of SimpleRate

@@ -30,6 +30,7 @@ import org.apache.http.entity.StringEntity;
 
 import com.avispl.symphony.api.dal.control.Controller;
 import com.avispl.symphony.api.dal.dto.control.AdvancedControllableProperty;
+import com.avispl.symphony.api.dal.dto.control.AdvancedControllableProperty.ControllableType;
 import com.avispl.symphony.api.dal.dto.control.ControllableProperty;
 import com.avispl.symphony.api.dal.dto.monitor.ExtendedStatistics;
 import com.avispl.symphony.api.dal.dto.monitor.Statistics;
@@ -51,7 +52,7 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.Cropping;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CroppingDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncodingProfile;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FrameRateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FramingDropdown;
@@ -140,22 +141,22 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * List of output statistics for the adapter filter
 	 */
-	private List<OutputResponse> outputForPortAndStatusList = new ArrayList<>();
+	private List<OutputResponse> outputForPortAndStatusList = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * List of audio Response
 	 */
-	private List<AudioResponse> audioResponseList = Collections.synchronizedList(new ArrayList<>());
+	private List<AudioResponse> audioResponseList = new ArrayList<>();
 
 	/**
 	 * List of audio Response
 	 */
-	private List<VideoResponse> videoResponseList = Collections.synchronizedList(new ArrayList<>());
+	private List<VideoResponse> videoResponseList = new ArrayList<>();
 
 	/**
 	 * List of audio Response
 	 */
-	private List<OutputResponse> outputResponseList = Collections.synchronizedList(new ArrayList<>());
+	private List<OutputResponse> outputResponseList = new ArrayList<>();
 
 	/**
 	 * Retrieves {@code {@link #streamNameFilter}}
@@ -251,7 +252,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			extendedStatistics.setStatistics(stats);
 			localExtendedStatistics = extendedStatistics;
 		}
-		isEmergencyDelivery = false;
 
 		return Collections.singletonList(localExtendedStatistics);
 	}
@@ -269,6 +269,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 		String propertiesAudioAndVideo = property.substring(0, HaivisionConstant.AUDIO.length());
 		if (HaivisionConstant.AUDIO.equals(propertiesAudioAndVideo)) {
+			controlAudioProperty(property, value, extendedStatistics, advancedControllableProperties);
+		}
+		if (HaivisionConstant.VIDEO.equals(propertiesAudioAndVideo)) {
 			controlAudioProperty(property, value, extendedStatistics, advancedControllableProperties);
 		}
 	}
@@ -308,39 +311,40 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void controlAudioProperty(String property, String value, Map<String, String> extendedStatistics, List<AdvancedControllableProperty> advancedControllableProperties) {
 		String propertyName = property.split(HaivisionConstant.HASH)[1];
 		AudioControllingMetric audioControllingMetric = AudioControllingMetric.getByName(propertyName);
+		isEmergencyDelivery = true;
 		switch (audioControllingMetric) {
 			case INPUT:
 				String[] inputDropdown = InputDropdown.names();
 				AdvancedControllableProperty inputDropdownControlProperty = controlDropdown(extendedStatistics, inputDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, inputDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case CHANGE_MODE:
 				String[] channelModeDropdown = ChannelModeDropdown.names();
 				String currentBitRateValue = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + AudioControllingMetric.BITRATE.getName());
 				String newBitRateValue = "";
-
-				if (ChannelModeDropdown.STEREO.getName().equalsIgnoreCase(value)) {
+				Map<String, Integer> bitRateNameModeMap = BitRateDropdown.getValueToNameMap();
+				Map<Integer, String> bitRateValueModeMap = BitRateDropdown.getNameToValueMap();
+				if (ChannelModeDropdown.STEREO.getName().equals(value)) {
 					//If channel mode is Stereo and Bitrate is in Stereo bitrate list, the bitrate value will be not changed
-					if (BitRateDropdown.checkIsStereoByValue(Integer.parseInt(currentBitRateValue))) {
+					if (BitRateDropdown.checkIsStereoByValue(bitRateNameModeMap.get(currentBitRateValue))) {
 						newBitRateValue = currentBitRateValue;
 					}
 					//If channel mode is Stereo and Bitrate is not in Stereo bitrate list, the bitrate value will be set to default bitrate value of Stereo
 					else {
-						newBitRateValue = Integer.toString(BitRateDropdown.getDefaultValueOfStereo());
+						newBitRateValue = bitRateValueModeMap.get(BitRateDropdown.getDefaultValueOfStereo());
 					}
 				} else {
 					//If channel mode is Mono and Bitrate is in Mono bitrate list, the bitrate value will be not changed
-					if (BitRateDropdown.checkIsMonoByValue(Integer.parseInt(currentBitRateValue))) {
+					if (BitRateDropdown.checkIsMonoByValue(bitRateNameModeMap.get(currentBitRateValue))) {
 						newBitRateValue = currentBitRateValue;
 					}
 					//If channel mode is Mono and Bitrate is in Mono bitrate list, the bitrate value will be set to default bitrate value of Mono
 					else {
-						newBitRateValue = Integer.toString(BitRateDropdown.getDefaultValueOfMono());
+						newBitRateValue = bitRateValueModeMap.get(BitRateDropdown.getDefaultValueOfMono());
 					}
 				}
 				String[] newBitRateDropdown = BitRateDropdown.namesIsMono();
-				if (ChannelModeDropdown.STEREO.getName().equalsIgnoreCase(value)) {
+				if (ChannelModeDropdown.STEREO.getName().equals(value)) {
 					newBitRateDropdown = BitRateDropdown.namesIsStereo();
 				}
 				AdvancedControllableProperty bitRateDropdownControlProperty = controlDropdown(extendedStatistics, newBitRateDropdown,
@@ -348,25 +352,21 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				AdvancedControllableProperty channelModeDropdownControlProperty = controlDropdown(extendedStatistics, channelModeDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, bitRateDropdownControlProperty);
 				addAdvanceControlProperties(advancedControllableProperties, channelModeDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case SAMPLE_RATE:
 				String[] sampleRateDropdown = SampleRateDropdown.names();
 				AdvancedControllableProperty sampleRateDropdownControlProperty = controlDropdown(extendedStatistics, sampleRateDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, sampleRateDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case ALGORITHM:
 				String[] algorithmsDropdown = AlgorithmDropdown.names();
 				AdvancedControllableProperty algorithmsControlProperty = controlDropdown(extendedStatistics, algorithmsDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, algorithmsControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case LANGUAGE:
 				String[] languageDropdown = LanguageDropdown.names();
 				AdvancedControllableProperty languageDropdownControlProperty = controlDropdown(extendedStatistics, languageDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, languageDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case BITRATE:
 				String valueInput = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + AudioControllingMetric.CHANGE_MODE.getName());
@@ -376,43 +376,112 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty bitRateControlProperty = controlDropdown(extendedStatistics, bitRateDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, bitRateControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case ACTION:
 				String[] actionDropdown = HaivisionConstant.START_AUDIO_VIDEO;
-				if (HaivisionConstant.STOP_AUDIO_VIDEO[0].equalsIgnoreCase(value)) {
+				if (AudioStateDropdown.STOPPED.getName().equals(value)) {
 					actionDropdown = HaivisionConstant.STOP_AUDIO_VIDEO;
 				}
-				AdvancedControllableProperty actionDropdownControlProperty = controlDropdown(extendedStatistics, actionDropdown, property, value);
+				AdvancedControllableProperty actionDropdownControlProperty = controlDropdownAcceptNoneValue(extendedStatistics, actionDropdown, property, HaivisionConstant.NONE);
 				addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case APPLY_CHANGE:
 				String audioName = property.split(HaivisionConstant.HASH)[0];
-				AudioResponse audioResponse = new AudioResponse();
-				audioResponse.setInterfaceName(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.INPUT.getName()));
-				audioResponse.setBitRate(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.BITRATE.getName()));
-				audioResponse.setSampleRate(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.SAMPLE_RATE.getName()));
-				audioResponse.setMode(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.CHANGE_MODE.getName()));
-				audioResponse.setState(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.STATE.getName()));
-				audioResponse.setAlgorithm(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.ALGORITHM.getName()));
-				audioResponse.setLang(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.LANGUAGE.getName()));
-				audioResponse.setId(audioNameToId.get(audioName));
+				AudioResponse audioResponse = convertAudioByValue(extendedStatistics, audioName);
 
 				// sent request to apply all change for all metric
-				setAudioApplyChange(audioResponse.toString(), audioNameToId.get(audioName));
+				setAudioApplyChange(audioResponse.payLoad(), audioNameToId.get(audioName));
 
 				//sent request to action for the metric
-				if (AudioStateDropdown.STOPPED.getName().equalsIgnoreCase(value)) {
-					changeAudioAction(HaivisionConstant.STOP, audioNameToId.get(audioName), audioResponse.payLoad());
-				} else {
-					changeAudioAction(HaivisionConstant.START, audioNameToId.get(audioName), audioResponse.payLoad());
-				}
-				isEmergencyDelivery = true;
+				String stateAudio = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + AudioControllingMetric.STATE.getName());
+				setActionAudioControl(audioName, audioResponse, stateAudio);
+				isEmergencyDelivery = false;
+				break;
+			case CANCEL:
+				isEmergencyDelivery = false;
 				break;
 			default:
 				break;
 		}
+		//Edditing
+		if (isEmergencyDelivery) {
+			propertyName = property.split(HaivisionConstant.HASH)[0];
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + AudioControllingMetric.APPLY_CHANGE.getName(), "");
+			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + AudioControllingMetric.APPLY_CHANGE.getName(), HaivisionConstant.APPLY, "Applying", 0));
+
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.EDITED, HaivisionConstant.TRUE);
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, "");
+			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, 0));
+		}
+		localExtendedStatistics.setStatistics(extendedStatistics);
+		localExtendedStatistics.setControllableProperties(advancedControllableProperties);
+	}
+
+	/**
+	 * Sent request to action start/stop for the audio
+	 *
+	 * @param audioName the audioName is name of audio
+	 * @param audioResponse is instance AudioResponse DTO
+	 */
+	private void setActionAudioControl(String audioName, AudioResponse audioResponse, String state) {
+		List<AdvancedControllableProperty> advancedControl = localExtendedStatistics.getControllableProperties();
+		String[] dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
+		if (AudioStateDropdown.STOPPED.getName().equals(state)) {
+			dropdownAction = HaivisionConstant.STOP_AUDIO_VIDEO;
+		}
+		List<AdvancedControllableProperty> advancedControlCompare = new ArrayList<>();
+		advancedControlCompare.add(controlDropdownAcceptNoneValue(new HashMap<>(), dropdownAction, AudioControllingMetric.ACTION.getName(), HaivisionConstant.NONE));
+		ControllableType dropdownCompare = advancedControlCompare.get(0).getType();
+		for (AdvancedControllableProperty controllableProperty : advancedControl) {
+			if (controllableProperty.getName().equals(audioName + HaivisionConstant.HASH + AudioControllingMetric.ACTION.getName())) {
+				ControllableType dropdown = controllableProperty.getType();
+				if (!Objects.equals(dropdown, dropdownCompare)) {
+					String stateAudio = AudioStateDropdown.STOPPED.getName();
+					String action = HaivisionConstant.STOP;
+					if (Objects.equals(controllableProperty, HaivisionConstant.STOP_AUDIO_VIDEO)) {
+						stateAudio = AudioStateDropdown.WORKING.getName();
+						action = HaivisionConstant.START;
+					}
+					changeAudioAction(action, audioNameToId.get(audioName), audioResponse.payLoad());
+					Map<String, String> extendedStatistics = localExtendedStatistics.getStatistics();
+					extendedStatistics.put(audioName + HaivisionConstant.HASH + AudioControllingMetric.ACTION.getName(), stateAudio);
+					localExtendedStatistics.setStatistics(extendedStatistics);
+				}
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Change AudioResponse by value
+	 *
+	 * @param extendedStatistics list
+	 * @param audioName the audio name is name of audio
+	 * @return AudioResponse
+	 */
+	private AudioResponse convertAudioByValue(Map<String, String> extendedStatistics, String audioName) {
+		AudioResponse audioResponse = new AudioResponse();
+		Map<String, Integer> channelModeMap = ChannelModeDropdown.getValueToNameMap();
+		Map<String, Integer> bitRateMap = BitRateDropdown.getValueToNameMap();
+		Map<String, Integer> sampleRateMap = SampleRateDropdown.getValueToNameMap();
+		Map<String, Integer> algorithmMap = AlgorithmDropdown.getValueToNameMap();
+		Map<String, String> languageMap = LanguageDropdown.getValueToNameMap();
+		Map<String, Integer> inputMap = InputDropdown.getValueToNameMap();
+		Map<String, Integer> audioStateMap = AudioStateDropdown.getValueToNameMap();
+		audioResponse.setInterfaceName(String.valueOf(inputMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.INPUT.getName()))));
+		audioResponse.setBitRate(String.valueOf(bitRateMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.BITRATE.getName()))));
+		audioResponse.setSampleRate(String.valueOf(sampleRateMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.SAMPLE_RATE.getName()))));
+		audioResponse.setMode(String.valueOf(channelModeMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.CHANGE_MODE.getName()))));
+		audioResponse.setState(String.valueOf(audioStateMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.STATE.getName()))));
+		audioResponse.setAlgorithm(String.valueOf(algorithmMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.ALGORITHM.getName()))));
+		String language = languageMap.get(extendedStatistics.get(audioName + HaivisionConstant.HASH + AudioControllingMetric.LANGUAGE.getName()));
+		if (HaivisionConstant.NONE.equals(language)) {
+			language = "";
+		}
+		audioResponse.setLang(language);
+		audioResponse.setName(audioName);
+		audioResponse.setId(audioNameToId.get(audioName));
+		return audioResponse;
 	}
 
 
@@ -482,6 +551,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			for (Map.Entry<String, String> messageFailed : failedMonitor.entrySet()) {
 				stringBuilder.append(messageFailed.getValue());
 			}
+			sessionID = null;
 			throw new ResourceNotReachableException("Get monitoring data failed: " + stringBuilder);
 		}
 		getFilteredForEncoderStatistics();
@@ -598,7 +668,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
 		String[] dropdownBitRate = BitRateDropdown.namesIsMono();
 		String value;
-		
+
 		for (AudioControllingMetric audioMetric : AudioControllingMetric.values()) {
 			switch (audioMetric) {
 				case STATE:
@@ -658,10 +728,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 							HaivisionConstant.NONE);
 					addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
 					break;
-				case APPLY_CHANGE:
-					stats.put(audioName + HaivisionConstant.HASH + audioMetric.getName(), "");
-					advancedControllableProperties.add(createButton(audioName + HaivisionConstant.HASH + audioMetric.getName(), HaivisionConstant.APPLY, "Applying", 0));
-					break;
 				default:
 					break;
 			}
@@ -669,16 +735,17 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Add Video data to statistics property
+	 * Add Output Stream data to  property
 	 *
 	 * @param stats list statistics property
 	 * @param videoResponseList list of video response
+	 * @param advancedControllableProperties the advancedControllableProperties is advancedControllableProperties instance
 	 */
 	private void addVideoDataControlToProperty(Map<String, String> stats, VideoResponse videoResponseList, List<AdvancedControllableProperty> advancedControllableProperties) {
 		String videoName = videoResponseList.getName();
 		Map<Integer, String> videoStateMap = VideoStateDropdown.getNameToValueMap();
 		Map<Integer, String> codecAlgorithmMap = CodecAlgorithm.getNameToValueMap();
-		Map<Integer, String> croppingMap = Cropping.getNameToValueMap();
+		Map<Integer, String> croppingMap = CroppingDropdown.getNameToValueMap();
 		Map<Integer, String> framingMap = FramingDropdown.getNameToValueMap();
 		Map<Integer, String> timeCodeSourceMap = TimeCodeSource.getNameToValueMap();
 		Map<Integer, String> aspectRatioMap = AspectRatioDropdown.getNameToValueMap();
@@ -687,7 +754,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] dropdownChromaSubSampling = ChromaSubSampling.namesIsBaselineOrMainOrHigh();
 		String[] dropdownRateControl = RateControlDropdown.names();
 		String[] dropdownResolution = ResolutionDropdown.names();
-		String[] dropdownCropping = Cropping.names();
+		String[] dropdownCropping = CroppingDropdown.names();
 		String[] dropdownFraming = FramingDropdown.names();
 		String[] dropdownTimeCodeSource = TimeCodeSource.names();
 		String[] dropdownAspectRatio = AspectRatioDropdown.names();
@@ -822,16 +889,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				case ACTION:
 					stateVideo = videoResponseList.getState();
 					value = compareNoneValueAndValueDeserializer(stateVideo, HaivisionConstant.NONE.equals(stateVideo), videoStateMap.get(Integer.parseInt(stateVideo)));
-					stats.put(videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
 					if (AudioStateDropdown.STOPPED.getName().equals(value)) {
-						dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
+						dropdownAction = HaivisionConstant.STOP_AUDIO_VIDEO;
 					}
 					AdvancedControllableProperty actionDropdownControlProperty = controlDropdown(stats, dropdownAction, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
 					addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
-					break;
-				case APPLY_CHANGE:
-					stats.put(videoName + HaivisionConstant.HASH + videoMetric.getName(), "");
-					advancedControllableProperties.add(createButton(videoName + HaivisionConstant.HASH + videoMetric.getName(), HaivisionConstant.APPLY, "Applying", 0));
 					break;
 				default:
 					break;
@@ -847,6 +909,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void addAdvanceControlProperties(List<AdvancedControllableProperty> advancedControllableProperties, AdvancedControllableProperty property) {
 		if (property != null) {
+			for (AdvancedControllableProperty controllableProperty : advancedControllableProperties) {
+				if (controllableProperty.getName().equals(property.getName())) {
+					advancedControllableProperties.remove(controllableProperty);
+					break;
+				}
+			}
 			advancedControllableProperties.add(property);
 		}
 	}
@@ -982,6 +1050,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void retrieveVideoEncoder() {
 		try {
 			VideoResponseWrapper videoResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER), VideoResponseWrapper.class);
+
 			for (VideoResponse videoItem : videoResponse.getData()) {
 				videoResponseList.add(videoItem);
 				videoNameToId.put(videoItem.getName(), videoItem.getId());
@@ -997,7 +1066,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void retrieveOutputEncoder() {
 		try {
 			OutputResponseWrapper outputResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER), OutputResponseWrapper.class);
-			outputResponseList.addAll(outputResponse.getData());
 			for (OutputResponse outputItem : outputResponse.getData()) {
 				outputResponseList.add(outputItem);
 				streamNameToId.put(outputItem.getName(), outputItem.getId());
@@ -1012,6 +1080,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void retrieveSystemInfoStatus(Map<String, String> stats) {
 		try {
+			// /apis/status
 			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
 			if (responseData != null) {
 				String name = HaivisionConstant.SYSTEM_INFO_STATUS;
@@ -1497,8 +1566,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void setAudioApplyChange(String data, String urlId) {
 		try {
-			String responseData = doPut(HaivisionURL.AUDIO_ENCODER.getName() + HaivisionConstant.SLASH + urlId, data);
-			if (StringUtils.isNullOrEmpty(responseData)) {
+			JsonNode responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER) + HaivisionConstant.SLASH + urlId, data, JsonNode.class);
+			if (responseData.get("info") == null) {
 				throw new ResourceNotReachableException(HaivisionConstant.NO_SET_ERROR_AUDIO);
 			}
 		} catch (Exception e) {
@@ -1509,14 +1578,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Change action for audio encoder
 	 *
-	 * @param action the action is state of audio ancoder
+	 * @param action the action is state of audio encoder
 	 * @param urlId the urlId is id of audio encoder
 	 * @param data the data is request body
 	 */
 	private void changeAudioAction(String action, String urlId, String data) {
 		try {
-			String responseData = doPut(HaivisionURL.AUDIO_ENCODER.getName() + HaivisionConstant.SLASH + urlId + HaivisionConstant.SLASH + action, data);
-			if (StringUtils.isNullOrEmpty(responseData)) {
+			JsonNode responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER) + HaivisionConstant.SLASH + urlId + HaivisionConstant.SLASH + action, data, JsonNode.class);
+			if (responseData.get("info") == null) {
 				throw new ResourceNotReachableException(HaivisionConstant.NO_CHANGE_ACTION_ERROR);
 			}
 		} catch (Exception e) {

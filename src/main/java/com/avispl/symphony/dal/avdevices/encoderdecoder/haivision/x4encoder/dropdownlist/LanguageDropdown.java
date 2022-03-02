@@ -130,4 +130,17 @@ public enum LanguageDropdown {
 		}
 		return nameToValue;
 	}
+
+	/**
+	 * Retrieves name to value map of languageDropdown
+	 *
+	 * @return Map<Integer, String> are name and value
+	 */
+	public static Map<String, String> getValueToNameMap() {
+		Map<String, String> valueToName = new HashMap<>();
+		for (LanguageDropdown languageDropdown : LanguageDropdown.values()) {
+			valueToName.put(languageDropdown.getName(), languageDropdown.getValue());
+		}
+		return valueToName;
+	}
 }

@@ -50,5 +50,8 @@ public class HaivisionConstant {
 	public static final String AUDIO = "Audio";
 	public static final String VIDEO = "Video";
 	public static final String STREAM = "Stream";
+	public static final String CANCEL = "Cancel";
+	public static final String EDITED = "Edited";
+	public static final String TRUE = "True";
 
 }

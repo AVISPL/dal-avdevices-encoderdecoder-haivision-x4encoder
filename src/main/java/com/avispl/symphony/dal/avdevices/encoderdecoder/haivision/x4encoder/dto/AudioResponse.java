@@ -214,17 +214,17 @@ public class AudioResponse {
 	 * @return payLoad the payload is String by AudioResponse
 	 */
 	public String payLoad() {
-		return "AudioResponse{" +
-				"id='" + id + '\'' +
-				", interface='" + interfaceName + '\'' +
-				", bitRate='" + bitRate + '\'' +
-				", sampleRate='" + sampleRate + '\'' +
-				", mode='" + mode + '\'' +
-				", state='" + state + '\'' +
-				", algorithm='" + algorithm + '\'' +
-				", name='" + name + '\'' +
-				", lang='" + lang + '\'' +
-				", inputLevel='" + "6" + '\'' +
+		return "{" +
+				"\"id\":\"" + id + "\"" +
+				",\"interface\":\"" + interfaceName + "\"" +
+				",\"bitRate\":\"" + bitRate + "\"" +
+				",\"sampleRate\":\"" + sampleRate + "\"" +
+				",\"mode\":\"" + mode + "\"" +
+				",\"state\":\"" + state + "\"" +
+				",\"algorithm\":\"" + algorithm + "\"" +
+				",\"name\":\"" + name + "\"" +
+				",\"lang\":\"" + lang + "\"" +
+				",\"inputLevel\":\"" + "6" + "\"" +
 				'}';
 	}
 }
