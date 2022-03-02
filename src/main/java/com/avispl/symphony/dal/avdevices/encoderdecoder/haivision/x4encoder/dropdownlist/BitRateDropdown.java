@@ -19,7 +19,7 @@ public enum BitRateDropdown {
 
 	NUMBER_12("12 kbps", 12, false, true),
 	NUMBER_14("14 kbps", 14, true, false),
-	NUMBER_16("16 kbps", 16, false, true),
+	NUMBER_16("16 kbps", 16, true, true),
 	NUMBER_24("24 kbps", 24, false, true),
 	NUMBER_32("32 kbps", 32, true, true),
 	NUMBER_40("40 kbps", 40, true, true),

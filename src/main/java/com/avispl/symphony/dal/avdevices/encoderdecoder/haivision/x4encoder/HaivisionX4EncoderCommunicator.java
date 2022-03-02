@@ -435,10 +435,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		for (AdvancedControllableProperty controllableProperty : advancedControl) {
 			if (controllableProperty.getName().equals(audioName + HaivisionConstant.HASH + AudioControllingMetric.ACTION.getName())) {
 				ControllableType dropdown = controllableProperty.getType();
-				if (!Objects.equals(dropdown, dropdownCompare)) {
+				if (!Objects.equals(dropdown.toString(), dropdownCompare.toString())) {
 					String stateAudio = AudioStateDropdown.STOPPED.getName();
 					String action = HaivisionConstant.STOP;
-					if (Objects.equals(controllableProperty, HaivisionConstant.STOP_AUDIO_VIDEO)) {
+					if (Objects.equals(dropdownAction, HaivisionConstant.STOP_AUDIO_VIDEO)) {
 						stateAudio = AudioStateDropdown.WORKING.getName();
 						action = HaivisionConstant.START;
 					}
