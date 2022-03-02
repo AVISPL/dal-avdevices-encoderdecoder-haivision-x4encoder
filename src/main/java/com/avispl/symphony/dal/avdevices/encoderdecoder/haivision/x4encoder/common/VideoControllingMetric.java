@@ -29,6 +29,7 @@ public enum VideoControllingMetric {
 	CROPPING("Resizing"),
 	FRAME_RATE("FrameRate"),
 	ACTION("Action"),
+	INPUT("Input"),
 	FRAMING("Framing");
 
 	private final String name;

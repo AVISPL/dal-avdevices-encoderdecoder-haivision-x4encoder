@@ -45,6 +45,7 @@ public class HaivisionConstant {
 	public static final String START = "start";
 	public static final String SLASH = "/";
 	public static final String NO_SET_ERROR_AUDIO = "Can't set configure audio";
+	public static final String NO_SET_ERROR_VIDEO = "Can't set configure video";
 	public static final String ERR_SET_CONTROL = "Error when controlling: ";
 	public static final String NO_CHANGE_ACTION_ERROR = "Can't set state for the audio metric";
 	public static final String AUDIO = "Audio";
@@ -53,5 +54,11 @@ public class HaivisionConstant {
 	public static final String CANCEL = "Cancel";
 	public static final String EDITED = "Edited";
 	public static final String TRUE = "True";
+	public static final int MIN_OF_VIDEO_BITRATE = 32;
+	public static final int MAX_OF_VIDEO_BITRATE = 120000;
+	public static final int MIN_OF_VIDEO_GOP_SIZE = 1;
+	public static final int MAX_OF_VIDEO_GOP_SIZE = 1000;
+	public static final String DISABLE = "Disable";
+	public static final String ENABLE = "Enable";
 
 }

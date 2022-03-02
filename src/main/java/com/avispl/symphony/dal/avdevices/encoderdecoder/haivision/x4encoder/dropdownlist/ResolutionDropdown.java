@@ -98,4 +98,20 @@ public enum ResolutionDropdown {
 		list.add(HaivisionConstant.NONE);
 		return list;
 	}
+
+	/**
+	 * Check if enum is cropping or not
+	 * @param name of enum
+	 * @return
+	 */
+	public static boolean checkIsCropping(String name) {
+		boolean isCropping = false;
+		for(ResolutionDropdown resolution : ResolutionDropdown.values()) {
+			if (resolution.name().equals(name)) {
+				isCropping = resolution.isCropping;
+				break;
+			}
+		}
+		return isCropping;
+	}
 }
