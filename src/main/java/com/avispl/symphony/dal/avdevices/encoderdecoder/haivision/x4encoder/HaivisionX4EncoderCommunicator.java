@@ -496,12 +496,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void controlVideoProperty(String property, String value, Map<String, String> extendedStatistics, List<AdvancedControllableProperty> advancedControllableProperties) {
 		String propertyName = property.split(HaivisionConstant.HASH)[1];
 		VideoControllingMetric videoControllingMetric = VideoControllingMetric.getByName(propertyName);
+		isEmergencyDelivery = true;
 		switch (videoControllingMetric) {
 			case INPUT:
 				String[] videoInputDropdown = VideoInputDropdown.names();
 				AdvancedControllableProperty videoInputDropdownControlProperty = controlDropdown(extendedStatistics, videoInputDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, videoInputDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case CODEC_ALGORITHM:
 				String[] codecAlgorithmDropdown = CodecAlgorithm.names();
@@ -513,10 +513,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				if (CodecAlgorithm.H_265.getName().equals(value)) {
 
 					//If Encoding profile is Baseline, Main or High; then it will be set to Main
-					if (EncodingProfile.BASELINE.getName().equals(currentEncodingProfile) || EncodingProfile.MAIN.getName().equals(currentEncodingProfile) || EncodingProfile.HIGH.getName().equals(currentEncodingProfile)) {
+					if (EncodingProfile.BASELINE.getName().equals(currentEncodingProfile) || EncodingProfile.MAIN.getName().equals(currentEncodingProfile) || EncodingProfile.HIGH.getName()
+							.equals(currentEncodingProfile)) {
 						newEncodingProfile = EncodingProfile.MAIN.getName();
-					}
-					else {
+					} else {
 						//If Encoding profile is High 10, it will be set to Main 10
 						if (EncodingProfile.HIGH_10.getName().equals(currentEncodingProfile)) {
 							newEncodingProfile = EncodingProfile.MAIN_10.getName();
@@ -549,7 +549,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				AdvancedControllableProperty encodingProfileDropdownControlProperty = controlDropdown(extendedStatistics, newEncodingProfileDropdown,
 						property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName(), newEncodingProfile);
 				addAdvanceControlProperties(advancedControllableProperties, encodingProfileDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case ENCODING_PROFILE:
 				String codecAlgorithmInput = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.CODEC_ALGORITHM.getName());
@@ -559,7 +558,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty encodingProfileControlProperty = controlDropdown(extendedStatistics, encodingProfileDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, encodingProfileControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case CHROMA_SUBSAMPLING:
 				String encodingProfileInput = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName());
@@ -579,13 +577,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty chromaSubsamplingControlProperty = controlDropdown(extendedStatistics, chromaSubsampling, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, chromaSubsamplingControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case RATE_CONTROL:
 				String[] rateControlDropdown = RateControlDropdown.names();
 				AdvancedControllableProperty rateControlDropdownControlProperty = controlDropdown(extendedStatistics, rateControlDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, rateControlDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case BITRATE:
 				if (Integer.parseInt(value) < HaivisionConstant.MIN_OF_VIDEO_BITRATE) {
@@ -596,7 +592,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty bitrateControlProperty = controlNumeric(extendedStatistics, property,value);
 				addAdvanceControlProperties(advancedControllableProperties, bitrateControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case RESOLUTION:
 				String[] resolutionDropdown = ResolutionDropdown.names();
@@ -609,27 +604,22 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					AdvancedControllableProperty croppingDropdownControlProperty = controlDropdown(extendedStatistics, croppingDropdown, property, value);
 					addAdvanceControlProperties(advancedControllableProperties, croppingDropdownControlProperty);
 				}
-
-				isEmergencyDelivery = true;
 				break;
 			case CROPPING:
 				String[] croppingDropdown = CroppingDropdown.names();
 				AdvancedControllableProperty croppingDropdownControlProperty = controlDropdown(extendedStatistics, croppingDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, croppingDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case FRAME_RATE:
 				String[] frameRateDropdown = FrameRateDropdown.names();
 				AdvancedControllableProperty frameRateDropdownControlProperty = controlDropdown(extendedStatistics, frameRateDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, frameRateDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case FRAMING:
 				// Please adjust this scope, if framing is I or IB then display Slices dropdown.
 				String[] framingDropdown = FramingDropdown.names();
 				AdvancedControllableProperty framingDropdownControlProperty = controlDropdown(extendedStatistics, framingDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, framingDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case GOP_SIZE:
 				if (Integer.parseInt(value) < HaivisionConstant.MIN_OF_VIDEO_GOP_SIZE) {
@@ -640,25 +630,22 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty gopSizeControlProperty = controlNumeric(extendedStatistics, property,value);
 				addAdvanceControlProperties(advancedControllableProperties, gopSizeControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case CLOSED_CAPTION:
 				AdvancedControllableProperty closeCaptionControlProperty = controlSwitch(extendedStatistics, property, value, HaivisionConstant.DISABLE, HaivisionConstant.ENABLE);
 				addAdvanceControlProperties(advancedControllableProperties, closeCaptionControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case TIME_CODE_SOURCE:
-				//Please adjust this scope, if Timecode Source is System, then display some dropdown.
-				String[] timecodeSourceDropdown = TimeCodeSource.names();
-				AdvancedControllableProperty timecodeSourceDropdownControlProperty = controlDropdown(extendedStatistics, timecodeSourceDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, timecodeSourceDropdownControlProperty);
+				//Please adjust this scope, if timeCode Source is System, then display some dropdown.
+				String[] timeCodeSourceDropdown = TimeCodeSource.names();
+				AdvancedControllableProperty timeCodeSourceDropdownControlProperty = controlDropdown(extendedStatistics, timeCodeSourceDropdown, property, value);
+				addAdvanceControlProperties(advancedControllableProperties, timeCodeSourceDropdownControlProperty);
 				isEmergencyDelivery = true;
 				break;
 			case ASPECT_RATIO:
 				String[] aspectRatioDropdown = AspectRatioDropdown.names();
 				AdvancedControllableProperty aspectRatioDropdownControlProperty = controlDropdown(extendedStatistics, aspectRatioDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, aspectRatioDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case ACTION:
 				String[] actionDropdown = HaivisionConstant.START_AUDIO_VIDEO;
@@ -667,7 +654,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 				AdvancedControllableProperty actionDropdownControlProperty = controlDropdown(extendedStatistics, actionDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
-				isEmergencyDelivery = true;
 				break;
 			case APPLY_CHANGE:
 				String videoName = property.split(HaivisionConstant.HASH)[0];
@@ -695,11 +681,26 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				} else {
 					changeVideoAction(HaivisionConstant.START, videoNameToId.get(videoName), videoResponse.toString());
 				}
-				isEmergencyDelivery = true;
+				isEmergencyDelivery = false;
+				break;
+			case CANCEL:
+				isEmergencyDelivery = false;
 				break;
 			default:
 				break;
 		}
+		//Editing
+		if (isEmergencyDelivery) {
+			propertyName = property.split(HaivisionConstant.HASH)[0];
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + VideoControllingMetric.APPLY_CHANGE.getName(), "");
+			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + VideoControllingMetric.APPLY_CHANGE.getName(), HaivisionConstant.APPLY, "Applying", 0));
+
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.EDITED, HaivisionConstant.TRUE);
+			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, "");
+			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, 0));
+		}
+		localExtendedStatistics.setStatistics(extendedStatistics);
+		localExtendedStatistics.setControllableProperties(advancedControllableProperties);
 	}
 
 	/**

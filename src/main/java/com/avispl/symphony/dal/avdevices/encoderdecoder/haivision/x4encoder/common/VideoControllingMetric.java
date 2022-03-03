@@ -30,6 +30,7 @@ public enum VideoControllingMetric {
 	FRAME_RATE("FrameRate"),
 	ACTION("Action"),
 	INPUT("Input"),
+	CANCEL("Cancel"),
 	FRAMING("Framing");
 
 	private final String name;
