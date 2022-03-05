@@ -42,27 +42,15 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.comm
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AlgorithmDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AspectRatioDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AudioStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.BitRateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CroppingDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncodingProfile;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FrameRateDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FramingDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.LanguageDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.RateControlDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ResolutionDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.SampleRateDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.TimeCodeSource;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoInputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
@@ -271,9 +259,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.AUDIO.equals(propertiesAudioAndVideo)) {
 			controlAudioProperty(property, value, extendedStatistics, advancedControllableProperties);
 		}
-		if (HaivisionConstant.VIDEO.equals(propertiesAudioAndVideo)) {
-			controlVideoProperty(property, value, extendedStatistics, advancedControllableProperties);
-		}
 	}
 
 	@Override
@@ -465,260 +450,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Control Video encoder
-	 *
-	 * @param property the property is the filed name of controlling metric
-	 * @param value the value is value of metric
-	 * @param extendedStatistics list extendedStatistics
-	 * @param advancedControllableProperties the advancedControllableProperties is advancedControllableProperties instance
-	 */
-	private void controlVideoProperty(String property, String value, Map<String, String> extendedStatistics, List<AdvancedControllableProperty> advancedControllableProperties) {
-		String propertyName = property.split(HaivisionConstant.HASH)[1];
-		VideoControllingMetric videoControllingMetric = VideoControllingMetric.getByName(propertyName);
-		isEmergencyDelivery = true;
-		switch (videoControllingMetric) {
-			case INPUT:
-				String[] videoInputDropdown = VideoInputDropdown.names();
-				AdvancedControllableProperty videoInputDropdownControlProperty = controlDropdown(extendedStatistics, videoInputDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, videoInputDropdownControlProperty);
-				break;
-			case CODEC_ALGORITHM:
-				String[] codecAlgorithmDropdown = CodecAlgorithm.names();
-				String[] newEncodingProfileDropdown = EncodingProfile.namesIsHEVC();
-				String currentEncodingProfile = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName());
-				String newEncodingProfile = "";
-
-				//Change Codec Algorithm to HEVC/H.265
-				if (CodecAlgorithm.H_265.getName().equals(value)) {
-
-					//If Encoding profile is Baseline, Main or High; then it will be set to Main
-					if (EncodingProfile.BASELINE.getName().equals(currentEncodingProfile) || EncodingProfile.MAIN.getName().equals(currentEncodingProfile) || EncodingProfile.HIGH.getName()
-							.equals(currentEncodingProfile)) {
-						newEncodingProfile = EncodingProfile.MAIN.getName();
-					} else {
-						//If Encoding profile is High 10, it will be set to Main 10
-						if (EncodingProfile.HIGH_10.getName().equals(currentEncodingProfile)) {
-							newEncodingProfile = EncodingProfile.MAIN_10.getName();
-						}
-						//If Encoding profile is High 4:2:2, it will be set to Main 4:2:2 10
-						if (EncodingProfile.HIGH_422.getName().equals(currentEncodingProfile)) {
-							newEncodingProfile = EncodingProfile.MAIN_422_10.getName();
-						}
-					}
-				}
-				//Change Codec Algorithm to AVC/H.264, change encoding profile dropdown to the list of AVC
-				if (CodecAlgorithm.H_264.getName().equals(value)) {
-					newEncodingProfileDropdown = EncodingProfile.namesIsAVG();
-					//If Encoding profile is Main, it will be not change
-					if (EncodingProfile.MAIN.getName().equals(currentEncodingProfile)) {
-						newEncodingProfile = currentEncodingProfile;
-					}
-					//If Encoding profile is Main 10, it will be set to High 10
-					else if (EncodingProfile.MAIN_10.getName().equals(currentEncodingProfile)) {
-						newEncodingProfile = EncodingProfile.HIGH_10.getName();
-					}
-					//If Encoding profile is Main 4:2:2 10, it will be set to High 4:2:2
-					else {
-						newEncodingProfile = EncodingProfile.HIGH_422.getName();
-					}
-				}
-
-				AdvancedControllableProperty codecAlgorithmDropdownControlProperty = controlDropdown(extendedStatistics, codecAlgorithmDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, codecAlgorithmDropdownControlProperty);
-				AdvancedControllableProperty encodingProfileDropdownControlProperty = controlDropdown(extendedStatistics, newEncodingProfileDropdown,
-						property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName(), newEncodingProfile);
-				addAdvanceControlProperties(advancedControllableProperties, encodingProfileDropdownControlProperty);
-				break;
-			case ENCODING_PROFILE:
-				String codecAlgorithmInput = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.CODEC_ALGORITHM.getName());
-				String[] encodingProfileDropdown = EncodingProfile.namesIsAVG();
-				if (CodecAlgorithm.H_265.getName().equals(codecAlgorithmInput)) {
-					encodingProfileDropdown = EncodingProfile.namesIsHEVC();
-				}
-				AdvancedControllableProperty encodingProfileControlProperty = controlDropdown(extendedStatistics, encodingProfileDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, encodingProfileControlProperty);
-				break;
-			case CHROMA_SUBSAMPLING:
-				String encodingProfileInput = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName());
-				String[] chromaSubsampling;
-
-				//If Encoding profile is Baseline, Main or High; then the Chroma subsampling list includes 4:2:0 8-bit
-				if (EncodingProfile.BASELINE.getName().equals(encodingProfileInput) || EncodingProfile.MAIN.getName().equals(encodingProfileInput) || EncodingProfile.HIGH.getName().equals(encodingProfileInput)) {
-					chromaSubsampling = ChromaSubSampling.namesIsBaselineOrMainOrHigh();
-				}
-				//If Encoding profile is Main 10 or High 10, the Chroma subsampling list includes {4:2:0 8-bit; 4:2:0 10-bit}
-				else if (EncodingProfile.MAIN_10.getName().equals(encodingProfileInput) || EncodingProfile.HIGH_10.getName().equals(encodingProfileInput)) {
-					chromaSubsampling = ChromaSubSampling.namesIsMain10OrHigh10();
-				}
-				//If Encoding profile is Main 4:2:2 10 or High 4:2:2, the Chroma subsampling list includes {4:2:0 8-bit; 4:2:0 10-bit, 4:2:2 8-bit, 4:2:2 10-bit}
-				else {
-					chromaSubsampling = ChromaSubSampling.names();
-				}
-				AdvancedControllableProperty chromaSubsamplingControlProperty = controlDropdown(extendedStatistics, chromaSubsampling, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, chromaSubsamplingControlProperty);
-				break;
-			case RATE_CONTROL:
-				String[] rateControlDropdown = RateControlDropdown.names();
-				AdvancedControllableProperty rateControlDropdownControlProperty = controlDropdown(extendedStatistics, rateControlDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, rateControlDropdownControlProperty);
-				break;
-			case BITRATE:
-				if (Integer.parseInt(value) < HaivisionConstant.MIN_OF_VIDEO_BITRATE) {
-					value = Integer.toString(HaivisionConstant.MIN_OF_VIDEO_BITRATE);
-				}
-				if (Integer.parseInt(value) > HaivisionConstant.MAX_OF_VIDEO_BITRATE) {
-					value = Integer.toString(HaivisionConstant.MAX_OF_VIDEO_BITRATE);
-				}
-				AdvancedControllableProperty bitrateControlProperty = controlNumeric(extendedStatistics, property,value);
-				addAdvanceControlProperties(advancedControllableProperties, bitrateControlProperty);
-				break;
-			case RESOLUTION:
-				String[] resolutionDropdown = ResolutionDropdown.names();
-				AdvancedControllableProperty resolutionDropdownControlProperty = controlDropdown(extendedStatistics, resolutionDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, resolutionDropdownControlProperty);
-
-				//If resolution is cropping, then display Cropping dropdown
-				if (ResolutionDropdown.checkIsCropping(value)) {
-					String[] croppingDropdown = CroppingDropdown.names();
-					AdvancedControllableProperty croppingDropdownControlProperty = controlDropdown(extendedStatistics, croppingDropdown, property, value);
-					addAdvanceControlProperties(advancedControllableProperties, croppingDropdownControlProperty);
-				}
-				break;
-			case CROPPING:
-				String[] croppingDropdown = CroppingDropdown.names();
-				AdvancedControllableProperty croppingDropdownControlProperty = controlDropdown(extendedStatistics, croppingDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, croppingDropdownControlProperty);
-				break;
-			case FRAME_RATE:
-				String[] frameRateDropdown = FrameRateDropdown.names();
-				AdvancedControllableProperty frameRateDropdownControlProperty = controlDropdown(extendedStatistics, frameRateDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, frameRateDropdownControlProperty);
-				break;
-			case FRAMING:
-				// Please adjust this scope, if framing is I or IB then display Slices dropdown.
-				String[] framingDropdown = FramingDropdown.names();
-				AdvancedControllableProperty framingDropdownControlProperty = controlDropdown(extendedStatistics, framingDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, framingDropdownControlProperty);
-				break;
-			case GOP_SIZE:
-				if (Integer.parseInt(value) < HaivisionConstant.MIN_OF_VIDEO_GOP_SIZE) {
-					value = Integer.toString(HaivisionConstant.MIN_OF_VIDEO_GOP_SIZE);
-				}
-				if (Integer.parseInt(value) > HaivisionConstant.MAX_OF_VIDEO_GOP_SIZE) {
-					value = Integer.toString(HaivisionConstant.MAX_OF_VIDEO_GOP_SIZE);
-				}
-				AdvancedControllableProperty gopSizeControlProperty = controlNumeric(extendedStatistics, property,value);
-				addAdvanceControlProperties(advancedControllableProperties, gopSizeControlProperty);
-				break;
-			case CLOSED_CAPTION:
-				AdvancedControllableProperty closeCaptionControlProperty = controlSwitch(extendedStatistics, property, value, HaivisionConstant.DISABLE, HaivisionConstant.ENABLE);
-				addAdvanceControlProperties(advancedControllableProperties, closeCaptionControlProperty);
-				break;
-			case TIME_CODE_SOURCE:
-				//Please adjust this scope, if timeCode Source is System, then display some dropdown.
-				String[] timeCodeSourceDropdown = TimeCodeSource.names();
-				AdvancedControllableProperty timeCodeSourceDropdownControlProperty = controlDropdown(extendedStatistics, timeCodeSourceDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, timeCodeSourceDropdownControlProperty);
-				isEmergencyDelivery = true;
-				break;
-			case ASPECT_RATIO:
-				String[] aspectRatioDropdown = AspectRatioDropdown.names();
-				AdvancedControllableProperty aspectRatioDropdownControlProperty = controlDropdown(extendedStatistics, aspectRatioDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, aspectRatioDropdownControlProperty);
-				break;
-			case ACTION:
-				String[] actionDropdown = HaivisionConstant.START_AUDIO_VIDEO;
-				if (HaivisionConstant.START.equalsIgnoreCase(value)) {
-					actionDropdown = HaivisionConstant.STOP_AUDIO_VIDEO;
-				}
-				AdvancedControllableProperty actionDropdownControlProperty = controlDropdownAcceptNoneValue(extendedStatistics, actionDropdown, property, value);
-				addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
-				break;
-			case APPLY_CHANGE:
-				String videoName = property.split(HaivisionConstant.HASH)[0];
-				VideoResponse videoResponse = new VideoResponse();
-				//Please continue set the fields are missing
-				videoResponse.setAspectRatio(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.ASPECT_RATIO.getName()));
-				videoResponse.setBitrate(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.BITRATE.getName()));
-				videoResponse.setChromaSubSampling(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.CHROMA_SUBSAMPLING.getName()));
-				videoResponse.setClosedCaption(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.CLOSED_CAPTION.getName()));
-				videoResponse.setCodecAlgorithm(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.CODEC_ALGORITHM.getName()));
-				videoResponse.setCropping(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.CROPPING.getName()));
-				videoResponse.setEncodingProfile(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.ENCODING_PROFILE.getName()));
-				videoResponse.setGopSize(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.GOP_SIZE.getName()));
-				videoResponse.setInputInterface(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.INPUT.getName()));
-				videoResponse.setResolution(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.RESOLUTION.getName()));
-				videoResponse.setTimeCode(extendedStatistics.get(videoName + HaivisionConstant.HASH + VideoControllingMetric.TIME_CODE_SOURCE.getName()));
-				videoResponse.setId(videoNameToId.get(videoName));
-
-				// Send request to apply all change for all metric
-				setVideoApplyChange(videoResponse.toString(), audioNameToId.get(videoName));
-
-				// Send request to action for the metric
-				if (AudioStateDropdown.STOPPED.getName().equalsIgnoreCase(value)) {
-					changeVideoAction(HaivisionConstant.STOP_ACTION, videoNameToId.get(videoName), videoResponse.toString());
-				} else {
-					changeVideoAction(HaivisionConstant.START_ACTION, videoNameToId.get(videoName), videoResponse.toString());
-				}
-				isEmergencyDelivery = false;
-				break;
-			case CANCEL:
-				isEmergencyDelivery = false;
-				break;
-			default:
-				break;
-		}
-		//Editing
-		if (isEmergencyDelivery) {
-			propertyName = property.split(HaivisionConstant.HASH)[0];
-			extendedStatistics.put(propertyName + HaivisionConstant.HASH + VideoControllingMetric.APPLY_CHANGE.getName(), "");
-			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + VideoControllingMetric.APPLY_CHANGE.getName(), HaivisionConstant.APPLY, "Applying", 0));
-
-			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.EDITED, HaivisionConstant.TRUE);
-			extendedStatistics.put(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, "");
-			advancedControllableProperties.add(createButton(propertyName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, 0));
-		}
-		localExtendedStatistics.setStatistics(extendedStatistics);
-		localExtendedStatistics.setControllableProperties(advancedControllableProperties);
-	}
-
-	/**
-	 * Save video apply change
-	 *
-	 * @param data the data is request body
-	 * @param urlId the urlId is id of video encoder
-	 */
-	private void setVideoApplyChange(String data, String urlId) {
-		try {
-			String responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER) + HaivisionConstant.SLASH + urlId, data);
-			if (StringUtils.isNullOrEmpty(responseData)) {
-				throw new ResourceNotReachableException(HaivisionConstant.NO_SET_ERROR_VIDEO);
-			}
-		} catch (Exception e) {
-			throw new ResourceNotReachableException(HaivisionConstant.ERR_SET_CONTROL + e.getMessage());
-		}
-	}
-
-	/**
-	 * Change action for video encoder
-	 *
-	 * @param action the action is state of video encoder
-	 * @param urlId the urlId is id of video encoder
-	 * @param data the data is request body
-	 */
-	private void changeVideoAction(String action, String urlId, String data) {
-		try {
-			String responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER) + HaivisionConstant.SLASH + urlId + HaivisionConstant.SLASH + action, data);
-			if (StringUtils.isNullOrEmpty(responseData)) {
-				throw new ResourceNotReachableException(HaivisionConstant.NO_CHANGE_ACTION_ERROR);
-			}
-		} catch (Exception e) {
-			throw new ResourceNotReachableException(HaivisionConstant.ERR_SET_CONTROL + e.getMessage());
-		}
-	}
-
-
-	/**
 	 * Retrieve SessionID from the Device
 	 *
 	 * @return sessionId of the device
@@ -847,9 +578,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			for (AudioResponse audioResponses : audioResponseList) {
 				addAudioDataControlToProperty(stats, audioResponses, advancedControllableProperties);
 			}
-			for (VideoResponse videoResponse : videoResponseList) {
-				addVideoDataControlToProperty(stats, videoResponse, advancedControllableProperties);
-			}
 		}
 	}
 
@@ -968,184 +696,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			}
 		}
 	}
-
-	/**
-	 * Add Output Stream data to  property
-	 *
-	 * @param stats list statistics property
-	 * @param videoResponseList list of video response
-	 * @param advancedControllableProperties the advancedControllableProperties is advancedControllableProperties instance
-	 */
-	private void addVideoDataControlToProperty(Map<String, String> stats, VideoResponse videoResponseList, List<AdvancedControllableProperty> advancedControllableProperties) {
-		String videoName = videoResponseList.getName();
-		Map<Integer, String> videoStateMap = VideoStateDropdown.getNameToValueMap();
-		Map<Integer, String> codecAlgorithmMap = CodecAlgorithm.getNameToValueMap();
-		Map<Integer, String> croppingMap = CroppingDropdown.getNameToValueMap();
-		Map<Integer, String> framingMap = FramingDropdown.getNameToValueMap();
-		Map<Integer, String> timeCodeSourceMap = TimeCodeSource.getNameToValueMap();
-		Map<Integer, String> aspectRatioMap = AspectRatioDropdown.getNameToValueMap();
-		Map<Integer, String> inputMap = InputDropdown.getNameToValueMap();
-		Map<Integer, String> encodingProfileMap = EncodingProfile.getNameToValueMap();
-		Map<Integer, String> chromaSubSamplingMap = ChromaSubSampling.getNameToValueMap();
-		Map<Integer, String> rateControlMap = RateControlDropdown.getNameToValueMap();
-		String[] dropdownCodecAlgorithm = CodecAlgorithm.names();
-		String[] dropdownEncodingProfile = EncodingProfile.namesIsAVG();
-		String[] dropdownChromaSubSampling = ChromaSubSampling.namesIsBaselineOrMainOrHigh();
-		String[] dropdownRateControl = RateControlDropdown.names();
-		String[] dropdownResolution = ResolutionDropdown.names();
-		String[] dropdownCropping = CroppingDropdown.names();
-		String[] dropdownFraming = FramingDropdown.names();
-		String[] dropdownTimeCodeSource = TimeCodeSource.names();
-		String[] dropdownAspectRatio = AspectRatioDropdown.names();
-		String[] inputDropdown = InputDropdown.names();
-		String[] frameRateDropdown = FrameRateDropdown.names();
-		List<String> resolutionNotCropping = ResolutionDropdown.getDropdownListNotCropping();
-		String[] dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
-		String value;
-		for (VideoControllingMetric videoMetric : VideoControllingMetric.values()) {
-			switch (videoMetric) {
-				case STATE:
-					String stateVideo = videoResponseList.getState();
-					value = getNameByValue(stateVideo, videoStateMap);
-					stats.put(videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					break;
-				case INPUT_FORMAT:
-					value = videoResponseList.getInputFormat();
-					if (HaivisionConstant.NONE.equals(value)) {
-						value = videoResponseList.getResolution();
-					}
-					stats.put(videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					break;
-				case CODEC_ALGORITHM:
-					String codecAlgorithm = videoResponseList.getCodecAlgorithm();
-					value = getNameByValue(codecAlgorithm, codecAlgorithmMap);
-					AdvancedControllableProperty languageControlProperty = controlDropdown(stats, dropdownCodecAlgorithm, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, languageControlProperty);
-					break;
-				case ENCODING_PROFILE:
-					String codecAlgorithmMode = videoResponseList.getCodecAlgorithm();
-					String valueAlgorithm = getNameByValue(codecAlgorithmMode, codecAlgorithmMap);
-					String encodingProfile = videoResponseList.getEncodingProfile();
-					value = getNameByValue(encodingProfile, encodingProfileMap);
-					if (CodecAlgorithm.H_265.getName().equals(valueAlgorithm)) {
-						dropdownEncodingProfile = EncodingProfile.namesIsHEVC();
-					}
-					AdvancedControllableProperty encodingProfileControlProperty = controlDropdown(stats, dropdownEncodingProfile, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, encodingProfileControlProperty);
-					break;
-				case CHROMA_SUBSAMPLING:
-					String encodingProfileMode = videoResponseList.getEncodingProfile();
-					String valueEncodingProfileMode = getNameByValue(encodingProfileMode, encodingProfileMap);
-					if (EncodingProfile.MAIN_10.getName().equals(valueEncodingProfileMode) || EncodingProfile.HIGH_10.getName().equals(valueEncodingProfileMode)) {
-						dropdownChromaSubSampling = ChromaSubSampling.namesIsMain10OrHigh10();
-					}
-					if (EncodingProfile.MAIN_422_10.getName().equals(valueEncodingProfileMode) || EncodingProfile.HIGH_422.getName().equals(valueEncodingProfileMode)) {
-						dropdownChromaSubSampling = ChromaSubSampling.names();
-					}
-					String chromaSubSampling = videoResponseList.getChromaSubSampling();
-					value = getNameByValue(chromaSubSampling, chromaSubSamplingMap);
-					AdvancedControllableProperty chromaSubSamplingProfileProperty = controlDropdown(stats, dropdownChromaSubSampling, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, chromaSubSamplingProfileProperty);
-					break;
-				case RATE_CONTROL:
-					String rateControl = videoResponseList.getRateControl();
-					value = getNameByValue(rateControl, rateControlMap);
-					AdvancedControllableProperty rateControlProperty = controlDropdown(stats, dropdownRateControl, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, rateControlProperty);
-					break;
-				case MAX_BITRATE:
-					String rateControlMode = videoResponseList.getRateControl();
-					String valueRateControl = getNameByValue(rateControlMode, rateControlMap);
-					if (RateControlDropdown.CVBR.getName().equals(valueRateControl)) {
-						String matBitRate = videoResponseList.getMaxBitrate();
-						AdvancedControllableProperty maxBitRateProperty = controlNumeric(stats, videoName + HaivisionConstant.HASH + videoMetric.getName(), matBitRate);
-						addAdvanceControlProperties(advancedControllableProperties, maxBitRateProperty);
-					}
-					break;
-				case BITRATE:
-					String bitRate = videoResponseList.getBitrate();
-					AdvancedControllableProperty bitRateProperty = controlNumeric(stats, videoName + HaivisionConstant.HASH + videoMetric.getName(), bitRate);
-					addAdvanceControlProperties(advancedControllableProperties, bitRateProperty);
-					break;
-				case RESOLUTION:
-					String resolution = videoResponseList.getResolution();
-					if (HaivisionConstant.INPUT_AUTO.equals(resolution)) {
-						resolution = videoResponseList.getVideoStatistic().getInputFormat();
-					}
-					AdvancedControllableProperty resolutionControlProperty = controlDropdown(stats, dropdownResolution, videoName + HaivisionConstant.HASH + videoMetric.getName(), resolution);
-					addAdvanceControlProperties(advancedControllableProperties, resolutionControlProperty);
-					break;
-				case CROPPING:
-					String resolutionMode = videoResponseList.getResolution();
-					if (HaivisionConstant.INPUT_AUTO.equals(resolutionMode)) {
-						resolutionMode = videoResponseList.getVideoStatistic().getInputFormat();
-					}
-					if (!resolutionNotCropping.contains(resolutionMode)) {
-						String cropping = videoResponseList.getCropping();
-						value = getNameByValue(cropping, croppingMap);
-						AdvancedControllableProperty croppingControlProperty = controlDropdown(stats, dropdownCropping, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-						addAdvanceControlProperties(advancedControllableProperties, croppingControlProperty);
-					}
-					break;
-				case FRAME_RATE:
-					String frameRate = videoResponseList.getFrameRate();
-					if (frameRate.equals("0")) {
-						frameRate = FrameRateDropdown.FAME_RATE_0.getValue();
-					}
-					AdvancedControllableProperty croppingControlProperty = controlDropdown(stats, frameRateDropdown, videoName + HaivisionConstant.HASH + videoMetric.getName(), frameRate);
-					addAdvanceControlProperties(advancedControllableProperties, croppingControlProperty);
-					break;
-				case FRAMING:
-					String framing = videoResponseList.getGopStructure();
-					value = getNameByValue(framing, framingMap);
-					AdvancedControllableProperty framingProperty = controlDropdown(stats, dropdownFraming, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, framingProperty);
-					break;
-				case GOP_SIZE:
-					String gopSize = videoResponseList.getGopSize();
-					AdvancedControllableProperty gopSizeProperty = controlNumeric(stats, videoName + HaivisionConstant.HASH + videoMetric.getName(), gopSize);
-					addAdvanceControlProperties(advancedControllableProperties, gopSizeProperty);
-					break;
-				case CLOSED_CAPTION:
-					String closedCaption = videoResponseList.getClosedCaption();
-					AdvancedControllableProperty closedCaptionProperty = controlSwitch(stats, videoName + HaivisionConstant.HASH + videoMetric.getName(), closedCaption, "Disable", "Enable");
-					addAdvanceControlProperties(advancedControllableProperties, closedCaptionProperty);
-					break;
-				case TIME_CODE_SOURCE:
-					String timeCodeSource = videoResponseList.getTimeCode();
-					value = getNameByValue(timeCodeSource, timeCodeSourceMap);
-					AdvancedControllableProperty timeCodeSourceProperty = controlDropdownAcceptNoneValue(stats, dropdownTimeCodeSource, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, timeCodeSourceProperty);
-					break;
-				case ASPECT_RATIO:
-					String aspectRatio = videoResponseList.getAspectRatio();
-					value = getNameByValue(aspectRatio, aspectRatioMap);
-					AdvancedControllableProperty aspectRatioProperty = controlDropdown(stats, dropdownAspectRatio, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, aspectRatioProperty);
-					break;
-				case ACTION:
-					stateVideo = videoResponseList.getState();
-					value = getNameByValue(stateVideo, videoStateMap);
-					String action = HaivisionConstant.START;
-					if (VideoStateDropdown.STOPPED.getName().equals(value)) {
-						dropdownAction = HaivisionConstant.STOP_AUDIO_VIDEO;
-						action = HaivisionConstant.STOP;
-					}
-					AdvancedControllableProperty actionDropdownControlProperty = controlDropdownAcceptNoneValue(stats, dropdownAction, videoName + HaivisionConstant.HASH + videoMetric.getName(), action);
-					addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
-					break;
-				case INPUT:
-					String input = videoResponseList.getInputInterface();
-					value = getNameByValue(input, inputMap);
-					AdvancedControllableProperty inputDropdownControlProperty = controlDropdown(stats, inputDropdown, videoName + HaivisionConstant.HASH + videoMetric.getName(), value);
-					addAdvanceControlProperties(advancedControllableProperties, inputDropdownControlProperty);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
 	/**
 	 * Add advancedControllableProperties if  advancedControllableProperties different empty
 	 *
@@ -1747,67 +1297,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Create Numeric is control property for metric
-	 *
-	 * @param name the name of the property
-	 * @param initialValue the initialValue is number
-	 * @return AdvancedControllableProperty Numeric instance
-	 */
-	private AdvancedControllableProperty createNumeric(String name, String initialValue) {
-		AdvancedControllableProperty.Numeric numeric = new AdvancedControllableProperty.Numeric();
-
-		return new AdvancedControllableProperty(name, new Date(), numeric, initialValue);
-	}
-
-	/**
-	 * Add Numeric is control property for metric
-	 *
-	 * @param stats list statistic
-	 * @param name String name of metric
-	 * @return AdvancedControllableProperty Numeric instance
-	 */
-	private AdvancedControllableProperty controlNumeric(Map<String, String> stats, String name, String value) {
-		stats.put(name, value);
-		return createNumeric(name, value);
-	}
-
-	/**
-	 * Create switch is control property for metric
-	 *
-	 * @param name the name of property
-	 * @param status initial status (0|1)
-	 * @return AdvancedControllableProperty switch instance
-	 */
-	private AdvancedControllableProperty createSwitch(String name, int status, String labelOff, String labelOn) {
-		AdvancedControllableProperty.Switch toggle = new AdvancedControllableProperty.Switch();
-		toggle.setLabelOff(labelOff);
-		toggle.setLabelOn(labelOn);
-
-		AdvancedControllableProperty advancedControllableProperty = new AdvancedControllableProperty();
-		advancedControllableProperty.setName(name);
-		advancedControllableProperty.setValue(status);
-		advancedControllableProperty.setType(toggle);
-		advancedControllableProperty.setTimestamp(new Date());
-
-		return advancedControllableProperty;
-	}
-
-	/**
-	 * Add switch is control property for metric
-	 *
-	 * @param stats list statistic
-	 * @param name String name of metric
-	 * @return AdvancedControllableProperty switch instance
-	 */
-	private AdvancedControllableProperty controlSwitch(Map<String, String> stats, String name, String value, String labelOff, String labelOn) {
-		stats.put(name, value);
-		if (!HaivisionConstant.NONE.equals(value)) {
-			return createSwitch(name, Integer.parseInt(value), labelOff, labelOn);
-		}
-		return null;
-	}
-
-	/**
 	 * Save audio apply change
 	 *
 	 * @param data the data is request body
@@ -1816,7 +1305,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void setAudioApplyChange(String data, String urlId) {
 		try {
 			JsonNode responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER) + HaivisionConstant.SLASH + urlId, data, JsonNode.class);
-			if (responseData.get("info") == null) {
+			if (responseData.get(HaivisionConstant.INFO) == null) {
 				throw new ResourceNotReachableException(HaivisionConstant.NO_SET_ERROR_AUDIO);
 			}
 		} catch (Exception e) {
@@ -1834,8 +1323,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void changeAudioAction(String action, String urlId, String data) {
 		try {
 			JsonNode responseData = doPut(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER) + HaivisionConstant.SLASH + urlId + HaivisionConstant.SLASH + action, data, JsonNode.class);
-			if (responseData.get("info") == null) {
-				throw new ResourceNotReachableException(HaivisionConstant.NO_CHANGE_ACTION_ERROR);
+			if (responseData.get(HaivisionConstant.INFO) == null) {
+				throw new ResourceNotReachableException(HaivisionConstant.NO_CHANGE_ACTION_AUDIO_ERROR);
 			}
 		} catch (Exception e) {
 			throw new ResourceNotReachableException(HaivisionConstant.ERR_SET_CONTROL + e.getMessage());

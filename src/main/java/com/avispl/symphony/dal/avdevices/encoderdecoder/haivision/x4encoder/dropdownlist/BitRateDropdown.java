@@ -211,4 +211,20 @@ public enum BitRateDropdown {
 		}
 		return defaultValue;
 	}
+
+	/**
+	 * Get name by value
+	 * @param value the value is value of metric
+	 * @return name the name is name of metric
+	 */
+	public static String getNameFromValue(int value) {
+		String name = "";
+		for(BitRateDropdown bitrate : BitRateDropdown.values()) {
+			if (bitrate.getValue() == value) {
+				name = bitrate.getName();
+				break;
+			}
+		}
+		return name;
+	}
 }

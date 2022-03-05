@@ -32,7 +32,7 @@ public class HaivisionConstant {
 	public static final String COOKIE = "Cookie";
 	public static final String SYSTEM_INFO_STATUS = "System Info Status";
 	public static final String OPERATOR = "Operator";
-	public static final String ADMIN = "Admin";
+	public static final String ADMIN = "Administrator";
 	public static final String INFO = "info";
 	public static final String ROLE = "role";
 	public static final String APPLY = "Apply";
@@ -49,7 +49,8 @@ public class HaivisionConstant {
 	public static final String NO_SET_ERROR_AUDIO = "Can't set configure audio";
 	public static final String NO_SET_ERROR_VIDEO = "Can't set configure video";
 	public static final String ERR_SET_CONTROL = "Error when controlling: ";
-	public static final String NO_CHANGE_ACTION_ERROR = "Can't set state for the audio metric";
+	public static final String NO_CHANGE_ACTION_AUDIO_ERROR = "Can't set state for the audio metric";
+	public static final String NO_CHANGE_ACTION_VIDEO_ERROR = "Can't set state for the video metric";
 	public static final String AUDIO = "Audio";
 	public static final String VIDEO = "Video";
 	public static final String STREAM = "Stream";
@@ -62,5 +63,8 @@ public class HaivisionConstant {
 	public static final int MAX_OF_VIDEO_GOP_SIZE = 1000;
 	public static final String DISABLE = "Disable";
 	public static final String ENABLE = "Enable";
+	public static final String AUTOMATIC = "Automatic";
+	public static final String NO_INPUT = "No Input";
+	public static final String ZERO = "0";
 
 }

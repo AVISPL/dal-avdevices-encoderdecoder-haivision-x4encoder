@@ -61,6 +61,8 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoResponse.setResolution(checkNoneInformation(infoNode, "resolutionText"));
 			videoResponse.setCropping(checkNoneInformation(infoNode, "cropping"));
 			videoResponse.setFrameRate(checkNoneInformation(infoNode, "pictureRate"));
+			videoResponse.setSlices(checkNoneInformation(infoNode, "slices"));
+			videoResponse.setIntraRefresh(checkNoneInformation(infoNode, "intraRefresh"));
 		}
 
 		JsonNode stateNode = jsonNode.get("stats");
