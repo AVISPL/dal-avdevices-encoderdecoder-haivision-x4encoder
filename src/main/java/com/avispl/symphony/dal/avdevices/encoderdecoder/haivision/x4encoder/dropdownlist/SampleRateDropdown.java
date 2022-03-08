@@ -11,8 +11,8 @@ import java.util.Map;
 /**
  * SampleRateDropdown class defined the enum for monitoring and controlling process
  *
- * @author Ivan
- * @version 1.0.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 public enum SampleRateDropdown {

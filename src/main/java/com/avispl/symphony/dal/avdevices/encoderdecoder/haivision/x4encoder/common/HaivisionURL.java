@@ -6,9 +6,9 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
 /**
  * HaivisionURL class defined the URL of the Makito X4 Encoder device
  *
- * @author Ivan
- * @version 1.0
- * @since 1.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
+ * @since 1.0.0
  */
 public enum HaivisionURL {
 

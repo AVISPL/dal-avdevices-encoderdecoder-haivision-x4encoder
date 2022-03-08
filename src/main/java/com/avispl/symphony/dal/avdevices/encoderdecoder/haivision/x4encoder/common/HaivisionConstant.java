@@ -6,9 +6,9 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
 /**
  * HaivisionConstant class provides the constant during the monitoring and controlling process
  *
- * @author Ivan
- * @version 1.0
- * @since 1.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
+ * @since 1.0.0
  */
 public class HaivisionConstant {
 
@@ -36,10 +36,10 @@ public class HaivisionConstant {
 	public static final String INFO = "info";
 	public static final String ROLE = "role";
 	public static final String APPLY = "Apply";
-	public static final String[] START_AUDIO_VIDEO = { "Stop", "None" };
-	public static final String[] STOP_AUDIO_VIDEO = { "Start", "None" };
-	public static final String[] START_STREAM = { "Stop", "None", "Delete" };
-	public static final String[] STOP_STREAM = { "Start", "None", "Delete" };
+	public static final String[] WORKING_AUDIO_VIDEO = { "Stop", "None" };
+	public static final String[] NOT_WORKING_AUDIO_VIDEO = { "Start", "None" };
+	public static final String[] WORKING_STREAM = { "Stop", "None", "Delete" };
+	public static final String[] NOT_WORKING_STREAM = { "Start", "None", "Delete" };
 	public static final String INPUT_AUTO = "Input/Auto";
 	public static final String STOP_ACTION = "stop";
 	public static final String START_ACTION = "start";

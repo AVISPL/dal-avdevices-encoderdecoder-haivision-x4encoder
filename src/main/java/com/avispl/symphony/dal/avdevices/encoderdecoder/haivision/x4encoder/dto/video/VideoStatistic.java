@@ -9,8 +9,8 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.comm
 /**
  * Video Statistic DTO class
  *
- * @author Ivan
- * @version 1.0.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 public class VideoStatistic {

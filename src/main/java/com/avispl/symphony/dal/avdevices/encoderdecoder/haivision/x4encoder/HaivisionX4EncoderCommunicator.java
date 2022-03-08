@@ -82,7 +82,8 @@ import com.avispl.symphony.dal.util.StringUtils;
  * <li>Start/Stop /Edit video encoder config</li>
  * <li>Create/ Edit/ Delete / Start/Stop /Edit output stream </li>
  *
- * @author Ivan
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 public class HaivisionX4EncoderCommunicator extends RestCommunicator implements Monitorable, Controller {
@@ -304,12 +305,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addAdvanceControlProperties(advancedControllableProperties, inputDropdownControlProperty);
 				break;
 			case CHANGE_MODE:
+				String nameIsBitRate = AudioControllingMetric.BITRATE.getName();
 				String[] channelModeDropdown = ChannelModeDropdown.names();
-				String currentBitRateValue = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + AudioControllingMetric.BITRATE.getName());
+				String currentBitRateValue = extendedStatistics.get(property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + nameIsBitRate);
 				String newBitRateValue = "";
 				Map<String, Integer> bitRateNameModeMap = BitRateDropdown.getValueToNameMap();
 				Map<Integer, String> bitRateValueModeMap = BitRateDropdown.getNameToValueMap();
-				if (ChannelModeDropdown.STEREO.getName().equals(value)) {
+				String nameIsStereo = ChannelModeDropdown.STEREO.getName();
+				if (nameIsStereo.equals(value)) {
 					//If channel mode is Stereo and Bitrate is in Stereo bitrate list, the bitrate value will be not changed
 					if (BitRateDropdown.checkIsStereoByValue(bitRateNameModeMap.get(currentBitRateValue))) {
 						newBitRateValue = currentBitRateValue;
@@ -329,11 +332,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					}
 				}
 				String[] newBitRateDropdown = BitRateDropdown.namesIsMono();
-				if (ChannelModeDropdown.STEREO.getName().equals(value)) {
+				if (nameIsStereo.equals(value)) {
 					newBitRateDropdown = BitRateDropdown.namesIsStereo();
 				}
 				AdvancedControllableProperty bitRateDropdownControlProperty = controlDropdown(extendedStatistics, newBitRateDropdown,
-						property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + AudioControllingMetric.BITRATE.getName(), newBitRateValue);
+						property.split(HaivisionConstant.HASH)[0] + HaivisionConstant.HASH + nameIsBitRate, newBitRateValue);
 				AdvancedControllableProperty channelModeDropdownControlProperty = controlDropdown(extendedStatistics, channelModeDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, bitRateDropdownControlProperty);
 				addAdvanceControlProperties(advancedControllableProperties, channelModeDropdownControlProperty);
@@ -363,9 +366,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addAdvanceControlProperties(advancedControllableProperties, bitRateControlProperty);
 				break;
 			case ACTION:
-				String[] actionDropdown = HaivisionConstant.START_AUDIO_VIDEO;
+				String[] actionDropdown = HaivisionConstant.WORKING_AUDIO_VIDEO;
 				if (AudioStateDropdown.STOPPED.getName().equals(value)) {
-					actionDropdown = HaivisionConstant.STOP_AUDIO_VIDEO;
+					actionDropdown = HaivisionConstant.NOT_WORKING_AUDIO_VIDEO;
 				}
 				AdvancedControllableProperty actionDropdownControlProperty = controlDropdownAcceptNoneValue(extendedStatistics, actionDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
@@ -626,7 +629,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] dropdownAlgorithm = AlgorithmDropdown.names();
 		String[] dropdownSampleRate = SampleRateDropdown.names();
 		String[] dropdownLanguage = LanguageDropdown.names();
-		String[] dropdownAction = HaivisionConstant.START_AUDIO_VIDEO;
+		String[] dropdownAction = HaivisionConstant.WORKING_AUDIO_VIDEO;
 		String[] dropdownBitRate = BitRateDropdown.namesIsMono();
 		String value;
 
@@ -684,7 +687,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					//define action = Start
 					String action = HaivisionConstant.START;
 					if (AudioStateDropdown.STOPPED.getName().equals(value)) {
-						dropdownAction = HaivisionConstant.STOP_AUDIO_VIDEO;
+						dropdownAction = HaivisionConstant.NOT_WORKING_AUDIO_VIDEO;
 						//action = Stop
 						action = HaivisionConstant.STOP;
 					}

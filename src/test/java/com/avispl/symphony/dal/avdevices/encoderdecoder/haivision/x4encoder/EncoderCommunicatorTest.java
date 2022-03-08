@@ -41,9 +41,10 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.SampleRateDropdown;
 
 /**
- * Unit test for simple App.
+ * Unit test for the HaivisionX4EncoderCommunicator
  *
- * @author Ivan
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 class EncoderCommunicatorTest {
