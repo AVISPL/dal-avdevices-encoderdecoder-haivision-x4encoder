@@ -1026,7 +1026,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				populateAudioData(stats, advancedControllableProperties);
 			}
 			if (HaivisionURL.VIDEO_ENCODER.equals(haivisionURL)) {
-				populateVideoData(stats);
+				populateVideoData(stats, advancedControllableProperties);
 			}
 			if (HaivisionURL.OUTPUT_ENCODER.equals(haivisionURL)) {
 				populateOutputData(stats);
@@ -1064,6 +1064,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Add audio data to statistics property
 	 *
+	 * @param advancedControllableProperties the advancedControllableProperties is list AdvancedControllableProperties
 	 * @param stats list statistics property
 	 */
 	private void populateAudioData(Map<String, String> stats, List<AdvancedControllableProperty> advancedControllableProperties) {
@@ -1079,9 +1080,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
 			for (AudioResponse audioResponses : audioResponseList) {
 				addAudioDataControlToProperty(stats, audioResponses, advancedControllableProperties);
-			}
-			for (VideoResponse videoResponse : videoResponseList) {
-				addVideoDataControlToProperty(stats, videoResponse, advancedControllableProperties);
 			}
 		}
 	}
@@ -1466,9 +1464,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Add video data to statistics property
 	 *
+	 * @param advancedControllableProperties advancedControllableProperties is the list that store all controllable properties
 	 * @param stats list statistics property
 	 */
-	private void populateVideoData(Map<String, String> stats) {
+	private void populateVideoData(Map<String, String> stats, List<AdvancedControllableProperty> advancedControllableProperties) {
 		if (!videoStatisticsList.isEmpty()) {
 			for (VideoResponse videoResponses : videoStatisticsList) {
 				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
@@ -1476,6 +1475,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		} else if (!videoResponseList.isEmpty() && !isAdapterFilter) {
 			for (VideoResponse videoResponses : videoResponseList) {
 				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
+			}
+		}
+		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
+			for (VideoResponse videoResponse : videoResponseList) {
+				addVideoDataControlToProperty(stats, videoResponse, advancedControllableProperties);
 			}
 		}
 	}
