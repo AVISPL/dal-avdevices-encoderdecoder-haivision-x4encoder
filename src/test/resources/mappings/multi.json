@@ -82,6 +82,123 @@
     {
       "request": {
         "method": "GET",
+        "url": "/apis/audenc"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/apply-change-fail-1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": ,\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-mode-stereo1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 1,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-mode-stereo2"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 12,\n                \"sampleRate\": 48,\n                \"mode\": 1,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-mode-mono1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-mode-mono2"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 14,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-bitrate-stereo"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 14,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/change-channel-bitrate-mono"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 14,\n                \"sampleRate\": 48,\n                \"mode\": 1,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/audenc/stop"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"data\": [\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 0\",\n                \"id\": 0,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 14,\n                \"sampleRate\": 48,\n                \"mode\": 1,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"70,743,117\",\n                \"encodedBytes\": \"24,146,984,454\",\n                \"encodedBitrate\": \"128\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x1a0348d5c\",\n                \"maxSampleValue\": 9693,\n                \"maxSampleValuePercentage\": 29,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 1\",\n                \"id\": 1,\n                \"interface\": 11,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"maxSampleValue\": 0,\n                \"maxSampleValuePercentage\": 0,\n                \"state\": 3\n            }\n        },\n        {\n            \"info\": {\n                \"name\": \"Audio Encoder 2\",\n                \"id\": 2,\n                \"interface\": 1,\n                \"algorithm\": 10,\n                \"bitRate\": 128,\n                \"sampleRate\": 48,\n                \"mode\": 0,\n                \"inputLevel\": 6,\n                \"lang\": \"\"\n            },\n            \"stats\": {\n                \"encodedFrames\": \"0\",\n                \"encodedBytes\": \"0\",\n                \"encodedBitrate\": \"0\",\n                \"encoderErrors\": \"0\",\n                \"encoderPTS\": \"0x000000000\",\n                \"state\": 0\n            }\n        }\n    ]}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
         "url": "/audio-none-data"
       },
       "response": {
@@ -204,6 +321,97 @@
       "response": {
         "status": 200,
         "body": "{\n    \"info\": {\n        \"name\": \"operator\",\n        \"role\": \"Operator\",\n        \"state\": 0,\n        \"expiration\": 0,\n        \"expirationDays\": 0,\n        \"pwd\": 1\n    },\n    \"keys\": {\n        \"accountName\": \"operator\",\n        \"data\": []\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/guest/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"operator\",\n        \"role\": \"Guest\",\n        \"state\": 0,\n        \"expiration\": 0,\n        \"expirationDays\": 0,\n        \"pwd\": 1\n    },\n    \"keys\": {\n        \"accountName\": \"operator\",\n        \"data\": []\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/role-empty/operator"
+      },
+      "response": {
+        "status": 200,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/role-failed"
+      },
+      "response": {
+        "status": 400,
+        "body": "",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/audenc/0"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 3\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/audenc/0/stop"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 0\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/audenc/1/stop"
+      },
+      "response": {
+        "status": 200,
+        "body": 1,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/audenc/1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 3\n    }\n}",
         "headers": {
           "Content-Type": "application/json"
         }

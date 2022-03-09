@@ -16,8 +16,8 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.
 /**
  * Custom Deserializer class for VideoResponse
  *
- * @author Ivan
- * @version 1.0.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 public class VideoDeserializer extends StdDeserializer<VideoResponse> {
@@ -58,7 +58,11 @@ public class VideoDeserializer extends StdDeserializer<VideoResponse> {
 			videoResponse.setTimeCode(checkNoneInformation(infoNode, "timeCode"));
 			videoResponse.setAspectRatio(checkNoneInformation(infoNode, "aspectRatio"));
 			videoResponse.setGopStructure(checkNoneInformation(infoNode, "gopStructure"));
-			videoResponse.setResolution(checkNoneInformation(infoNode, "resolution"));
+			videoResponse.setResolution(checkNoneInformation(infoNode, "resolutionText"));
+			videoResponse.setCropping(checkNoneInformation(infoNode, "cropping"));
+			videoResponse.setFrameRate(checkNoneInformation(infoNode, "pictureRate"));
+			videoResponse.setSlices(checkNoneInformation(infoNode, "slices"));
+			videoResponse.setIntraRefresh(checkNoneInformation(infoNode, "intraRefresh"));
 		}
 
 		JsonNode stateNode = jsonNode.get("stats");

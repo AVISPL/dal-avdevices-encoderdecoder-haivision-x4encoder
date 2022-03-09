@@ -11,8 +11,8 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.
 /**
  * Video Response DTO class
  *
- * @author Ivan
- * @version 1.0.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 @JsonDeserialize(using = VideoDeserializer.class)
@@ -30,11 +30,20 @@ public class VideoResponse {
 	private String rateControl;
 	private String timeCode;
 	private String aspectRatio;
-	private String gopStructure;
 	private String resolution;
 	private String inputFormat;
 	private String name;
+	private String cropping;
+	private String frameRate;
+	private String slices;
+	private String intraRefresh;
 	private VideoStatistic videoStatistic;
+
+	/**
+	 * Framing Video
+	 */
+	private String gopStructure;
+
 
 	/**
 	 * Retrieves {@code {@link #id}}
@@ -358,5 +367,109 @@ public class VideoResponse {
 	 */
 	public void setVideoStatistic(VideoStatistic videoStatistic) {
 		this.videoStatistic = videoStatistic;
+	}
+
+	/**
+	 * Retrieves {@code {@link #cropping}}
+	 *
+	 * @return value of {@link #cropping}
+	 */
+	public String getCropping() {
+		return cropping;
+	}
+
+	/**
+	 * Sets {@code cropping}
+	 *
+	 * @param cropping the {@code java.lang.String} field
+	 */
+	public void setCropping(String cropping) {
+		this.cropping = cropping;
+	}
+
+	/**
+	 * Retrieves {@code {@link #frameRate}}
+	 *
+	 * @return value of {@link #frameRate}
+	 */
+	public String getFrameRate() {
+		return frameRate;
+	}
+
+	/**
+	 * Sets {@code frameRate}
+	 *
+	 * @param frameRate the {@code java.lang.String} field
+	 */
+	public void setFrameRate(String frameRate) {
+		this.frameRate = frameRate;
+	}
+
+	/**
+	 * Retrieves {@code {@link #slices}}
+	 *
+	 * @return value of {@link #slices}
+	 */
+	public String getSlices() {
+		return slices;
+	}
+
+	/**
+	 * Sets {@code slices}
+	 *
+	 * @param slices the {@code java.lang.String} field
+	 */
+	public void setSlices(String slices) {
+		this.slices = slices;
+	}
+
+	/**
+	 * Retrieves {@code {@link #intraRefresh}}
+	 *
+	 * @return value of {@link #intraRefresh}
+	 */
+	public String getIntraRefresh() {
+		return intraRefresh;
+	}
+
+	/**
+	 * Sets {@code intraRefresh}
+	 *
+	 * @param intraRefresh the {@code java.lang.String} field
+	 */
+	public void setIntraRefresh(String intraRefresh) {
+		this.intraRefresh = intraRefresh;
+	}
+
+	/**
+	 * Convert AudioResponse
+	 *
+	 * @return payLoad the payload is String by AudioResponse
+	 */
+	public String payLoad() {
+		return "VideoResponse{" +
+				"\"id\":\"" +  id + "\"" +
+				"\"bitrate\":\"" +  bitrate + "\"" +
+				"\"maxBitrate\":\"" +  maxBitrate + "\"" +
+				"\"gopSize\":\"" +  gopSize + "\"" +
+				"\"closedCaption\":\"" +  closedCaption + "\"" +
+				"\"state\":\"" +  state + "\"" +
+				"\"inputInterface\":\"" +  inputInterface + "\"" +
+				"\"codecAlgorithm\":\"" +  codecAlgorithm + "\"" +
+				"\"encodingProfile\":\"" +  encodingProfile + "\"" +
+				"\"chromaSubSampling\":\"" +  chromaSubSampling + "\"" +
+				"\"rateControl\":\"" +  rateControl + "\"" +
+				"\"timeCode\":\"" +  timeCode + "\"" +
+				"\"aspectRatio\":\"" +  aspectRatio + "\"" +
+				"\"resolution\":\"" +  resolution + "\"" +
+				"\"inputFormat\":\"" +  inputFormat + "\"" +
+				"\"name\":\"" +  name + "\"" +
+				"\"cropping\":\"" +  cropping + "\"" +
+				"\"frameRate\":\"" +  frameRate + "\"" +
+				"\"slices\":\"" +  slices + "\"" +
+				"\"intraRefresh\":\"" +  intraRefresh + "\"" +
+				"\"videoStatistic=" + videoStatistic +
+				"\"gopStructure\":\"" +  gopStructure + "\"" +
+				'}';
 	}
 }

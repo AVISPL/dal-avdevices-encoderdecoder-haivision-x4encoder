@@ -8,9 +8,9 @@ import java.util.Objects;
 /**
  * HaivisionStatisticsUtil class support getting the URL by metric
  *
- * @author Ivan
- * @version 1.0
- * @since 1.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
+ * @since 1.0.0
  */
 public class HaivisionStatisticsUtil {
 
@@ -34,6 +34,8 @@ public class HaivisionStatisticsUtil {
 				return HaivisionURL.AUTHENTICATION.getUrl();
 			case SYSTEM_INFO_STATUS:
 				return HaivisionURL.SYSTEM_INFO_STATUS.getUrl();
+			case ROLE_BASED:
+				return HaivisionURL.ROLE_BASED.getUrl();
 			default:
 				throw new IllegalArgumentException("Do not support HaivisionStatisticsMetric: " + haivisionURL.name());
 		}

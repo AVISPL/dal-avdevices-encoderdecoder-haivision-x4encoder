@@ -11,8 +11,8 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.
 /**
  * Audio Response DTO class
  *
- * @author Ivan
- * @version 1.0.0
+ * @author Ivan / Symphony Dev Team<br>
+ * Created on 3/8/2022
  * @since 1.0.0
  */
 @JsonDeserialize(using = AudioDeserializer.class)
@@ -206,5 +206,25 @@ public class AudioResponse {
 	 */
 	public void setAudioStatistic(AudioStatistic audioStatistic) {
 		this.audioStatistic = audioStatistic;
+	}
+
+	/**
+	 * Convert AudioResponse
+	 *
+	 * @return payLoad the payload is String by AudioResponse
+	 */
+	public String payLoad() {
+		return "{" +
+				"\"id\":\"" + id + "\"" +
+				",\"interface\":\"" + interfaceName + "\"" +
+				",\"bitRate\":\"" + bitRate + "\"" +
+				",\"sampleRate\":\"" + sampleRate + "\"" +
+				",\"mode\":\"" + mode + "\"" +
+				",\"state\":\"" + state + "\"" +
+				",\"algorithm\":\"" + algorithm + "\"" +
+				",\"name\":\"" + name + "\"" +
+				",\"lang\":\"" + lang + "\"" +
+				",\"inputLevel\":\"" + "6" + "\"" +
+				'}';
 	}
 }
