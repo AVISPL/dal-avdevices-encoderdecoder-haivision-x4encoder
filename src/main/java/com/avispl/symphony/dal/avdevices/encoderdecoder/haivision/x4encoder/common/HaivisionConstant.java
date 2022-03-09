@@ -41,8 +41,6 @@ public class HaivisionConstant {
 	public static final String[] WORKING_STREAM = { "Stop", "None", "Delete" };
 	public static final String[] NOT_WORKING_STREAM = { "Start", "None", "Delete" };
 	public static final String INPUT_AUTO = "Input/Auto";
-	public static final String STOP_ACTION = "stop";
-	public static final String START_ACTION = "start";
 	public static final String START = "Start";
 	public static final String STOP = "Stop";
 	public static final String SLASH = "/";
@@ -57,6 +55,7 @@ public class HaivisionConstant {
 	public static final String CANCEL = "Cancel";
 	public static final String EDITED = "Edited";
 	public static final String TRUE = "True";
+	public static final String FALSE = "False";
 	public static final int MIN_OF_VIDEO_BITRATE = 32;
 	public static final int MAX_OF_VIDEO_BITRATE = 120000;
 	public static final int MIN_OF_VIDEO_GOP_SIZE = 1;
