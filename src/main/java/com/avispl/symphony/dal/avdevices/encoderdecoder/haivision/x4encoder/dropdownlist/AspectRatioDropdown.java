@@ -7,29 +7,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * AspectRatioDropdown class defined the enum for monitoring and controlling process
  *
  * @author Ivan / Symphony Dev Team<br>
  * Created on 3/8/2022
  * @since 1.0.0
  */
-public enum AudioStateDropdown {
+public enum AspectRatioDropdown {
 
-	STOPPED("Stopped", 0),
-	WORKING("Working", 3),
-	MUTED("Muted", 67),
-	FAILED("Failed", 128);
+	ASPECT_RATIO_0("Automatic", 0),
+	ASPECT_RATIO_1("WSS/AFD", 1),
+	ASPECT_RATIO_13("3:2", 13),
+	ASPECT_RATIO_2("4:3", 2),
+	ASPECT_RATIO_3("5:3", 3),
+	ASPECT_RATIO_4("5:4", 4),
+	ASPECT_RATIO_5("16:9", 5),
+	ASPECT_RATIO_14("16:10", 14),
+	ASPECT_RATIO_15("17:9", 15);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * AspectRatioDropdown instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	AudioStateDropdown(String name, int value) {
+	AspectRatioDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -53,28 +58,33 @@ public enum AudioStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateDropdown
+	 * Retrieves name to value map of FramingDropdown
 	 *
 	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
-			nameToValue.put(stateDropdown.getValue(), stateDropdown.getName());
+		for (AspectRatioDropdown aspectRatioDropdown : AspectRatioDropdown.values()) {
+			nameToValue.put(aspectRatioDropdown.getValue(), aspectRatioDropdown.getName());
 		}
 		return nameToValue;
 	}
 
 	/**
-	 * Retrieves name to value map of stateDropdown
+	 * Retrieves name to value map of aspectRatioDropdown
 	 *
 	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
-			valueToName.put(stateDropdown.getName(), stateDropdown.getValue());
+		for (AspectRatioDropdown aspectRatioDropdown : AspectRatioDropdown.values()) {
+			valueToName.put(aspectRatioDropdown.getName(), aspectRatioDropdown.getValue());
 		}
 		return valueToName;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

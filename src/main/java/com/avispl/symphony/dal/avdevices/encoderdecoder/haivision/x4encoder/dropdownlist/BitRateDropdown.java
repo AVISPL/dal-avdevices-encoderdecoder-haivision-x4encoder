@@ -22,18 +22,18 @@ public enum BitRateDropdown {
 	NUMBER_16("16 kbps", 16, true, true),
 	NUMBER_24("24 kbps", 24, false, true),
 	NUMBER_32("32 kbps", 32, true, true),
-	NUMBER_40("40 kbps", 40, true, true),
+	NUMBER_40("40 kbps", 40, false, true),
 	NUMBER_48("48 kbps", 48, true, true),
-	NUMBER_56("56 kbps", 56, true, true),
+	NUMBER_56("56 kbps", 56, false, true),
 	NUMBER_64("64 kbps", 64, true, true),
 	NUMBER_80("80 kbps", 80, true, false),
 	NUMBER_96("96 kbps", 96, true, true),
 	NUMBER_128("128 kbps", 128, true, true),
-	NUMBER_160("160 kbps", 160, true, true),
+	NUMBER_160("160 kbps", 160, false, true),
 	NUMBER_192("192 kbps", 192, true, true),
-	NUMBER_224("224 kbps", 224, true, true),
+	NUMBER_224("224 kbps", 224, false, true),
 	NUMBER_256("256 kbps", 256, true, true),
-	NUMBER_288("288 kbps", 288, true, true),
+	NUMBER_288("288 kbps", 288, false, true),
 	NUMBER_320("320 kbps", 320, true, false),
 	NUMBER_384("384 kbps", 384, true, false),
 	NUMBER_448("448 kbps", 448, true, false),
@@ -129,7 +129,7 @@ public enum BitRateDropdown {
 	/**
 	 * Retrieves name to value map of bitRateDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -142,7 +142,7 @@ public enum BitRateDropdown {
 	/**
 	 * Retrieves name to value map of bitRateDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();

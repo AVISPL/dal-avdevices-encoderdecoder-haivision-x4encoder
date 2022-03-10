@@ -1,8 +1,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -106,22 +104,9 @@ public enum LanguageDropdown {
 	}
 
 	/**
-	 * Retrieves all name of LanguageDropdown
+	 * Retrieves name to value map of languageDropdown
 	 *
-	 * @return list name of Language
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (LanguageDropdown languageDropdown : LanguageDropdown.values()) {
-			list.add(languageDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	/**
-	 * Retrieves name to value map of LanguageDropdown
-	 *
-	 * @return Map<String, String> are name and value
+	 * @return Map<String, Integer> are map value and name
 	 */
 	public static Map<String, String> getNameToValueMap() {
 		Map<String, String> nameToValue = new HashMap<>();

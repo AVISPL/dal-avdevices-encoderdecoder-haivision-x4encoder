@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputDeserializer;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
 
@@ -32,6 +33,10 @@ public class OutputResponse {
 	private String name;
 	private List<Video> video;
 	private List<Audio> audio;
+	private String shaping;
+	//name is shapiovereadPercentageng
+	private String bandwidthOverhead;
+	private OutputSAP outputSAP;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -248,5 +253,59 @@ public class OutputResponse {
 	 */
 	public void setOutputStatistic(OutputStatistic outputStatistic) {
 		this.outputStatistic = outputStatistic;
+	}
+
+	/**
+	 * Retrieves {@code {@link #shaping}}
+	 *
+	 * @return value of {@link #shaping}
+	 */
+	public String getShaping() {
+		return shaping;
+	}
+
+	/**
+	 * Sets {@code shaping}
+	 *
+	 * @param shaping the {@code java.lang.String} field
+	 */
+	public void setShaping(String shaping) {
+		this.shaping = shaping;
+	}
+
+	/**
+	 * Retrieves {@code {@link #bandwidthOverhead}}
+	 *
+	 * @return value of {@link #bandwidthOverhead}
+	 */
+	public String getBandwidthOverhead() {
+		return bandwidthOverhead;
+	}
+
+	/**
+	 * Sets {@code bandwidthOverhead}
+	 *
+	 * @param bandwidthOverhead the {@code java.lang.String} field
+	 */
+	public void setBandwidthOverhead(String bandwidthOverhead) {
+		this.bandwidthOverhead = bandwidthOverhead;
+	}
+
+	/**
+	 * Retrieves {@code {@link #outputSAP}}
+	 *
+	 * @return value of {@link #outputSAP}
+	 */
+	public OutputSAP getOutputSAP() {
+		return outputSAP;
+	}
+
+	/**
+	 * Sets {@code outputSAP}
+	 *
+	 * @param outputSAP the {@code com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP} field
+	 */
+	public void setOutputSAP(OutputSAP outputSAP) {
+		this.outputSAP = outputSAP;
 	}
 }

@@ -7,31 +7,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * countingDropdown class defined the enum for monitoring and controlling process
  *
  * @author Ivan / Symphony Dev Team<br>
  * Created on 3/8/2022
  * @since 1.0.0
  */
-public enum VideoStateDropdown {
+public enum CountingDropdown {
 
-	STOPPED("Stopped", 0),
-	AWAIT_FRAMING("Await Framing", 3),
-	NOT_ENCODING("Not Encoding", 5),
-	WORKING("Working", 7),
-	RESETTING("Resetting", 8),
-	FAILED("Failed", 128);
+	UTC_CONVERSION("UTC conversion", 0),
+	SMPTE_12M_1("SMPTE 12M-1", 1);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * countingDropdown instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	VideoStateDropdown(String name, int value) {
+	CountingDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -55,15 +51,28 @@ public enum VideoStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateOutputDropdown
+	 * Retrieves name to value map of countingDropdown
 	 *
 	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (VideoStateDropdown stateOutputDropdown : VideoStateDropdown.values()) {
-			nameToValue.put(stateOutputDropdown.getValue(), stateOutputDropdown.getName());
+		for (CountingDropdown countingDropdown : CountingDropdown.values()) {
+			nameToValue.put(countingDropdown.getValue(), countingDropdown.getName());
 		}
 		return nameToValue;
+	}
+
+	/**
+	 * Retrieves name to value map of countingDropdown
+	 *
+	 * @return Map<String, Integer> are map name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (CountingDropdown countingDropdown : CountingDropdown.values()) {
+			valueToName.put(countingDropdown.getName(), countingDropdown.getValue());
+		}
+		return valueToName;
 	}
 }

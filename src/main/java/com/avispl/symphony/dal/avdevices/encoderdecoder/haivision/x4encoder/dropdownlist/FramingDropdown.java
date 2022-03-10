@@ -7,31 +7,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * FramingDropdown class defined the enum for monitoring and controlling process
  *
  * @author Ivan / Symphony Dev Team<br>
  * Created on 3/8/2022
  * @since 1.0.0
  */
-public enum VideoStateDropdown {
+public enum FramingDropdown {
 
-	STOPPED("Stopped", 0),
-	AWAIT_FRAMING("Await Framing", 3),
-	NOT_ENCODING("Not Encoding", 5),
-	WORKING("Working", 7),
-	RESETTING("Resetting", 8),
-	FAILED("Failed", 128);
+	I("I", 1),
+	IP("IP", 0),
+	IBP("IBP", 2),
+	IBBP("IBBP", 3),
+	IBBBP("IBBBP", 4),
+	IBBBBP("IBBBBP", 5);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * FramingDropdown instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	VideoStateDropdown(String name, int value) {
+	FramingDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -55,15 +55,29 @@ public enum VideoStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateOutputDropdown
+	 * Retrieves name to value map of FramingDropdown
 	 *
 	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (VideoStateDropdown stateOutputDropdown : VideoStateDropdown.values()) {
-			nameToValue.put(stateOutputDropdown.getValue(), stateOutputDropdown.getName());
+		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+			nameToValue.put(framingDropdown.getValue(), framingDropdown.getName());
 		}
 		return nameToValue;
+	}
+
+
+	/**
+	 * Retrieves name to value map of framingDropdown
+	 *
+	 * @return Map<String, Integer> are map name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+			valueToName.put(framingDropdown.getName(), framingDropdown.getValue());
+		}
+		return valueToName;
 	}
 }

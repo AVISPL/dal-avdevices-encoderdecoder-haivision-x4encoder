@@ -7,31 +7,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * TimeCodeSource class defined the enum for monitoring and controlling process
  *
  * @author Ivan / Symphony Dev Team<br>
  * Created on 3/8/2022
  * @since 1.0.0
  */
-public enum VideoStateDropdown {
+public enum TimeCodeSource {
 
-	STOPPED("Stopped", 0),
-	AWAIT_FRAMING("Await Framing", 3),
-	NOT_ENCODING("Not Encoding", 5),
-	WORKING("Working", 7),
-	RESETTING("Resetting", 8),
-	FAILED("Failed", 128);
+	None("None", 0),
+	VIDEO("Video", 1),
+	SYSTEM("System", 2);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * TimeCodeSource instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	VideoStateDropdown(String name, int value) {
+	TimeCodeSource(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -55,15 +52,29 @@ public enum VideoStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateOutputDropdown
+	 * Retrieves name to value map of TimeCodeSource
 	 *
 	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (VideoStateDropdown stateOutputDropdown : VideoStateDropdown.values()) {
-			nameToValue.put(stateOutputDropdown.getValue(), stateOutputDropdown.getName());
+		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+			nameToValue.put(timeCodeSource.getValue(), timeCodeSource.getName());
 		}
 		return nameToValue;
+	}
+
+
+	/**
+	 * Retrieves name to value map of TimeCodeSource
+	 *
+	 * @return Map<String,Integer> are map name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+			valueToName.put(timeCodeSource.getName(), timeCodeSource.getValue());
+		}
+		return valueToName;
 	}
 }

@@ -7,31 +7,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * StateDropdown class defined the enum for monitoring and controlling process
+ * Cropping class defined the enum for monitoring and controlling process
  *
  * @author Ivan / Symphony Dev Team<br>
  * Created on 3/8/2022
  * @since 1.0.0
  */
-public enum VideoStateDropdown {
+public enum CroppingDropdown {
 
-	STOPPED("Stopped", 0),
-	AWAIT_FRAMING("Await Framing", 3),
-	NOT_ENCODING("Not Encoding", 5),
-	WORKING("Working", 7),
-	RESETTING("Resetting", 8),
-	FAILED("Failed", 128);
+	H_264("Scale", 0),
+	H_265("Crop", 1);
 
 	private final String name;
 	private final int value;
 
 	/**
-	 * VideoDropdown instantiation
+	 * Cropping instantiation
 	 *
 	 * @param name {@code {@link #name}}
 	 * @param value {@code {@link #value}}
 	 */
-	VideoStateDropdown(String name, int value) {
+	CroppingDropdown(String name, int value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -55,15 +51,28 @@ public enum VideoStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateOutputDropdown
+	 * Retrieves name to value map of Cropping
 	 *
 	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (VideoStateDropdown stateOutputDropdown : VideoStateDropdown.values()) {
-			nameToValue.put(stateOutputDropdown.getValue(), stateOutputDropdown.getName());
+		for (CroppingDropdown cropping : CroppingDropdown.values()) {
+			nameToValue.put(cropping.getValue(), cropping.getName());
 		}
 		return nameToValue;
+	}
+
+	/**
+	 * Retrieves name to value map of CroppingDropdown
+	 *
+	 * @return Map<String, Integer> are map name and value
+	 */
+	public static Map<String, Integer> getValueToNameMap() {
+		Map<String, Integer> valueToName = new HashMap<>();
+		for (CroppingDropdown cropping : CroppingDropdown.values()) {
+			valueToName.put(cropping.getName(), cropping.getValue());
+		}
+		return valueToName;
 	}
 }

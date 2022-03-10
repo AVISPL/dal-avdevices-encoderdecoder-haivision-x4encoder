@@ -416,6 +416,58 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/videnc/0"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 3\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/videnc/0/stop"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 0\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/videnc/1/stop"
+      },
+      "response": {
+        "status": 200,
+        "body": 1,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/videnc/1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Audio Encoder 0\",\n        \"id\": 0,\n        \"interface\": 1,\n        \"algorithm\": 10,\n        \"bitRate\": 128,\n        \"sampleRate\": 48,\n        \"mode\": 0,\n        \"inputLevel\": 6,\n        \"lang\": \"\"\n    },\n    \"stats\": {\n        \"encodedFrames\": \"70,743,117\",\n        \"encodedBytes\": \"24,146,984,454\",\n        \"encodedBitrate\": \"128\",\n        \"encoderErrors\": \"0\",\n        \"encoderPTS\": \"0x1a0348d5c\",\n        \"maxSampleValue\": 9693,\n        \"maxSampleValuePercentage\": 29,\n        \"state\": 3\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

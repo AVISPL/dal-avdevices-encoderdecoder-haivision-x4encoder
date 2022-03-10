@@ -37,6 +37,10 @@ public class VideoResponse {
 	private String frameRate;
 	private String slices;
 	private String intraRefresh;
+	private String dailyReSync;
+	private String reSyncHour;
+	private String countingMode;
+
 	private VideoStatistic videoStatistic;
 
 	/**
@@ -442,34 +446,88 @@ public class VideoResponse {
 	}
 
 	/**
+	 * Retrieves {@code {@link #dailyReSync }}
+	 *
+	 * @return value of {@link #dailyReSync}
+	 */
+	public String getDailyReSync() {
+		return dailyReSync;
+	}
+
+	/**
+	 * Sets {@code dailyResync}
+	 *
+	 * @param dailyReSync the {@code java.lang.String} field
+	 */
+	public void setDailyReSync(String dailyReSync) {
+		this.dailyReSync = dailyReSync;
+	}
+
+	/**
+	 * Retrieves {@code {@link #reSyncHour }}
+	 *
+	 * @return value of {@link #reSyncHour}
+	 */
+	public String getReSyncHour() {
+		return reSyncHour;
+	}
+
+	/**
+	 * Sets {@code resyncHour}
+	 *
+	 * @param reSyncHour the {@code java.lang.String} field
+	 */
+	public void setReSyncHour(String reSyncHour) {
+		this.reSyncHour = reSyncHour;
+	}
+
+	/**
+	 * Retrieves {@code {@link #countingMode}}
+	 *
+	 * @return value of {@link #countingMode}
+	 */
+	public String getCountingMode() {
+		return countingMode;
+	}
+
+	/**
+	 * Sets {@code countingMode}
+	 *
+	 * @param countingMode the {@code java.lang.String} field
+	 */
+	public void setCountingMode(String countingMode) {
+		this.countingMode = countingMode;
+	}
+
+	/**
 	 * Convert AudioResponse
 	 *
 	 * @return payLoad the payload is String by AudioResponse
 	 */
 	public String payLoad() {
-		return "VideoResponse{" +
-				"\"id\":\"" +  id + "\"" +
-				"\"bitrate\":\"" +  bitrate + "\"" +
-				"\"maxBitrate\":\"" +  maxBitrate + "\"" +
-				"\"gopSize\":\"" +  gopSize + "\"" +
-				"\"closedCaption\":\"" +  closedCaption + "\"" +
-				"\"state\":\"" +  state + "\"" +
-				"\"inputInterface\":\"" +  inputInterface + "\"" +
-				"\"codecAlgorithm\":\"" +  codecAlgorithm + "\"" +
-				"\"encodingProfile\":\"" +  encodingProfile + "\"" +
-				"\"chromaSubSampling\":\"" +  chromaSubSampling + "\"" +
-				"\"rateControl\":\"" +  rateControl + "\"" +
-				"\"timeCode\":\"" +  timeCode + "\"" +
-				"\"aspectRatio\":\"" +  aspectRatio + "\"" +
-				"\"resolution\":\"" +  resolution + "\"" +
-				"\"inputFormat\":\"" +  inputFormat + "\"" +
-				"\"name\":\"" +  name + "\"" +
-				"\"cropping\":\"" +  cropping + "\"" +
-				"\"frameRate\":\"" +  frameRate + "\"" +
-				"\"slices\":\"" +  slices + "\"" +
-				"\"intraRefresh\":\"" +  intraRefresh + "\"" +
-				"\"videoStatistic=" + videoStatistic +
-				"\"gopStructure\":\"" +  gopStructure + "\"" +
+		return '{' +
+				"\"id\":\"" + id + "\"" +
+				",\"bitrate\":\"" + bitrate + "\"" +
+				",\"maxBitrate\":\"" + maxBitrate + "\"" +
+				",\"gopSize\":\"" + gopSize + "\"" +
+				",\"closedCaption\":\"" + closedCaption + "\"" +
+				",\"interface\":\"" + inputInterface + "\"" +
+				",\"codecAlgorithm\":\"" + codecAlgorithm + "\"" +
+				",\"encodingProfile\":\"" + encodingProfile + "\"" +
+				",\"chromaSubSampling\":\"" + chromaSubSampling + "\"" +
+				",\"rateControl\":\"" + rateControl + "\"" +
+				",\"timeCode\":\"" +  timeCode + "\"" +
+				",\"aspectRatio\":\"" +  aspectRatio + "\"" +
+				",\"resolution\":\"" +  resolution + "\"" +
+				",\"name\":\"" +  name + "\"" +
+				",\"cropping\":\"" +  cropping + "\"" +
+				",\"pictureRate\":\"" +  frameRate + "\"" +
+				",\"slices\":\"" +  slices + "\"" +
+				",\"intraRefresh\":\"" +  intraRefresh + "\"" +
+				",\"gopStructure\":\"" +  gopStructure + "\"" +
+				",\"dailyResync\":\"" + dailyReSync + "\"" +
+				",\"resyncHour\":\"" + reSyncHour + "\"" +
+				",\"countingMode\":\"" +  countingMode + "\"" +
 				'}';
 	}
 }
