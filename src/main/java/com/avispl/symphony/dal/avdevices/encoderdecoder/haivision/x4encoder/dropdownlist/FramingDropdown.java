@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,7 +57,7 @@ public enum FramingDropdown {
 	/**
 	 * Retrieves name to value map of FramingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -71,9 +69,9 @@ public enum FramingDropdown {
 
 
 	/**
-	 * Retrieves name to value map of FramingDropdown
+	 * Retrieves name to value map of framingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -81,18 +79,5 @@ public enum FramingDropdown {
 			valueToName.put(framingDropdown.getName(), framingDropdown.getValue());
 		}
 		return valueToName;
-	}
-
-	/**
-	 * Retrieves all name of framingDropdown
-	 *
-	 * @return list name of framingDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
-			list.add(framingDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
 	}
 }

@@ -54,6 +54,23 @@ public class OutputDeserializer extends StdDeserializer<OutputResponse> {
 			outputResponse.setMtu(checkNoneInformation(infoNode, "mtu"));
 			outputResponse.setTtl(checkNoneInformation(infoNode, "ttl"));
 			outputResponse.setTos(checkNoneInformation(infoNode, "tos"));
+			outputResponse.setShaping(checkNoneInformation(infoNode, "shaping"));
+			outputResponse.setBandwidthOverhead(checkNoneInformation(infoNode, "shapiovereadPercentageng"));
+
+			JsonNode sap = infoNode.get("sap");
+			if(sap != null){
+					OutputSAP outputSAP = new OutputSAP();
+					outputSAP.setAdvertise(checkNoneInformation(sap,"advertise"));
+					outputSAP.setName(checkNoneInformation(sap,"name"));
+					outputSAP.setDesc(checkNoneInformation(sap,"desc"));
+					outputSAP.setKeywords(checkNoneInformation(sap,"keywords"));
+					outputSAP.setAuthor(checkNoneInformation(sap,"author"));
+					outputSAP.setCopyright(checkNoneInformation(sap,"copyright"));
+					outputSAP.setAddress(checkNoneInformation(sap,"address"));
+					outputSAP.setPort(checkNoneInformation(sap,"port"));
+
+					outputResponse.setOutputSAP(outputSAP);
+			}
 
 			Video video = new Video();
 			JsonNode videoList = infoNode.get("video");

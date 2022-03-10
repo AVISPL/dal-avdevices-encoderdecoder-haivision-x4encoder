@@ -1647,11 +1647,11 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.getMultipleStatistics();
 		ControllableProperty controllableProperty = new ControllableProperty();
 		controllableProperty.setProperty("Video Encoder 0" + HaivisionConstant.HASH + VideoControllingMetric.FRAME_RATE.getName());
-		controllableProperty.setValue(FrameRateDropdown.FAME_RATE_2.getValue());
+		controllableProperty.setValue(FrameRateDropdown.FAME_RATE_2.getName());
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 		ExtendedStatistics newExtendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = newExtendedStatistics.getStatistics();
-		assertEquals(FrameRateDropdown.FAME_RATE_2.getValue(), stats.get("Video Encoder 0" + HaivisionConstant.HASH + VideoControllingMetric.FRAME_RATE.getName()));
+		assertEquals(FrameRateDropdown.FAME_RATE_2.getName(), stats.get("Video Encoder 0" + HaivisionConstant.HASH + VideoControllingMetric.FRAME_RATE.getName()));
 	}
 
 	/**

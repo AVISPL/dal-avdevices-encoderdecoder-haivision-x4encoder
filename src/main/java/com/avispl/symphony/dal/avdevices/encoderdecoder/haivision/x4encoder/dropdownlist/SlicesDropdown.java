@@ -3,9 +3,6 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * SlicesDropdown class defined the enum for monitoring and controlling process
  *
@@ -45,18 +42,5 @@ public enum SlicesDropdown {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Retrieves all name of SimpleRateDropdown
-	 *
-	 * @return list name of SimpleRate
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (SlicesDropdown sampleRateDropdown : SlicesDropdown.values()) {
-			list.add(sampleRateDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
 	}
 }

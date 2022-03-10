@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +54,7 @@ public enum RateControlDropdown {
 	/**
 	 * Retrieves name to value map of RateControlDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -69,7 +67,7 @@ public enum RateControlDropdown {
 	/**
 	 * Retrieves name to value map of rateControlDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -77,18 +75,5 @@ public enum RateControlDropdown {
 			valueToName.put(rateControlDropdown.getName(), rateControlDropdown.getValue());
 		}
 		return valueToName;
-	}
-
-	/**
-	 * Retrieves all name of rateControlDropdown
-	 *
-	 * @return list name of rateControlDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (RateControlDropdown rateControlDropdown : RateControlDropdown.values()) {
-			list.add(rateControlDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
 	}
 }

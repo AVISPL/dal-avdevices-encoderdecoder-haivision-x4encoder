@@ -3,9 +3,6 @@
  */
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * FrameRateDropdown class defined the enum for monitoring and controlling process
  *
@@ -77,36 +74,23 @@ public enum FrameRateDropdown {
 	FAME_RATE_59("59"),
 	FAME_RATE_60("60");
 
-	private final String value;
+	private final String name;
 
 	/**
 	 * FrameRateDropdown instantiation
 	 *
-	 * @param value {@code {@link #value}}
+	 * @param name {@code {@link #name}}
 	 */
-	FrameRateDropdown(String value) {
-		this.value = value;
+	FrameRateDropdown(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * Retrieves {@code {@link #value}}
+	 * Retrieves {@code {@link #name}}
 	 *
-	 * @return value of {@link #value}
+	 * @return value of {@link #name}
 	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * Retrieves all name of FrameRateDropdown
-	 *
-	 * @return list name of FrameRateDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (FrameRateDropdown frameRateDropdown : FrameRateDropdown.values()) {
-			list.add(frameRateDropdown.getValue());
-		}
-		return list.toArray(new String[list.size()]);
+	public String getName() {
+		return name;
 	}
 }

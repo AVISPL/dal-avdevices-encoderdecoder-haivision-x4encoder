@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,11 +17,11 @@ public enum AspectRatioDropdown {
 
 	ASPECT_RATIO_0("Automatic", 0),
 	ASPECT_RATIO_1("WSS/AFD", 1),
+	ASPECT_RATIO_13("3:2", 13),
 	ASPECT_RATIO_2("4:3", 2),
 	ASPECT_RATIO_3("5:3", 3),
 	ASPECT_RATIO_4("5:4", 4),
 	ASPECT_RATIO_5("16:9", 5),
-	ASPECT_RATIO_13("3:2", 13),
 	ASPECT_RATIO_14("16:10", 14),
 	ASPECT_RATIO_15("17:9", 15);
 
@@ -62,7 +60,7 @@ public enum AspectRatioDropdown {
 	/**
 	 * Retrieves name to value map of FramingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -73,9 +71,9 @@ public enum AspectRatioDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of TimeCodeSource
+	 * Retrieves name to value map of aspectRatioDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -85,16 +83,8 @@ public enum AspectRatioDropdown {
 		return valueToName;
 	}
 
-	/**
-	 * Retrieves all name of framingDropdown
-	 *
-	 * @return list name of framingDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (AspectRatioDropdown aspectRatioDropdown : AspectRatioDropdown.values()) {
-			list.add(aspectRatioDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
+	@Override
+	public String toString() {
+		return name;
 	}
 }

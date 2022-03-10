@@ -84,7 +84,7 @@ public enum EncodingProfile {
 	/**
 	 * Retrieves name to value map of EncodingProfileDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -97,7 +97,7 @@ public enum EncodingProfile {
 	/**
 	 * Retrieves name to value map of encodingProfileDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();

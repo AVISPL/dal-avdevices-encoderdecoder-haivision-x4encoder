@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +54,7 @@ public enum TimeCodeSource {
 	/**
 	 * Retrieves name to value map of TimeCodeSource
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -70,7 +68,7 @@ public enum TimeCodeSource {
 	/**
 	 * Retrieves name to value map of TimeCodeSource
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String,Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -78,18 +76,5 @@ public enum TimeCodeSource {
 			valueToName.put(timeCodeSource.getName(), timeCodeSource.getValue());
 		}
 		return valueToName;
-	}
-
-	/**
-	 * Retrieves all name of TimeCodeSource
-	 *
-	 * @return list name of TimeCodeSource
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
-			list.add(timeCodeSource.getName());
-		}
-		return list.toArray(new String[list.size()]);
 	}
 }

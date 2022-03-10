@@ -55,7 +55,7 @@ public enum AudioStateDropdown {
 	/**
 	 * Retrieves name to value map of StateDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -66,9 +66,9 @@ public enum AudioStateDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of StateDropdown
+	 * Retrieves name to value map of stateDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();

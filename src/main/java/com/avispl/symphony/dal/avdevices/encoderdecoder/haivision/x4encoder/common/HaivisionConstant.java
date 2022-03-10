@@ -65,5 +65,6 @@ public class HaivisionConstant {
 	public static final String AUTOMATIC = "Automatic";
 	public static final String NO_INPUT = "No Input";
 	public static final String ZERO = "0";
+	public static final String EMPTY_STRING = "";
 
 }

@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,7 +53,7 @@ public enum CountingDropdown {
 	/**
 	 * Retrieves name to value map of countingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -66,9 +64,9 @@ public enum CountingDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of CountingDropdown
+	 * Retrieves name to value map of countingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -76,18 +74,5 @@ public enum CountingDropdown {
 			valueToName.put(countingDropdown.getName(), countingDropdown.getValue());
 		}
 		return valueToName;
-	}
-
-	/**
-	 * Retrieves all name of countingDropdown
-	 *
-	 * @return list name of countingDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (CountingDropdown countingDropdown : CountingDropdown.values()) {
-			list.add(countingDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
 	}
 }

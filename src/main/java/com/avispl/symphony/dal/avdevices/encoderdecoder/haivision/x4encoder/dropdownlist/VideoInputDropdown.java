@@ -1,8 +1,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,22 +50,9 @@ public enum VideoInputDropdown {
     }
 
     /**
-     * Retrieves all name of VideoInputDropdown
-     *
-     * @return list name of Input Interface
-     */
-    public static String[] names() {
-        List<String> list = new LinkedList<>();
-        for (VideoInputDropdown videoInputDropdown : VideoInputDropdown.values()) {
-            list.add(videoInputDropdown.getName());
-        }
-        return list.toArray(new String[list.size()]);
-    }
-
-    /**
      * Retrieves name to value map of VideoInputDropdown
      *
-     * @return Map<String, String> are name and value
+     * @return Map<String, String> are map value and name
      */
     public static Map<Integer, String> getNameToValueMap() {
         Map<Integer, String> nameToValue = new HashMap<>();
@@ -80,7 +65,7 @@ public enum VideoInputDropdown {
     /**
      * Retrieves name to value map of videoInputDropdown
      *
-     * @return Map<Integer, String> are name and value
+     * @return Map<String, Integer> are map name and value
      */
     public static Map<String, Integer> getValueToNameMap() {
         Map<String, Integer> valueToName = new HashMap<>();

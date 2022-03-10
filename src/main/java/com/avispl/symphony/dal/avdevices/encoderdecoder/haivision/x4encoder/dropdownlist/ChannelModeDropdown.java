@@ -4,8 +4,6 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +55,7 @@ public enum ChannelModeDropdown {
 	/**
 	 * Retrieves name to value map of ChannelModeDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -68,22 +66,9 @@ public enum ChannelModeDropdown {
 	}
 
 	/**
-	 * Retrieves all name of ChannelModeDropdown
+	 * Retrieves name to value map of channelModeDropdown
 	 *
-	 * @return list name of ChannelMode
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (ChannelModeDropdown channelModeDropdown : ChannelModeDropdown.values()) {
-			list.add(channelModeDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	/**
-	 * Retrieves name to value map of ChannelModeDropdown
-	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();

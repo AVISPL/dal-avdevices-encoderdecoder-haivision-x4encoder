@@ -57,7 +57,7 @@ public enum VideoStateDropdown {
 	/**
 	 * Retrieves name to value map of StateOutputDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();

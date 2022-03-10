@@ -80,7 +80,7 @@ public enum ChromaSubSampling {
 	/**
 	 * Retrieves name to value map of ChromaSubSamplingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
@@ -93,7 +93,7 @@ public enum ChromaSubSampling {
 	/**
 	 * Retrieves name to value map of chromaSubSamplingDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
@@ -104,20 +104,7 @@ public enum ChromaSubSampling {
 	}
 
 	/**
-	 * Retrieves all name of ChromaSubSampling
-	 *
-	 * @return list name of ChromaSubSampling
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (ChromaSubSampling chromaSubSampling : ChromaSubSampling.values()) {
-			list.add(chromaSubSampling.getName());
-		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	/**
-	 * Retrieves all name of ChromaSubSampling
+	 * Retrieves all name of ChromaSubSampling with mode EncodingProfile is Main 10 or High 10
 	 *
 	 * @return list name of ChromaSubSampling
 	 */
@@ -132,7 +119,7 @@ public enum ChromaSubSampling {
 	}
 
 	/**
-	 * Retrieves all name of ChromaSubSampling
+	 * Retrieves all name of ChromaSubSampling with mode EncodingProfile is Baseline or Main or High
 	 *
 	 * @return list name of ChromaSubSampling
 	 */

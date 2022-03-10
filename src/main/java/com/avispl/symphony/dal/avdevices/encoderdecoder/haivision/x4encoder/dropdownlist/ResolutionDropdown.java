@@ -26,9 +26,9 @@ public enum ResolutionDropdown {
 	RESOLUTION_1920_1080I("1920x1080i", "9223372044908392449", true),
 	RESOLUTION_1440_1080P("1440x1080p", "9223372042895126528", true),
 	RESOLUTION_1440_1080I("1440x1080i", "9223372042895126529", true),
+	RESOLUTION_1280_720("1280x720p", "9223372042223853568", true),
 	RESOLUTION_960_1080P("960x1080p", "9223372040881860608", true),
 	RESOLUTION_960_1080I("960x1080i", "9223372040881860609", true),
-	RESOLUTION_1280_720("1280x720p", "9223372042223853568", true),
 	RESOLUTION_960_720("960x720p", "9223372040881676288", true),
 	RESOLUTION_720_576P("720x576p", "9223372039874969600", true),
 	RESOLUTION_720_576I("720x576i", "9223372039874969601", true),
@@ -37,6 +37,9 @@ public enum ResolutionDropdown {
 	RESOLUTION_640_720("640x720p", "9223372039539499008", true),
 	RESOLUTION_540_576P("540x576p", "9223372039119994880", true),
 	RESOLUTION_540_576I("540x576i", "9223372039119994881", true),
+	RESOLUTION_540_480I("540x480i", "9223372039119945729", true),
+	RESOLUTION_540_480P("540x480p", "9223372039119945728", true),
+	RESOLUTION_448_336P("448x336p", "9223372038733996032", true),
 	RESOLUTION_352_480P("352x480p", "9223372038331416576", true),
 	RESOLUTION_352_480I("352x480i", "9223372038331416577", true),
 	RESOLUTION_352_576P("352x576p", "9223372038331465728", true),
@@ -89,22 +92,9 @@ public enum ResolutionDropdown {
 	}
 
 	/**
-	 * Retrieves all name of ResolutionDropdown
-	 *
-	 * @return list name of ResolutionDropdown
-	 */
-	public static String[] names() {
-		List<String> list = new LinkedList<>();
-		for (ResolutionDropdown resolutionDropdown : ResolutionDropdown.values()) {
-			list.add(resolutionDropdown.getName());
-		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	/**
 	 * Retrieves name to value map of ResolutionDropdown
 	 *
-	 * @return Map<Integer, String> are name and value
+	 * @return Map<Integer, String> are map value and name
 	 */
 	public static Map<String, String> getNameToValueMap() {
 		Map<String, String> nameToValue = new HashMap<>();
@@ -115,9 +105,9 @@ public enum ResolutionDropdown {
 	}
 
 	/**
-	 * Retrieves name to value map of ResolutionDropdown
+	 * Retrieves name to value map of resolutionDropdown
 	 *
-	 * @return Map<Long, String> are name and value
+	 * @return Map<String, Integer> are map name and value
 	 */
 	public static Map<String, String> getValueToNameMap() {
 		Map<String, String> valueToName = new HashMap<>();
