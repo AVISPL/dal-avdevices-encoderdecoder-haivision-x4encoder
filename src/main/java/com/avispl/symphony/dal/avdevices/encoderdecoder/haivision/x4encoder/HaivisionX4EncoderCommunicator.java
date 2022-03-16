@@ -53,7 +53,7 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CountingDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CreateOutputStreamMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CroppingDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.DropdownList;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncodingProfile;
@@ -2873,7 +2873,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Create new Source Audio dropdown list
+	 * Edit new Source Audio by output stream
+	 *
+	 * @param streamName the streamName is name of stream output
+	 * @param sourceAudio the sourceAudio is Map<String,Audio>
+	 * @param stats the stats is list statistics
+	 * @param advancedControllablePropertyList list AdvancedControllableProperty instance
 	 */
 	private void editSourceAudioControlStream(String streamName, Map<String, Audio> sourceAudio, Map<String, String> stats, List<AdvancedControllableProperty> advancedControllablePropertyList) {
 		audioNameToAudioResponse.put(HaivisionConstant.NONE, new AudioResponse());
@@ -2895,7 +2900,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * add new Source Audio dropdown list
+	 * Edit new Source Audio Create Output
+	 *
+	 * @param streamName the streamName is name of stream output
+	 * @param sourceAudio the sourceAudio is Map<String,Audio>
+	 * @param stats the stats is list statistics
+	 * @param advancedControllablePropertyList list AdvancedControllableProperty instance
 	 */
 	private void editSourceAudioCreateOutputStream(String streamName, Map<String, Audio> sourceAudio, Map<String, String> stats, List<AdvancedControllableProperty> advancedControllablePropertyList) {
 		List<String> audioName = new ArrayList<>(audioNameToAudioResponse.keySet());
@@ -2915,7 +2925,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Create new Source Audio dropdown list
+	 * Add new Source Audio for the create output stream
 	 *
 	 * @param stats iss list statistics
 	 * @param advancedControllablePropertyList is list AdvancedControllableProperty instance
@@ -3656,9 +3666,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		advancedControllableProperties.add(controlButton(stats, prefixName + CreateOutputStreamMetric.ACTION.getName(), HaivisionConstant.CREATE, HaivisionConstant.CREATE, 0));
 		advancedControllableProperties.add(controlText(stats, prefixName + CreateOutputStreamMetric.CONTENT_NAME.getName(), HaivisionConstant.EMPTY_STRING));
 		advancedControllableProperties.add(controlText(stats, prefixName + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName(), HaivisionConstant.EMPTY_STRING));
-		advancedControllableProperties.add(controlNumeric(stats, prefixName + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName(), HaivisionConstant.EMPTY_STRING));
+		advancedControllableProperties.add(controlNumeric(stats, prefixName + CreateOutputStreamMetric.DESTINATION_PORT.getName(), HaivisionConstant.EMPTY_STRING));
 		advancedControllableProperties.add(controlNumeric(stats, prefixName + CreateOutputStreamMetric.PARAMETER_MTU.getName(), HaivisionConstant.DEFAULT_MTU));
-		advancedControllableProperties.add(controlDropdown(stats, timingAndShapingValues, prefixName + CreateOutputStreamMetric.PARAMETER_TIMING_AND_SHAPING.getName(), TimingAndShaping.CBR.getName()));
+		advancedControllableProperties.add(controlDropdown(stats, timingAndShapingValues, prefixName + CreateOutputStreamMetric.PARAMETER_TIMING_AND_SHAPING.getName(), TimingAndShaping.VBR.getName()));
 		advancedControllableProperties.add(controlText(stats, prefixName + CreateOutputStreamMetric.PARAMETER_TOS.getName(), HaivisionConstant.DEFAULT_TOS));
 		advancedControllableProperties.add(controlNumeric(stats, prefixName + CreateOutputStreamMetric.PARAMETER_TTL.getName(), HaivisionConstant.DEFAULT_TTL));
 		advancedControllableProperties.add(controlButton(stats, prefixName + CreateOutputStreamMetric.SOURCE_ADD_AUDIO.getName(), HaivisionConstant.PLUS, HaivisionConstant.PLUS, 0));
@@ -3689,7 +3699,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] audioList = audioNameToAudioResponse.keySet().toArray(new String[audioNameToAudioResponse.size()]);
 		String[] shapingDropdown = DropdownList.Names(TimingAndShaping.class);
 		String[] videoDropdown = DropdownList.Names(VideoDropdown.class);
-
+		isCreateStreamCalled = true;
 		//Control Source Audio
 		if (propertyName.contains(CreateOutputStreamMetric.SOURCE_AUDIO.getName())) {
 			if (HaivisionConstant.NONE.equals(value) && !(HaivisionConstant.SOURCE_AUDIO_0.equals(propertyName))) {
@@ -3703,16 +3713,16 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				audio.setId(audioNameToAudioResponse.get(value).getId());
 				sourceAudio.put(propertyName, null);
 			}
+			if (isCreateStreamCalled) {
+
+				updateExtendedStatistic.put(prefixName + HaivisionConstant.HASH + HaivisionConstant.EDITED, HaivisionConstant.TRUE);
+				updateExtendedStatistic.put(prefixName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, "");
+				advancedControllableProperties.add(createButton(prefixName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, 0));
+			}
 			return;
 		}
 		CreateOutputStreamMetric createOutputStreamMetric = CreateOutputStreamMetric.getByName(propertyName);
 		switch (createOutputStreamMetric) {
-			case ACTION:
-				OutputResponse outputResponse = convertCreateOutputStreamByValue(updateExtendedStatistic, prefixName);
-
-				// sent request to apply all change for all metric
-				setOutputStreamAction(outputResponse.payLoad());
-				break;
 			//Control text
 			case CONTENT_NAME:
 			case SAP_ADDRESS:
@@ -4119,10 +4129,25 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						HaivisionConstant.DISABLE, HaivisionConstant.ENABLE);
 				addAdvanceControlProperties(advancedControllableProperties, networkAdaptiveControlProperty);
 				break;
+			case ACTION:
+				OutputResponse outputResponse = convertCreateOutputStreamByValue(updateExtendedStatistic, prefixName);
+
+				// sent request to apply all change for all metric
+				setOutputStreamAction(outputResponse.payLoad());
+				isCreateStreamCalled = false;
+				break;
+			case CANCEL:
+				isCreateStreamCalled = false;
+				break;
 			default:
 				break;
 		}
-
+		//Editing
+		if (isCreateStreamCalled) {
+			updateExtendedStatistic.put(prefixName + HaivisionConstant.HASH + HaivisionConstant.EDITED, HaivisionConstant.TRUE);
+			updateExtendedStatistic.put(prefixName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, "");
+			advancedControllableProperties.add(createButton(prefixName + HaivisionConstant.HASH + HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, HaivisionConstant.CANCEL, 0));
+		}
 		Map<String, String> extendedStats = localExtendedStatistics.getStatistics();
 		extendedStats.putAll(updateExtendedStatistic);
 		List<AdvancedControllableProperty> listControlProperty = localExtendedStatistics.getControllableProperties();

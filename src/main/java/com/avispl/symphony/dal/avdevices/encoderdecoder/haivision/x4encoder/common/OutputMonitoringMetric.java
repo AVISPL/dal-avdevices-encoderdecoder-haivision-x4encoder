@@ -37,6 +37,7 @@ public enum OutputMonitoringMetric {
 	LATENCY("Latency",false,false),
 	OCCURRED("Occurred",false,false	);
 
+
 	private final String name;
 	private boolean isNormalize;
 	private boolean isReplaceComma;

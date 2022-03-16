@@ -76,7 +76,7 @@ public class HaivisionConstant {
 	public static final String PLUS = "+";
 	public static final String DEFAULT_MTU = "1496";
 	public static final String DEFAULT_TTL = "64";
-	public static final String DEFAULT_TOS = "0xB8";
+	public static final String DEFAULT_TOS = "0x80";
 	public static final String ONE = "1";
 	public static final int MAX_SOURCE_AUDIO_DROPDOWN = 8;
 	public static final String DEFAULT_LATENCY = "250";
