@@ -12,12 +12,13 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.com
  */
 public enum HaivisionURL {
 
-	AUDIO_ENCODER("Audio Encoder",true,"apis/audenc"),
-	VIDEO_ENCODER("Video Encoder",true,"apis/videnc"),
-	OUTPUT_ENCODER("Output Encoder",true,"apis/streams"),
-	SYSTEM_INFO_STATUS("System Info Status",true,"apis/status"),
-	AUTHENTICATION("Authentication",false,"/apis/authentication"),
-	ROLE_BASED("Role Based",false,"apis/accounts/");
+	AUDIO_ENCODER("Audio Encoder", true, "apis/audenc"),
+	VIDEO_ENCODER("Video Encoder", true, "apis/videnc"),
+	OUTPUT_ENCODER("Output Encoder", true, "apis/streams"),
+	SYSTEM_INFO_STATUS("System Info Status", true, "apis/status"),
+	AUTHENTICATION("Authentication", false, "/apis/authentication"),
+	STREAM("STREAM", false, "apis/streams"),
+	ROLE_BASED("Role Based", false, "apis/accounts/");
 
 	private final String name;
 	private boolean isMonitor;

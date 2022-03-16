@@ -4,7 +4,9 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -55,21 +57,29 @@ public class OutputDeserializer extends StdDeserializer<OutputResponse> {
 			outputResponse.setTtl(checkNoneInformation(infoNode, "ttl"));
 			outputResponse.setTos(checkNoneInformation(infoNode, "tos"));
 			outputResponse.setShaping(checkNoneInformation(infoNode, "shaping"));
-			outputResponse.setBandwidthOverhead(checkNoneInformation(infoNode, "shapiovereadPercentageng"));
+			outputResponse.setBandwidthOverhead(checkNoneInformation(infoNode, "overheadPercentage"));
+			outputResponse.setBandwidthEstimate(checkNoneInformation(infoNode, "bandwithEstimate"));
+			outputResponse.setSrtMode(checkNoneInformation(infoNode, "srtMode"));
+			outputResponse.setSourcePort(checkNoneInformation(infoNode, "sourceport"));
+			outputResponse.setAdaptive(checkNoneInformation(infoNode, "adaptive"));
+			outputResponse.setLatency(checkNoneInformation(infoNode, "latency"));
+			outputResponse.setEncryption(checkNoneInformation(infoNode, "encKeyLength"));
+			outputResponse.setPassphrase(checkNoneInformation(infoNode, "passphrase"));
+			outputResponse.setSrtListenerSecondPort(checkNoneInformation(infoNode, "srtListenerSecondPort"));
 
 			JsonNode sap = infoNode.get("sap");
-			if(sap != null){
-					OutputSAP outputSAP = new OutputSAP();
-					outputSAP.setAdvertise(checkNoneInformation(sap,"advertise"));
-					outputSAP.setName(checkNoneInformation(sap,"name"));
-					outputSAP.setDesc(checkNoneInformation(sap,"desc"));
-					outputSAP.setKeywords(checkNoneInformation(sap,"keywords"));
-					outputSAP.setAuthor(checkNoneInformation(sap,"author"));
-					outputSAP.setCopyright(checkNoneInformation(sap,"copyright"));
-					outputSAP.setAddress(checkNoneInformation(sap,"address"));
-					outputSAP.setPort(checkNoneInformation(sap,"port"));
+			if (sap != null) {
+				OutputSAP outputSAP = new OutputSAP();
+				outputSAP.setAdvertise(checkNoneInformation(sap, "advertise"));
+				outputSAP.setName(checkNoneInformation(sap, "name"));
+				outputSAP.setDesc(checkNoneInformation(sap, "desc"));
+				outputSAP.setKeywords(checkNoneInformation(sap, "keywords"));
+				outputSAP.setAuthor(checkNoneInformation(sap, "author"));
+				outputSAP.setCopyright(checkNoneInformation(sap, "copyright"));
+				outputSAP.setAddress(checkNoneInformation(sap, "address"));
+				outputSAP.setPort(checkNoneInformation(sap, "port"));
 
-					outputResponse.setOutputSAP(outputSAP);
+				outputResponse.setOutputSAP(outputSAP);
 			}
 
 			Video video = new Video();
@@ -83,16 +93,19 @@ public class OutputDeserializer extends StdDeserializer<OutputResponse> {
 					outputResponse.setVideo(Collections.singletonList(video));
 				}
 			}
-			Audio audio = new Audio();
-			JsonNode audioList = infoNode.get("video");
+
+			List<Audio> audios = new ArrayList<>();
+			JsonNode audioList = infoNode.get("audio");
 			if (audioList != null) {
 				for (int i = 0; i < audioList.size(); i++) {
+					Audio audio = new Audio();
 					audio.setId(checkNoneInformation(audioList.get(i), "id"));
 					audio.setName(checkNoneInformation(audioList.get(i), "name"));
 					audio.setPid(checkNoneInformation(audioList.get(i), "pid"));
 					audio.setAutoAssigned(checkNoneInformation(audioList.get(i), "autoassigned"));
-					outputResponse.setAudio(Collections.singletonList(audio));
+					audios.add(audio);
 				}
+				outputResponse.setAudio(audios);
 			}
 		}
 

@@ -125,7 +125,7 @@ public enum ResolutionDropdown {
 	public static List<String> getDropdownListNotCropping() {
 		List<String> list = new LinkedList<>();
 		for (ResolutionDropdown resolutionDropdown : ResolutionDropdown.values()) {
-			if (!resolutionDropdown.isCropping) {
+			if (!resolutionDropdown.isCropping()) {
 				list.add(resolutionDropdown.getName());
 			}
 		}

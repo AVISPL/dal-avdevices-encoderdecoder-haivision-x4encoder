@@ -37,6 +37,15 @@ public class OutputResponse {
 	//name is shapiovereadPercentageng
 	private String bandwidthOverhead;
 	private OutputSAP outputSAP;
+	//Average bandwidth
+	private String bandwidthEstimate;
+	private String srtMode;
+	private String sourcePort;
+	private String adaptive;
+	private String latency;
+	private String encryption;
+	private String passphrase;
+	private String srtListenerSecondPort;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -307,5 +316,198 @@ public class OutputResponse {
 	 */
 	public void setOutputSAP(OutputSAP outputSAP) {
 		this.outputSAP = outputSAP;
+	}
+
+	/**
+	 * Retrieves {@code {@link #bandwidthEstimate }}
+	 *
+	 * @return value of {@link #bandwidthEstimate}
+	 */
+	public String getBandwidthEstimate() {
+		return bandwidthEstimate;
+	}
+
+	/**
+	 * Sets {@code bandwithEstimate}
+	 *
+	 * @param bandwidthEstimate the {@code java.lang.String} field
+	 */
+	public void setBandwidthEstimate(String bandwidthEstimate) {
+		this.bandwidthEstimate = bandwidthEstimate;
+	}
+
+	/**
+	 * Retrieves {@code {@link #srtMode}}
+	 *
+	 * @return value of {@link #srtMode}
+	 */
+	public String getSrtMode() {
+		return srtMode;
+	}
+
+	/**
+	 * Sets {@code srtMode}
+	 *
+	 * @param srtMode the {@code java.lang.String} field
+	 */
+	public void setSrtMode(String srtMode) {
+		this.srtMode = srtMode;
+	}
+
+	/**
+	 * Retrieves {@code {@link #sourcePort}}
+	 *
+	 * @return value of {@link #sourcePort}
+	 */
+	public String getSourcePort() {
+		return sourcePort;
+	}
+
+	/**
+	 * Sets {@code sourcePort}
+	 *
+	 * @param sourcePort the {@code java.lang.String} field
+	 */
+	public void setSourcePort(String sourcePort) {
+		this.sourcePort = sourcePort;
+	}
+
+	/**
+	 * Retrieves {@code {@link #adaptive}}
+	 *
+	 * @return value of {@link #adaptive}
+	 */
+	public String getAdaptive() {
+		return adaptive;
+	}
+
+	/**
+	 * Sets {@code adaptive}
+	 *
+	 * @param adaptive the {@code java.lang.String} field
+	 */
+	public void setAdaptive(String adaptive) {
+		this.adaptive = adaptive;
+	}
+
+	/**
+	 * Retrieves {@code {@link #latency}}
+	 *
+	 * @return value of {@link #latency}
+	 */
+	public String getLatency() {
+		return latency;
+	}
+
+	/**
+	 * Sets {@code latency}
+	 *
+	 * @param latency the {@code java.lang.String} field
+	 */
+	public void setLatency(String latency) {
+		this.latency = latency;
+	}
+
+	/**
+	 * Retrieves {@code {@link #encryption}}
+	 *
+	 * @return value of {@link #encryption}
+	 */
+	public String getEncryption() {
+		return encryption;
+	}
+
+	/**
+	 * Sets {@code encryption}
+	 *
+	 * @param encryption the {@code java.lang.String} field
+	 */
+	public void setEncryption(String encryption) {
+		this.encryption = encryption;
+	}
+
+	/**
+	 * Retrieves {@code {@link #passphrase}}
+	 *
+	 * @return value of {@link #passphrase}
+	 */
+	public String getPassphrase() {
+		return passphrase;
+	}
+
+	/**
+	 * Sets {@code passphrase}
+	 *
+	 * @param passphrase the {@code java.lang.String} field
+	 */
+	public void setPassphrase(String passphrase) {
+		this.passphrase = passphrase;
+	}
+
+	/**
+	 * Retrieves {@code {@link #srtListenerSecondPort}}
+	 *
+	 * @return value of {@link #srtListenerSecondPort}
+	 */
+	public String getSrtListenerSecondPort() {
+		return srtListenerSecondPort;
+	}
+
+	/**
+	 * Sets {@code srtListenerSecondPort}
+	 *
+	 * @param srtListenerSecondPort the {@code java.lang.String} field
+	 */
+	public void setSrtListenerSecondPort(String srtListenerSecondPort) {
+		this.srtListenerSecondPort = srtListenerSecondPort;
+	}
+
+	/**
+	 * Convert OutputResponse
+	 *
+	 * @return payLoad the payload is String by OutputResponse
+	 */
+	public String payLoad() {
+		StringBuilder audioPayload = new StringBuilder();
+		if (audio.size() > 0) {
+			audioPayload.append("[");
+			for (Audio audioItem : audio) {
+				audioPayload.append("{\"id\":\"" + audioItem.getId() + "\"}");
+				if (!audioItem.equals(audio.get(audio.size()-1))) {
+					audioPayload.append(",");
+				}
+			}
+			audioPayload.append("]");
+		}
+		StringBuilder videoPayload = new StringBuilder();
+		videoPayload.append("[");
+		if (video.size() > 0) {
+			videoPayload.append("{\"id\":\"" + video.get(0).getId() + "\"}");
+		}
+		videoPayload.append("]");
+
+		return "{" +
+				"\"id\":\"" + id + "\"" +
+				",\"encapsulation\":\"" + encapsulation + "\"" +
+				",\"port\":\"" + port + "\"" +
+				",\"address\":\"" + address + "\"" +
+				",\"mtu\":\"" + mtu + "\"" +
+				",\"ttl\":\"" + ttl + "\"" +
+				",\"tos\":\"" + tos + "\"" +
+				",\"name\":\"" + name + "\"" +
+				",\"video\":" + videoPayload +
+				",\"audio\":" + audioPayload +
+				",\"shaping\":\"" + shaping + "\"" +
+				",\"overheadPercentage\":\"" + bandwidthOverhead + "\"" +
+				",\"sap\":" + outputSAP.payLoad()  +
+				",\"bandwithEstimate\":\"" + bandwidthEstimate + "\"" +
+				",\"srtMode\":\"" + srtMode + "\"" +
+				",\"sourcePort\":\"" + sourcePort + "\"" +
+				",\"adaptive\":\"" + adaptive + "\"" +
+				",\"latency\":\"" + latency + "\"" +
+				",\"encKeyLength\":\"" + encryption + "\"" +
+				",\"overheadPercentage\":\"" + passphrase + "\"" +
+				",\"srtListenerSecondPort\":\"" + srtListenerSecondPort + "\"" +
+				'}';
 	}
 }

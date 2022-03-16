@@ -12,6 +12,7 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto
  */
 public class OutputSAP {
 
+	//Transmit SAP
 	private String advertise;
 	private String name;
 	private String desc;
@@ -163,5 +164,23 @@ public class OutputSAP {
 	 */
 	public void setPort(String port) {
 		this.port = port;
+	}
+
+	/**
+	 * Convert OutputSAP
+	 *
+	 * @return payLoad the payload is String by OutputSAP
+	 */
+	public String payLoad() {
+		return "{" +
+				"\"advertise\":\"" + advertise +  "\"" +
+				",\"name\":\"" + name +  "\"" +
+				",\"desc\":\"" + desc +  "\"" +
+				",\"keywords\":\"" + keywords +  "\"" +
+				",\"author\":\"" + author +  "\"" +
+				",\"copyright\":\"" + copyright +  "\"" +
+				",\"address\":\"" + address +  "\"" +
+				",\"port\":\"" + port +  "\"" +
+				'}';
 	}
 }
