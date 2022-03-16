@@ -494,6 +494,19 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/apis/streams"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Ivan&#32;Test&#32;03\",\n        \"id\": 24,\n        \"type\": \"1\",\n        \"encapsulation\": \"2\",\n        \"userData\": \"\",\n        \"address\": \"127.0.0.3\",\n        \"port\": \"80\",\n        \"networkInterface\": \"\",\n        \"pcrPid\": \"34\",\n        \"pmtPid\": \"32\",\n        \"tsStreamId\": \"1\",\n        \"programNumber\": \"1\",\n        \"pcrPidAutoAssigned\": true,\n        \"pmtPidAutoAssigned\": true,\n        \"programNumberAutoAssigned\": true,\n        \"video\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Video Encoder 0\",\n                \"pid\": \"33\",\n                \"autoassigned\": true\n            }\n        ],\n        \"audio\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Audio Encoder 0\",\n                \"pid\": \"36\",\n                \"autoassigned\": true\n            }\n        ],\n        \"metadata\": [],\n        \"sap\": {},\n        \"mtu\": \"1496\",\n        \"tos\": \"0xB8\",\n        \"ttl\": \"64\",\n        \"shaping\": \"cbr\",\n        \"overheadPercentage\": \"15\",\n        \"bandwithEstimate\": \"24584\",\n        \"metadataBandwidth\": \"0\",\n        \"metadataBandwidthAutoAssigned\": false,\n        \"encryption\": \"0\",\n        \"fec\": \"0\",\n        \"idleCells\": \"1\",\n        \"delayedAudio\": \"1\",\n        \"metadataEncapsulation\": 0,\n        \"persistent\": 1,\n        \"stillImage\": \"\"\n    },\n    \"stats\": {\n        \"uptime\": \"0s\",\n        \"sourcePort\": \"57287\",\n        \"sentPackets\": \"321\",\n        \"sentBytes\": \"431,424\",\n        \"bitrate\": \"0 kbps\",\n        \"unsentPackets\": \"320\",\n        \"unsentBytes\": \"421,120\",\n        \"lastError\": \"111, (Connection refused)\",\n        \"occurred\": \"0s ago\",\n        \"state\": 1\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

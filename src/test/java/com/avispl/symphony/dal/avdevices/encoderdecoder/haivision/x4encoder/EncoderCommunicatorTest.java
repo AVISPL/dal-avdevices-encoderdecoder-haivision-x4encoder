@@ -29,6 +29,7 @@ import com.avispl.symphony.api.dal.dto.monitor.ExtendedStatistics;
 import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
@@ -43,7 +44,6 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CroppingDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncodingProfile;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncryptionDropdown;
@@ -2745,9 +2745,61 @@ class EncoderCommunicatorTest {
 	}
 
 	/**
+	 * Test set Source audio 0 to None
+	 *
+	 * Expect value of source audio 0 is None
+	 */
+	@Test
+	void testSetSourceAudio0ToNone() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + "SourceAudio 0";
+		String propValue = HaivisionConstant.NONE;
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test set Source audio 1-7 to None
+	 *
+	 * Expect value of source audio is null
+	 */
+	@Test
+	void testSetSourceAudioToNone() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty addAudio = new ControllableProperty();
+		String addAudioName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SOURCE_ADD_AUDIO.getName();
+		String addAudioValue = HaivisionConstant.ONE;
+		addAudio.setProperty(addAudioName);
+		addAudio.setValue(addAudioValue);
+		haivisionX4EncoderCommunicator.controlProperty(addAudio);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + "SourceAudio 1";
+		String propValue = HaivisionConstant.NONE;
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertNull(stats.get(propName));
+	}
+
+	/**
 	 * Test add source audio
 	 *
-	 * Expect add sucessfully
+	 * Expect add successfully
 	 */
 	@Test
 	void testAddSourceAudio() throws Exception {
@@ -2795,7 +2847,7 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test change Stream protocol to TS over SRT while Connection mode is Rendezvous
 	 *
-	 * Expect ConnectionSourcePort equals to ConnectionDestinationPort
+	 * Expect ConnectionSourcePort equals to ConnectionDestinationPort; ConnectionSourcePort is unavailable to be controlled
 	 */
 	@Test
 	void testChangeProtocolToSrtAndModeIsRendezvous() throws Exception {
@@ -2818,6 +2870,7 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.controlProperty(modeProperty);
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
+		List<AdvancedControllableProperty> controllableProps = extendedStatistics.getControllableProperties();
 		String sourcePort = stats.get(HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName());
 		String destinationPort = stats.get(
 				HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName());
@@ -2853,6 +2906,190 @@ class EncoderCommunicatorTest {
 		assertNull(stats.get(HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName()));
 		assertNull(stats.get(HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ALTERNATE_PORT.getName()));
 		assertNull(stats.get(HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName()));
+	}
+
+	/**
+	 * Test edit alternate port successfully
+	 *
+	 * Expect alternate port will be set to new value
+	 */
+	@Test
+	void testEditAlternatePortSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ALTERNATE_PORT.getName();
+		String propValue = "1000";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP name successfully
+	 *
+	 * Expect SAP name will be set to new value
+	 */
+	@Test
+	void testEditSapNameSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_NAME.getName();
+		String propValue = "Name of SAP";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP keywords successfully
+	 *
+	 * Expect SAP keywords will be set to new value
+	 */
+	@Test
+	void testEditSapKeywordsSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_KEYWORDS.getName();
+		String propValue = "There are some keywords of SAP";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP description successfully
+	 *
+	 * Expect SAP description will be set to new value
+	 */
+	@Test
+	void testEditSapDescriptionSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_DESCRIPTION.getName();
+		String propValue = "There is SAP description";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP author successfully
+	 *
+	 * Expect SAP author will be set to new value
+	 */
+	@Test
+	void testEditSapAuthorSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_AUTHOR.getName();
+		String propValue = "SAP author here";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP copyright successfully
+	 *
+	 * Expect SAP copyright will be set to new value
+	 */
+	@Test
+	void testEditSapCopyrightSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_COPYRIGHT.getName();
+		String propValue = "There is SAP copyright";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP address successfully
+	 *
+	 * Expect SAP address will be set to new value
+	 */
+	@Test
+	void testEditSapAddressSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_ADDRESS.getName();
+		String propValue = "There is SAP address";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
+	}
+
+	/**
+	 * Test edit SAP port successfully
+	 *
+	 * Expect SAP port will be set to new value
+	 */
+	@Test
+	void testEditSapPortSuccess() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.SAP_PORT.getName();
+		String propValue = "8888";
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals(propValue, stats.get(propName));
 	}
 
 	/**
@@ -3856,5 +4093,111 @@ class EncoderCommunicatorTest {
 		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName()));
 		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName()));
 		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ALTERNATE_PORT.getName()));
+	}
+
+	/**
+	 * Test  Cancel edit stream
+	 *
+	 * Expect control Cancel successfully and field edited is null
+	 */
+	@Test
+	void testCancelOutputStream() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.STREAMING_PROTOCOL.getName();
+		String propValue = ProtocolDropdown.TS_OVER_SRT.getName();
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+
+		Assert.assertEquals("True", stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + HaivisionConstant.EDITED));
+		Assert.assertEquals("", stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName()));
+
+		controllableProperty.setProperty(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName());
+		controllableProperty.setValue("1");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		stats = extendedStatistics.getStatistics();
+
+		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + HaivisionConstant.EDITED));
+		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName()));
+	}
+
+	/**
+	 * Test save Output Stream
+	 *
+	 * Create output Stream successfully and Edited is null
+	 */
+	@Test
+	void testActionCreateOutputStream() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propNameAddress = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName();
+		controllableProperty.setProperty(propNameAddress);
+		controllableProperty.setValue("127.0.0.1");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		String propNamePort = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_PORT.getName();
+		controllableProperty.setProperty(propNamePort);
+		controllableProperty.setValue("80");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		String propName = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONTENT_NAME.getName();
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue("Test");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("True", stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + HaivisionConstant.EDITED));
+		Assert.assertEquals("", stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName()));
+		Assert.assertEquals("127.0.0.1", stats.get(propNameAddress));
+		Assert.assertEquals("80", stats.get(propNamePort));
+		Assert.assertEquals("Test", stats.get(propName));
+
+		String propNameAction = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.ACTION.getName();
+		controllableProperty.setProperty(propNameAction);
+		controllableProperty.setValue("Test");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+
+		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + HaivisionConstant.EDITED));
+		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName()));
+		Assert.assertNull(stats.get(propNameAddress));
+		Assert.assertNull(stats.get(propNamePort));
+		Assert.assertNull(stats.get(propName));
+	}
+
+	@Test
+	void testProtocolUDP() throws Exception {
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
+		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
+		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		ControllableProperty controllableProperty = new ControllableProperty();
+		String propName = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.STREAMING_PROTOCOL.getName();
+		String propValue = ProtocolDropdown.TS_OVER_UDP.getName();
+		controllableProperty.setProperty(propName);
+		controllableProperty.setValue(propValue);
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName()));
+		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_MODE.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_NETWORK_ADAPTIVE.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ENCRYPTION.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PASSPHRASE.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ALTERNATE_PORT.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_LATENCY.getName()));
 	}
 }
