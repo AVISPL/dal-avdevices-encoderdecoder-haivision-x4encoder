@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -140,6 +141,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private Map<String, Map<String, Audio>> sourceAudioResponse = new HashMap<>();
 	private Map<String, Audio> sourceAudio = new HashMap<>();
 	private Map<String, String> localStatsStreamOutput = new HashMap<>();
+	private Map<String, String> audioIdToName = new HashMap<>();
 
 	/**
 	 * List of audio statistics filter
@@ -306,8 +308,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String property = controllableProperty.getProperty();
 		String value = String.valueOf(controllableProperty.getValue());
 		if (logger.isDebugEnabled()) {
-			logger.debug("controlProperty value" + value);
-			logger.debug("controlProperty value" + property);
+			logger.debug("controlProperty property" + property);
+		}
+		if (localStatsStreamOutput == null || localCreateOutputStream == null) {
+			return;
 		}
 		Map<String, String> updateCreateOutputStream = localCreateOutputStream.getStatistics();
 		Map<String, String> extendedStatistics = localExtendedStatistics.getStatistics();
@@ -319,7 +323,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			localStatsStreamOutput.putAll(updateCreateOutputStream);
 			return;
 		}
-
 		String propertiesAudioAndVideo = property.substring(0, HaivisionConstant.AUDIO.length());
 		if (HaivisionConstant.AUDIO.equals(propertiesAudioAndVideo)) {
 			controlAudioProperty(property, value, extendedStatistics, advancedControllableProperties);
@@ -333,10 +336,19 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void controlProperties(List<ControllableProperty> list) throws Exception {
-		//TODO
+		if (CollectionUtils.isEmpty(list)) {
+			throw new IllegalArgumentException("Controllable properties cannot be null or empty");
+		}
+		for (ControllableProperty controllableProperty : list) {
+			controlProperty(controllableProperty);
+		}
 	}
+
 
 	@Override
 	protected void authenticate() throws Exception {
@@ -461,7 +473,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				isEmergencyDelivery = false;
 				break;
 			default:
-				break;
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("Controlling group %s is not supported.", audioControllingMetric.getName()));
+				}
 		}
 		//Editing
 		if (isEmergencyDelivery) {
@@ -949,7 +963,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				videoResponseDailyReSync.setReSyncHour(value);
 				break;
 			default:
-				break;
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("Controlling group %s is not supported.", videoControllingMetric.getName()));
+				}
 		}
 		//Editing
 		if (isEmergencyDelivery) {
@@ -1344,8 +1360,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case CONNECTION_SOURCE_PORT:
 				int sourcePort = Integer.parseInt(value);
-				if (sourcePort < HaivisionConstant.SOURCE_PORT_MIN || sourcePort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of source port is invalid. Source port must be between 1 to 65535");
+				if (sourcePort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				} else {
+					if (sourcePort < HaivisionConstant.SOURCE_PORT_MIN) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+					}
+					if (sourcePort > HaivisionConstant.SOURCE_PORT_MAX) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
+					}
 				}
 				AdvancedControllableProperty connectionSourcePortControl = controlNumeric(extendedStatistics, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, connectionSourcePortControl);
@@ -1353,8 +1376,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case CONNECTION_ALTERNATE_PORT:
 				int alternatePort = Integer.parseInt(value);
-				if (alternatePort < HaivisionConstant.SOURCE_PORT_MIN || alternatePort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of alternate port is invalid. Alternate port must be between 1 to 65535");
+				if (alternatePort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				} else {
+					if (alternatePort < HaivisionConstant.SOURCE_PORT_MIN) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+					}
+					if (alternatePort > HaivisionConstant.SOURCE_PORT_MAX) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
+					}
 				}
 				AdvancedControllableProperty alternatePortProperty = controlNumeric(extendedStatistics, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, alternatePortProperty);
@@ -1363,8 +1393,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			case DESTINATION_PORT:
 			case CONNECTION_DESTINATION_PORT:
 				int destinationPort = Integer.parseInt(value);
-				if (destinationPort < HaivisionConstant.SOURCE_PORT_MIN || destinationPort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of destination port is invalid. Destination port must be between 1 to 65535");
+				if (destinationPort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				}
+				if (destinationPort < HaivisionConstant.SOURCE_PORT_MIN) {
+					value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+				}
+				if (destinationPort > HaivisionConstant.SOURCE_PORT_MAX) {
+					value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
 				}
 				AdvancedControllableProperty destinationPortProperty = controlNumeric(extendedStatistics, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, destinationPortProperty);
@@ -1485,7 +1521,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						addAdvanceControlProperties(advancedControllableProperties, toSControlProperty);
 						outputResponseItem.setTos(value);
 					} catch (Exception e) {
-						throw new NumberFormatException("Value of ParameterToS is invalid. TOS must be between 0 to 255");
+						throw new NumberFormatException("Value of ParameterToS is invalid. TOS must be between 0x00 to 0xFF");
 					}
 				}
 				break;
@@ -1507,7 +1543,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				isEmergencyDelivery = false;
 				break;
 			default:
-				break;
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("Controlling group %s is not supported.", streamMetric.getName()));
+				}
 		}
 		//Editing
 		if (isEmergencyDelivery) {
@@ -1676,7 +1714,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String srtMode = String.valueOf(srtModeMap.get(extendedStatistics.get(property + CreateOutputStreamMetric.CONNECTION_MODE.getName())));
 		String protocol = String.valueOf(protocolMap.get(extendedStatistics.get(property + CreateOutputStreamMetric.STREAMING_PROTOCOL.getName())));
 		String name = extendedStatistics.get(property + CreateOutputStreamMetric.CONTENT_NAME.getName());
-
+		String sourceVideo = checkNullValue(extendedStatistics.get(property + CreateOutputStreamMetric.SOURCE_VIDEO.getName()));
 		OutputSAP outputSAP = outputResponseItem.getOutputSAP();
 		outputSAP.setName(checkNoneStringValue(outputSAP.getName()));
 		outputSAP.setDesc(checkNoneStringValue(outputSAP.getDesc()));
@@ -1706,7 +1744,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				audioList.add(audioName);
 			}
 		}
+		Video video = new Video();
+		video.setId(videoNameToVideoResponse.get(sourceVideo).getId());
+		List<Video> videoList = new ArrayList<>();
+		videoList.add(video);
 
+		outputResponseItem.setVideo(videoList);
 		outputResponseItem.setPort(port);
 		outputResponseItem.setSourcePort(sourcePort);
 		outputResponseItem.setEncryption(encryption);
@@ -2069,6 +2112,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void addAudioDataStatisticsToStatisticsProperty(Map<String, String> stats, AudioResponse audioResponseList) {
 		String audioName = audioResponseList.getName();
+		int indexName = audioName.indexOf(HaivisionConstant.SPACE, HaivisionConstant.AUDIO_ENCODER.length());
+		if (indexName != -1) {
+			audioName = audioName.substring(0, indexName);
+		}
 		AudioStatistic audioStatistic = audioResponseList.getAudioStatistic();
 		Map<Integer, String> audioMap = AudioStateDropdown.getNameToValueMap();
 		String state = audioResponseList.getState();
@@ -2112,6 +2159,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void addAudioDataControlToProperty(Map<String, String> stats, AudioResponse audioResponseList, List<AdvancedControllableProperty> advancedControllableProperties) {
 		String audioName = audioResponseList.getName();
+		int indexName = audioName.indexOf(HaivisionConstant.SPACE, HaivisionConstant.AUDIO_ENCODER.length());
+		if (indexName != -1) {
+			audioName = audioName.substring(0, indexName);
+		}
 		Map<Integer, String> audioMap = AudioStateDropdown.getNameToValueMap();
 		Map<Integer, String> channelModeMap = ChannelModeDropdown.getNameToValueMap();
 		Map<Integer, String> bitRateMap = BitRateDropdown.getNameToValueMap();
@@ -2190,7 +2241,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					addAdvanceControlProperties(advancedControllableProperties, actionDropdownControlProperty);
 					break;
 				default:
-					break;
+					if (logger.isDebugEnabled()) {
+						logger.debug(String.format("Controlling group %s is not supported.", audioMetric.getName()));
+					}
 			}
 		}
 	}
@@ -2437,7 +2490,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					}
 					break;
 				default:
-					break;
+					if (logger.isDebugEnabled()) {
+						logger.debug(String.format("Controlling group %s is not supported.", videoMetric.getName()));
+					}
 			}
 		}
 	}
@@ -2612,11 +2667,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (protocolOption == null) {
 			protocolOption = srtProtocol;
 		}
-		String bandwidthOverHead =
+		String averageBandwidth =
 				HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputResponse.getName()) + HaivisionConstant.HASH + CreateOutputStreamMetric.AVERAGE_BANDWIDTH.getName();
 		for (CreateOutputStreamMetric streamMetric : CreateOutputStreamMetric.values()) {
 			String streamName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputResponse.getName()) + HaivisionConstant.HASH + streamMetric.getName();
 			switch (streamMetric) {
+				case AVERAGE_BANDWIDTH:
+					stats.put(averageBandwidth, outputResponse.getBandwidthEstimate());
+					break;
 				case STATE:
 					String stateStream = outputResponse.getState();
 					value = getNameByValue(stateStream, stateMap);
@@ -2653,12 +2711,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					value = outputResponse.getShaping().toUpperCase();
 					String overhead = outputResponse.getBandwidthOverhead();
 					if (ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolMode)) {
-
 						AdvancedControllableProperty bandwidthControl = controlNumeric(stats, streamName, overhead);
 						addAdvanceControlProperties(advancedControllableProperties, bandwidthControl);
 					} else {
 						if (!TimingAndShaping.VBR.getName().equalsIgnoreCase(value)) {
-
 							AdvancedControllableProperty bandwidthControl = controlNumeric(stats, streamName, overhead);
 							addAdvanceControlProperties(advancedControllableProperties, bandwidthControl);
 						}
@@ -2695,9 +2751,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					String protocolValue = getNameByValue(protocol, protocolMap);
 					AdvancedControllableProperty protocolControl = controlDropdown(stats, protocolDropdown, streamName, protocolValue);
 					addAdvanceControlProperties(advancedControllableProperties, protocolControl);
-					if (!ProtocolDropdown.TS_OVER_UDP.getName().equals(protocolValue)) {
-						stats.put(bandwidthOverHead, outputResponse.getBandwidthEstimate());
-					}
 					break;
 				case TRANSMIT_SAP:
 					if (HaivisionConstant.NONE.equals(transmitSAP)) {
@@ -2847,6 +2900,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					protocolMode = getNameByValue(protocol, protocolMap);
 					if (ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolMode) && SRTModeDropdown.LISTENER.getName().equals(connectionMode)) {
 						value = checkNoneStringValue(outputResponse.getSrtListenerSecondPort());
+						if (HaivisionConstant.ZERO.equals(value)) {
+							value = HaivisionConstant.EMPTY_STRING;
+						}
 						AdvancedControllableProperty connectionPort = controlNumeric(stats, streamName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionPort);
 					}
@@ -2869,7 +2925,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					editSourceAudioControlStream(name, sourceAudioMap, stats, advancedControllableProperties);
 					break;
 				default:
-					break;
+					if (logger.isDebugEnabled()) {
+						logger.debug(String.format("Controlling group %s is not supported.", streamMetric.getName()));
+					}
 			}
 		}
 	}
@@ -2913,13 +2971,28 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		List<String> audioName = new ArrayList<>(audioNameToAudioResponse.keySet());
 		Collections.sort(audioName);
 		String[] audioNames = audioName.toArray(new String[audioName.size()]);
-		String defaultName = CreateOutputStreamMetric.SOURCE_AUDIO.getName() + HaivisionConstant.SPACE + HaivisionConstant.ZERO;
+
+		Map<Integer, String> idAudioList = new HashMap<>();
+		for (Map.Entry<String, Audio> audioKey : sourceAudio.entrySet()) {
+			if (audioKey.getValue() != null) {
+				idAudioList.put(Integer.valueOf(audioKey.getValue().getId()), audioKey.getValue().getName());
+			}
+		}
 		for (Map.Entry<String, Audio> audioSourceKey : sourceAudio.entrySet()) {
-			if (sourceAudio.get(defaultName) == null) {
+			String defaultAudioName = audioNames[0];
+			for (int i = 0; i < HaivisionConstant.MIN_ADD_SOURCE_AUDIO; i++) {
+				if (!idAudioList.containsKey(i)) {
+					defaultAudioName = audioIdToName.get(String.valueOf(i));
+					break;
+				}
+			}
+			if (sourceAudio.get(defaultAudioName) == null) {
 				advancedControllablePropertyList.add(controlDropdownAcceptNoneValue(stats, audioNames, streamName + HaivisionConstant.HASH + audioSourceKey.getKey(), HaivisionConstant.NONE));
 			} else if (audioSourceKey.getValue() == null) {
-				advancedControllablePropertyList.add(controlDropdown(stats, audioNames, streamName + HaivisionConstant.HASH + audioSourceKey.getKey(), audioNames[0]));
+
+				advancedControllablePropertyList.add(controlDropdown(stats, audioNames, streamName + HaivisionConstant.HASH + audioSourceKey.getKey(), defaultAudioName));
 				Audio audio = new Audio();
+				audio.setId(audioNameToAudioResponse.get(defaultAudioName).getId());
 				audioSourceKey.setValue(audio);
 				break;
 			}
@@ -2937,11 +3010,24 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		List<String> audioName = new ArrayList<>(audioNameToAudioResponse.keySet());
 		Collections.sort(audioName);
 		String[] audioNames = audioName.toArray(new String[audioName.size()]);
+		Map<Integer, String> idAudioList = new HashMap<>();
+		for (Map.Entry<String, Audio> audioKey : sourceAudio.entrySet()) {
+			if (audioKey.getValue() != null) {
+				idAudioList.put(Integer.valueOf(audioKey.getValue().getId()), audioKey.getValue().getName());
+			}
+		}
 		for (Map.Entry<String, Audio> element : sourceAudio.entrySet()) {
+			String defaultName = audioNames[0];
+			for (int i = 0; i <= HaivisionConstant.MIN_ADD_SOURCE_AUDIO; i++) {
+				if (!idAudioList.containsKey(i)) {
+					defaultName = audioIdToName.get(String.valueOf(i));
+					break;
+				}
+			}
 			if (element.getValue() == null) {
-				advancedControllablePropertyList.add(controlDropdown(stats, audioNames, prefixName + element.getKey(), audioNames[0]));
+				advancedControllablePropertyList.add(controlDropdown(stats, audioNames, prefixName + element.getKey(), defaultName));
 				Audio audio = new Audio();
-				audio.setId(audioNameToAudioResponse.get(audioNames[0]).getId());
+				audio.setId(audioNameToAudioResponse.get(defaultName).getId());
 				element.setValue(audio);
 				break;
 			}
@@ -3020,9 +3106,20 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			AudioResponseWrapper audioResponse = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER), AudioResponseWrapper.class);
 			audioResponseList.clear();
 			audioNameToAudioResponse.clear();
+			audioIdToName.clear();
+			Map<String, String> languageName = LanguageDropdown.getNameToValueMap();
 			for (AudioResponse audioItem : audioResponse.getData()) {
+				String audioName = audioItem.getName();
+				if (!StringUtils.isNullOrEmpty(audioItem.getLang()) && !HaivisionConstant.NONE.equals(audioItem.getLang())) {
+					String name = languageName.get(audioItem.getLang());
+					audioName = audioName + HaivisionConstant.SPACE + "(" + name.substring(0, name.indexOf(HaivisionConstant.SPACE)) + ")";
+				}
+				audioItem.setName(audioName);
+				audioNameToAudioResponse.put(audioName, audioItem);
 				audioResponseList.add(audioItem);
-				audioNameToAudioResponse.put(audioItem.getName(), audioItem);
+				if (Integer.parseInt(audioItem.getId()) <= HaivisionConstant.MIN_ADD_SOURCE_AUDIO) {
+					audioIdToName.put(audioItem.getId(), audioItem.getName());
+				}
 			}
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionURL.AUDIO_ENCODER.getName(), e.getMessage());
@@ -3702,7 +3799,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] shapingDropdown = DropdownList.Names(TimingAndShaping.class);
 		String[] videoDropdown = DropdownList.Names(VideoDropdown.class);
 		isCreateStreamCalled = true;
-		//Control Source Audio
+		//Control Source Audio//Control Source Audio
 		if (propertyName.contains(CreateOutputStreamMetric.SOURCE_AUDIO.getName())) {
 			if (HaivisionConstant.NONE.equals(value) && !(HaivisionConstant.SOURCE_AUDIO_0.equals(propertyName))) {
 				updateExtendedStatistic.remove(property);
@@ -3713,7 +3810,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addAdvanceControlProperties(advancedControllableProperties, sourceAudioControlProperty);
 				Audio audio = new Audio();
 				audio.setId(audioNameToAudioResponse.get(value).getId());
-				sourceAudio.put(propertyName, null);
+				sourceAudio.put(propertyName, audio);
 			}
 			if (isCreateStreamCalled) {
 
@@ -3745,8 +3842,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case CONNECTION_DESTINATION_PORT:
 				int destinationPort = Integer.parseInt(value);
-				if (destinationPort < HaivisionConstant.SOURCE_PORT_MIN || destinationPort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of destination port is invalid. Destination port must be between 1 to 65535");
+				if (destinationPort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				}
+				if (destinationPort < HaivisionConstant.SOURCE_PORT_MIN) {
+					value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+				}
+				if (destinationPort > HaivisionConstant.SOURCE_PORT_MAX) {
+					value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
 				}
 				AdvancedControllableProperty destinationPortProperty = controlNumeric(updateExtendedStatistic, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, destinationPortProperty);
@@ -3800,8 +3903,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			//Control numeric
 			case CONNECTION_SOURCE_PORT:
 				int sourcePort = Integer.parseInt(value);
-				if (sourcePort < HaivisionConstant.SOURCE_PORT_MIN || sourcePort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of source port is invalid. Source port must be between 1 to 65535");
+				if (sourcePort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				} else {
+					if (sourcePort < HaivisionConstant.SOURCE_PORT_MIN) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+					}
+					if (sourcePort > HaivisionConstant.SOURCE_PORT_MAX) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
+					}
 				}
 				AdvancedControllableProperty connectionSourcePortControl = controlNumeric(updateExtendedStatistic, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, connectionSourcePortControl);
@@ -3843,7 +3953,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						AdvancedControllableProperty toSControlProperty = controlText(updateExtendedStatistic, property, value);
 						addAdvanceControlProperties(advancedControllableProperties, toSControlProperty);
 					} catch (Exception e) {
-						throw new NumberFormatException("Value of ParameterToS is invalid. TOS must be between 0 to 255");
+						throw new NumberFormatException("Value of ParameterToS is invalid. TOS must be hex value range to 00-FF");
 					}
 				}
 				break;
@@ -3882,9 +3992,17 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case CONNECTION_ALTERNATE_PORT:
 				int alternatePort = Integer.parseInt(value);
-				if (alternatePort < HaivisionConstant.SOURCE_PORT_MIN || alternatePort > HaivisionConstant.SOURCE_PORT_MAX) {
-					throw new ResourceNotReachableException("Value of alternation port is invalid. Alternation port must be between 1 to 65535");
+				if (alternatePort == 0) {
+					value = HaivisionConstant.EMPTY_STRING;
+				} else {
+					if (alternatePort < HaivisionConstant.SOURCE_PORT_MIN) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MIN);
+					}
+					if (alternatePort > HaivisionConstant.SOURCE_PORT_MAX) {
+						value = String.valueOf(HaivisionConstant.SOURCE_PORT_MAX);
+					}
 				}
+
 				AdvancedControllableProperty alternatePortProperty = controlNumeric(updateExtendedStatistic, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, alternatePortProperty);
 				break;
@@ -4137,12 +4255,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				// sent request to apply all change for all metric
 				setOutputStreamAction(outputResponse.payLoad());
 				isCreateStreamCalled = false;
+				isEmergencyDelivery = false;
 				break;
 			case CANCEL:
 				isCreateStreamCalled = false;
 				break;
 			default:
-				break;
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("Controlling group %s is not supported.", createOutputStreamMetric.getName()));
+				}
 		}
 		//Editing
 		Map<String, String> extendedStats = localExtendedStatistics.getStatistics();
@@ -4161,7 +4282,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			listControlProperty.addAll(new ArrayList<>(advancedControllableProperties));
 		} else {
 			//Update localExtendedStatistics
-			localStatsStreamOutput.keySet().stream().filter(extendedStats::containsKey).collect(Collectors.toList()).forEach(extendedStats::remove);
+			extendedStats.keySet().stream().filter(localStatsStreamOutput::containsKey).collect(Collectors.toList()).forEach(extendedStats::remove);
 		}
 	}
 

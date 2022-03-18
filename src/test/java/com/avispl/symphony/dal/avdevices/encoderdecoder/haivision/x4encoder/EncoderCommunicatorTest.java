@@ -2093,7 +2093,7 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Connection Source port of Stream
 	 *
-	 * Expect edit successfully
+	 * Expect edit successfully with default port is 1025
 	 */
 	@Test
 	void testEditConnectionSourcePortOfStream() throws Exception {
@@ -2110,13 +2110,13 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		assertEquals(propValue, stats.get(propName));
+		assertEquals("1025", stats.get(propName));
 	}
 
 	/**
 	 * Test edit Connection Source port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect with default port is 65535
 	 */
 	@Test
 	void testEditConnectionSourcePortOfStreamFail() throws Exception {
@@ -2130,8 +2130,10 @@ class EncoderCommunicatorTest {
 		String propValue = "80000";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
-	}
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("65535", stats.get(propName));	}
 
 	/**
 	 * Test edit Connection Alternate port of Stream
@@ -2159,22 +2161,24 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Connection Alternate port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect with default max port is 655535
 	 */
 	@Test
-	void testEditConnectionAlternatePortOfStreamFail() throws Exception {
+	void testEditConnectionAlternatePortReturnDefaultValue() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
 		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		ControllableProperty controllableProperty = new ControllableProperty();
-		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName();
-		String propValue = "0";
+		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ALTERNATE_PORT.getName();
+		String propValue = "999999";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
-	}
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("65535", stats.get(propName));	}
 
 	/**
 	 * Test edit Destination port of Stream
@@ -2202,10 +2206,10 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Destination port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect with default max port is 655535
 	 */
 	@Test
-	void testEditDestinationPortOfStreamFail() throws Exception {
+	void testEditDestinationPortOfStreamWithMaxPort() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
@@ -2213,11 +2217,13 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		ControllableProperty controllableProperty = new ControllableProperty();
 		String propName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + "Stream Output 0" + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName();
-		String propValue = "99999";
+		String propValue = "90000";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
-	}
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("65535", stats.get(propName));	}
 
 	/**
 	 * Test edit Network adaptive of Stream
@@ -2911,7 +2917,7 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit alternate port successfully
 	 *
-	 * Expect alternate port will be set to new value
+	 * Expect alternate port will be default port 1025
 	 */
 	@Test
 	void testEditAlternatePortSuccess() throws Exception {
@@ -2928,7 +2934,7 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		assertEquals(propValue, stats.get(propName));
+		assertEquals("1025", stats.get(propName));
 	}
 
 	/**
@@ -3324,7 +3330,7 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Connection Source port of Stream
 	 *
-	 * Expect edit successfully
+	 * Expect edit successfully with value is 1025
 	 */
 	@Test
 	void testEditConnectionSourcePortForTheCreateOutputStream() throws Exception {
@@ -3341,16 +3347,16 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		assertEquals(propValue, stats.get(propName));
+		assertEquals("1025", stats.get(propName));
 	}
 
 	/**
 	 * Test edit Connection Source port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect port is max port 65535
 	 */
 	@Test
-	void testEditConnectionSourcePortForTheCreateOutputStreamFailed() throws Exception {
+	void testEditConnectionSourcePortReturnMaxPort() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
@@ -3361,7 +3367,10 @@ class EncoderCommunicatorTest {
 		String propValue = "80000";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("65535", stats.get(propName));
 	}
 
 	/**
@@ -3390,10 +3399,10 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Connection Alternate port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect the value of port is 1025
 	 */
 	@Test
-	void testEditConnectionAlternatePortForTheCreateOutputStreamFailed() throws Exception {
+	void testEditConnectionAlternatePortWithMinPort() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
@@ -3401,10 +3410,13 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		ControllableProperty controllableProperty = new ControllableProperty();
 		String propName = HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName();
-		String propValue = "0";
+		String propValue = "-1";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("1025", stats.get(propName));
 	}
 
 	/**
@@ -3433,10 +3445,10 @@ class EncoderCommunicatorTest {
 	/**
 	 * Test edit Destination port of Stream with the value out of range (1 - 65535)
 	 *
-	 * Expect an exception will be thrown
+	 * Expect with default max port is 655535
 	 */
 	@Test
-	void testEditDestinationPortForTheCreateOutputStreamFailed() throws Exception {
+	void testEditDestinationPortWithMaxPort() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.VIDEO_ENCODER)).thenReturn(HaivisionURL.VIDEO_ENCODER.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
@@ -3447,7 +3459,10 @@ class EncoderCommunicatorTest {
 		String propValue = "99999";
 		controllableProperty.setProperty(propName);
 		controllableProperty.setValue(propValue);
-		assertThrows(ResourceNotReachableException.class, () -> haivisionX4EncoderCommunicator.controlProperty(controllableProperty), "Expect an exception because value is out of range");
+		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		assertEquals("65535", stats.get(propName));
 	}
 
 	/**

@@ -88,15 +88,17 @@ public class HaivisionConstant {
 	public static final int MIN_OF_BANDWIDTH_OVERHEAD = 5;
 	public static final int MAX_OF_MTU = 1500;
 	public static final int MIN_OF_MTU = 228;
-	public static final int MAX_OF_TTL = 225;
+	public static final int MAX_OF_TTL = 255;
 	public static final int MIN_OF_TTL = 1;
 	public static final int MAX_OF_PASSPHRASE_LENGTH = 79;
 	public static final int MIN_OF_PASSPHRASE_LENGTH = 10;
 	public static final String SOURCE_AUDIO_0 = "SourceAudio 0";
-	public static final int SOURCE_PORT_MIN = 1;
+	public static final int SOURCE_PORT_MIN = 1025;
 	public static final int SOURCE_PORT_MAX = 65535;
 	public static final int DEFAULT_PORT_SAP = 9875;
 	public static final String MAX_OF_TOS = "FF";
 	public static final String MIN_OF_TOS = "00";
+	public static final String AUDIO_ENCODER = "Audio Encoder ";
+	public static final int MIN_ADD_SOURCE_AUDIO = 7;
 
 }
