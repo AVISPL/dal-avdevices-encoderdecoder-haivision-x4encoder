@@ -106,13 +106,13 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
       <scope>provided</scope>
-      <version>2.12.4</version>
+      <version>2.12.5</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <scope>provided</scope>
-      <version>2.12.4</version>
+      <version>2.12.5</version>
     </dependency>
     <dependency>
       <groupId>com.jcraft</groupId>
@@ -161,7 +161,7 @@
       <groupId>org.snmp4j</groupId>
       <artifactId>snmp4j</artifactId>
       <scope>test</scope>
-      <version>2.6.3</version>
+      <version>3.5.1</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -190,7 +190,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
