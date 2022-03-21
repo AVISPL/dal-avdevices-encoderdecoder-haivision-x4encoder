@@ -100,5 +100,7 @@ public class HaivisionConstant {
 	public static final String MIN_OF_TOS = "00";
 	public static final String AUDIO_ENCODER = "Audio Encoder ";
 	public static final int MIN_ADD_SOURCE_AUDIO = 7;
+	public static final String HEX_PREFIX = "0x";
+	public static final String ANY = "Any";
 
 }

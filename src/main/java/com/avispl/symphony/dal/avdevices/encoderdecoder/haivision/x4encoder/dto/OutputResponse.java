@@ -9,9 +9,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputDeserializer;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
+import com.avispl.symphony.dal.util.StringUtils;
 
 /**
  * Output Response DTO class
@@ -46,6 +47,7 @@ public class OutputResponse {
 	private String encryption;
 	private String passphrase;
 	private String srtListenerSecondPort;
+	private String srtRedundancyMode;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -463,29 +465,51 @@ public class OutputResponse {
 	}
 
 	/**
+	 * Retrieves {@code {@link #srtRedundancyMode}}
+	 *
+	 * @return value of {@link #srtRedundancyMode}
+	 */
+	public String getSrtRedundancyMode() {
+		return srtRedundancyMode;
+	}
+
+	/**
+	 * Sets {@code srtRedundancyMode}
+	 *
+	 * @param srtRedundancyMode the {@code java.lang.String} field
+	 */
+	public void setSrtRedundancyMode(String srtRedundancyMode) {
+		this.srtRedundancyMode = srtRedundancyMode;
+	}
+
+	/**
 	 * Convert OutputResponse
 	 *
 	 * @return payLoad the payload is String by OutputResponse
 	 */
 	public String payLoad() {
 		StringBuilder audioPayload = new StringBuilder();
+		audioPayload.append("[");
 		if (audio.size() > 0) {
-			audioPayload.append("[");
 			for (Audio audioItem : audio) {
 				audioPayload.append("{\"id\":\"" + audioItem.getId() + "\"}");
 				if (!audioItem.equals(audio.get(audio.size()-1))) {
 					audioPayload.append(",");
 				}
 			}
-			audioPayload.append("]");
 		}
+		audioPayload.append("]");
+
 		StringBuilder videoPayload = new StringBuilder();
 		videoPayload.append("[");
 		if (video.size() > 0) {
 			videoPayload.append("{\"id\":\"" + video.get(0).getId() + "\"}");
 		}
 		videoPayload.append("]");
-
+		String srtRedundancyModeValue = "";
+		if (!StringUtils.isNullOrEmpty(srtRedundancyMode)) {
+			srtRedundancyModeValue = ",\"srtRedundancyMode\":\"" + srtListenerSecondPort + "\"";
+		}
 		return "{" +
 				"\"id\":\"" + id + "\"" +
 				",\"encapsulation\":\"" + encapsulation + "\"" +
@@ -499,15 +523,16 @@ public class OutputResponse {
 				",\"audio\":" + audioPayload +
 				",\"shaping\":\"" + shaping + "\"" +
 				",\"overheadPercentage\":\"" + bandwidthOverhead + "\"" +
-				",\"sap\":" + outputSAP.payLoad()  +
+				",\"sap\":" + outputSAP.payLoad() +
 				",\"bandwithEstimate\":\"" + bandwidthEstimate + "\"" +
 				",\"srtMode\":\"" + srtMode + "\"" +
 				",\"sourcePort\":\"" + sourcePort + "\"" +
 				",\"adaptive\":\"" + adaptive + "\"" +
 				",\"latency\":\"" + latency + "\"" +
 				",\"encKeyLength\":\"" + encryption + "\"" +
-				",\"overheadPercentage\":\"" + passphrase + "\"" +
+				",\"passphrase\":\"" + passphrase + "\"" +
 				",\"srtListenerSecondPort\":\"" + srtListenerSecondPort + "\"" +
+				 srtRedundancyModeValue +
 				'}';
 	}
 }
