@@ -7,11 +7,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputDeserializer;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.util.StringUtils;
 
 /**
@@ -48,7 +49,6 @@ public class OutputResponse {
 	private String passphrase;
 	private String srtListenerSecondPort;
 	private String srtRedundancyMode;
-	private String passphraseSet;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -484,24 +484,6 @@ public class OutputResponse {
 	}
 
 	/**
-	 * Retrieves {@code {@link #passphraseSet}}
-	 *
-	 * @return value of {@link #passphraseSet}
-	 */
-	public String getPassphraseSet() {
-		return passphraseSet;
-	}
-
-	/**
-	 * Sets {@code passphraseSet}
-	 *
-	 * @param passphraseSet the {@code java.lang.String} field
-	 */
-	public void setPassphraseSet(String passphraseSet) {
-		this.passphraseSet = passphraseSet;
-	}
-
-	/**
 	 * Convert OutputResponse
 	 *
 	 * @return payLoad the payload is String by OutputResponse
@@ -527,7 +509,11 @@ public class OutputResponse {
 		videoPayload.append("]");
 		String srtRedundancyModeValue = "";
 		if (!StringUtils.isNullOrEmpty(srtRedundancyMode)) {
-			srtRedundancyModeValue = ",\"srtRedundancyMode\":\"" + srtListenerSecondPort + "\"";
+			srtRedundancyModeValue = ",\"srtRedundancyMode\":\"" + srtRedundancyMode + "\"";
+		}
+		String passphraseValue = "";
+		if(!HaivisionConstant.ZERO.equals(encryption) && !StringUtils.isNullOrEmpty(passphrase)){
+			passphraseValue = ",\"passphrase\":\"" + passphrase + "\"";
 		}
 		return "{" +
 				"\"id\":\"" + id + "\"" +
@@ -549,7 +535,7 @@ public class OutputResponse {
 				",\"adaptive\":\"" + adaptive + "\"" +
 				",\"latency\":\"" + latency + "\"" +
 				",\"encKeyLength\":\"" + encryption + "\"" +
-				",\"passphrase\":\"" + passphrase + "\"" +
+				passphraseValue +
 				",\"srtListenerSecondPort\":\"" + srtListenerSecondPort + "\"" +
 				 srtRedundancyModeValue +
 				'}';

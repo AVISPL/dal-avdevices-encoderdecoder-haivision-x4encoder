@@ -41,7 +41,6 @@ public enum CreateOutputStreamMetric {
 	CONNECTION_NETWORK_ADAPTIVE("ConnectionNetworkAdaptive"),
 	CONNECTION_LATENCY("ConnectionLatency"),
 	CONNECTION_ENCRYPTION("ConnectionEncryption"),
-	CONNECTION_PASSPHRASESET("ConnectionPassphraseSet"),
 	CONNECTION_PASSPHRASE("ConnectionPassphrase"),
 	CONNECTION_PORT("ConnectionPort"),
 	CONNECTION_ALTERNATE_PORT("ConnectionAlternatePort"),

@@ -39,19 +39,30 @@ import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.api.dal.monitor.Monitorable;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AlgorithmDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AspectRatioDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AudioStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.BitRateDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CountingDropdown;
@@ -61,7 +72,6 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncryptionDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FrameRateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FramingDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.LanguageDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ProtocolDropdown;
@@ -76,19 +86,9 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoInputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.SystemInfoResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
 import com.avispl.symphony.dal.communicator.RestCommunicator;
 import com.avispl.symphony.dal.util.StringUtils;
 
@@ -1503,7 +1503,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				break;
 			case CONNECTION_ENCRYPTION:
 				String connectionPassphrase = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PASSPHRASE.getName();
-				String setPassphrase = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PASSPHRASESET.getName();
 				AdvancedControllableProperty encryptionControlProperty = controlDropdown(extendedStatistics, encryptionDropdown, property, value);
 				addAdvanceControlProperties(advancedControllableProperties, encryptionControlProperty);
 				outputResponseItem.setEncryption(value);
@@ -1511,27 +1510,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				if (EncryptionDropdown.AES_128.getName().equals(value) || EncryptionDropdown.AES_256.getName().equals(value)) {
 					String passwordsPhrase = checkNoneStringValue(outputResponseItem.getPassphrase());
 					advancedControllableProperties.add(controlText(extendedStatistics, connectionPassphrase, passwordsPhrase));
-
-					value = outputResponseItem.getPassphraseSet();
-					String setPass = HaivisionConstant.ZERO;
-					if (HaivisionConstant.TRUE.equalsIgnoreCase(value)) {
-						setPass = HaivisionConstant.ONE;
-					}
-					AdvancedControllableProperty connectionSetPassphrase = controlSwitch(extendedStatistics, streamName, setPass, HaivisionConstant.FALSE, HaivisionConstant.TRUE);
-					addAdvanceControlProperties(advancedControllableProperties, connectionSetPassphrase);
 				} else {
 					extendedStatistics.remove(connectionPassphrase);
-					extendedStatistics.remove(setPassphrase);
 				}
-				break;
-			case CONNECTION_PASSPHRASESET:
-				outputResponseItem.setPassphraseSet(value);
-				String setPass = HaivisionConstant.ZERO;
-				if (HaivisionConstant.TRUE.equalsIgnoreCase(value)) {
-					setPass = HaivisionConstant.ONE;
-				}
-				AdvancedControllableProperty setPassControl = controlSwitch(extendedStatistics, streamName, setPass, HaivisionConstant.FALSE, HaivisionConstant.TRUE);
-				addAdvanceControlProperties(advancedControllableProperties, setPassControl);
 				break;
 			case CONNECTION_PASSPHRASE:
 				if (value.length() >= HaivisionConstant.MIN_OF_PASSPHRASE_LENGTH || value.length() <= HaivisionConstant.MAX_OF_PASSPHRASE_LENGTH) {
@@ -1667,6 +1648,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String srtModeName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_MODE.getName();
 		String latencyName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_LATENCY.getName();
 		String addressName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName();
+		String connectionAddressName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName();
 		String encapsulationName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.STREAMING_PROTOCOL.getName();
 		String encryptionName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ENCRYPTION.getName();
 		String passphraseName = streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PASSPHRASE.getName();
@@ -1689,6 +1671,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		OutputResponse outputItem = new OutputResponse();
 		String encapsulation = checkNullValue(localStatsStreamOutput.get(encapsulationName));
 		String address = checkNullValue(localStatsStreamOutput.get(addressName));
+		String connectionAddress = checkNullValue(localStatsStreamOutput.get(connectionAddressName));
 		String name = checkNullValue(localStatsStreamOutput.get(nameName));
 		String srtMode = checkNullValue(localStatsStreamOutput.get(srtModeName));
 		String sourcePort = checkNullValue(localStatsStreamOutput.get(sourcePortName));
@@ -1708,7 +1691,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String connectionDestinationPort = checkNullValue(localStatsStreamOutput.get(conectionDestinationPortName));
 		String sourceVideo = checkNullValue(localStatsStreamOutput.get(sourceVideoName));
 		String bandwidthOverHead = checkNullValue(localStatsStreamOutput.get(bandwidthOverHeadName));
-
 		String mtu = checkNullValue(localStatsStreamOutput.get(mtuName));
 		String ttl = checkNullValue(localStatsStreamOutput.get(ttlName));
 		String tos = checkNullValue(localStatsStreamOutput.get(tosName));
@@ -1765,13 +1747,16 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.ONE.equals(outputSAP.getAdvertise()) && StringUtils.isNullOrEmpty(outputSAP.getName())) {
 			throw new ResourceNotReachableException("Can't set transmit SAP, Please enter a SAP name");
 		}
+		if(StringUtils.isNullOrEmpty(address)){
+			address = connectionAddress;
+		}
 		if (StringUtils.isNullOrEmpty(address)) {
 			if (!ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) || (ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) && !SRTModeDropdown.LISTENER.getName()
 					.equals(srtModeName))) {
 				throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 			}
 		} else {
-			outputItem.setSrtRedundancyMode(HaivisionConstant.NONE.toLowerCase());
+			outputItem.setSrtRedundancyMode(HaivisionConstant.ZERO);
 		}
 		outputItem.setAddress(address);
 		outputItem.setMtu(mtu);
@@ -1832,7 +1817,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		outputSAP.setCopyright(checkNoneStringValue(outputSAP.getCopyright()));
 		outputSAP.setAddress(checkNoneStringValue(outputSAP.getAddress()));
 		String advertise = outputSAP.getAdvertise();
-		String setPassphraseValue = outputResponseItem.getPassphraseSet();
 		if (StringUtils.isNullOrEmpty(advertise) || HaivisionConstant.NONE.equals(advertise)) {
 			advertise = HaivisionConstant.ZERO;
 		}
@@ -1846,7 +1830,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				&& !SRTModeDropdown.LISTENER.getName().equals(srtModeName)))) {
 			throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 		} else {
-			outputResponseItem.setSrtRedundancyMode(HaivisionConstant.NONE.toLowerCase());
+			outputResponseItem.setSrtRedundancyMode(HaivisionConstant.ZERO);
 		}
 		String portSAP = outputSAP.getPort();
 		if (HaivisionConstant.NONE.equals(portSAP)) {
@@ -1867,7 +1851,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			video.setId(videoMap.getId());
 			videoList.add(video);
 		}
-
+		outputResponseItem.setPassphrase(passphrase);
 		outputResponseItem.setVideo(videoList);
 		outputResponseItem.setPort(port);
 		outputResponseItem.setSourcePort(sourcePort);
@@ -3006,22 +2990,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						addAdvanceControlProperties(advancedControllableProperties, connectionEncryption);
 					}
 					break;
-				case CONNECTION_PASSPHRASESET:
-					protocolMode = getNameByValue(protocol, protocolMap);
-					String encryptionOption = outputResponse.getEncryption();
-					if (!HaivisionConstant.NONE.equals(encryptionOption)) {
-						encryptionOption = encryptionMap.get(Integer.parseInt(outputResponse.getEncryption()));
-					}
-					if (ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolMode) && !HaivisionConstant.NONE.equals(encryptionOption)) {
-						value = outputResponse.getPassphraseSet();
-						String setPass = HaivisionConstant.ZERO;
-						if (HaivisionConstant.TRUE.equalsIgnoreCase(value)) {
-							setPass = HaivisionConstant.ONE;
-						}
-						AdvancedControllableProperty connectionsetPassphrase = controlSwitch(stats, streamName, setPass, HaivisionConstant.FALSE, HaivisionConstant.TRUE);
-						addAdvanceControlProperties(advancedControllableProperties, connectionsetPassphrase);
-					}
-					break;
 				case CONNECTION_PASSPHRASE:
 					protocolMode = getNameByValue(protocol, protocolMap);
 					String encryptionMode = outputResponse.getEncryption();
@@ -3163,10 +3131,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		Collections.sort(audioName);
 		String[] audioNames = audioName.toArray(new String[audioName.size()]);
 		Map<Integer, String> idAudioList = new HashMap<>();
+		int countSource = 0;
 		for (Map.Entry<String, Audio> audioKey : sourceAudio.entrySet()) {
 			if (audioKey.getValue() != null) {
 				idAudioList.put(Integer.valueOf(audioKey.getValue().getId()), audioKey.getValue().getName());
+				countSource++;
 			}
+		}
+		if(countSource == HaivisionConstant.MIN_ADD_SOURCE_AUDIO){
+			throw new ResourceNotReachableException("The audio source just assign max audio source is 7.");
 		}
 		for (Map.Entry<String, Audio> element : sourceAudio.entrySet()) {
 			String defaultName = audioNames[0];
@@ -3226,9 +3199,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						extractBitRate(outputStatistic.getValueByMetric(outputStreamMetric)));
 			} else if (OutputMonitoringMetric.STATE.equals(outputStreamMetric)) {
 				if (HaivisionConstant.NONE.equals(state)) {
-					stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()), state);
+					stats.put(String.format(HaivisionConstant.FORMAT,  HaivisionConstant.STREAM + HaivisionConstant.SPACE + name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()), state);
 				} else {
-					stats.put(String.format(HaivisionConstant.FORMAT, name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()),
+					stats.put(String.format(HaivisionConstant.FORMAT,  HaivisionConstant.STREAM + HaivisionConstant.SPACE + name + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS, outputStreamMetric.getName()),
 							String.valueOf(outputMap.get(Integer.valueOf(state))));
 				}
 			} else {
