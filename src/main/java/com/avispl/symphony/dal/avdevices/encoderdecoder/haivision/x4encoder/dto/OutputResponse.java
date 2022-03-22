@@ -48,6 +48,7 @@ public class OutputResponse {
 	private String passphrase;
 	private String srtListenerSecondPort;
 	private String srtRedundancyMode;
+	private String passphraseSet;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -480,6 +481,24 @@ public class OutputResponse {
 	 */
 	public void setSrtRedundancyMode(String srtRedundancyMode) {
 		this.srtRedundancyMode = srtRedundancyMode;
+	}
+
+	/**
+	 * Retrieves {@code {@link #passphraseSet}}
+	 *
+	 * @return value of {@link #passphraseSet}
+	 */
+	public String getPassphraseSet() {
+		return passphraseSet;
+	}
+
+	/**
+	 * Sets {@code passphraseSet}
+	 *
+	 * @param passphraseSet the {@code java.lang.String} field
+	 */
+	public void setPassphraseSet(String passphraseSet) {
+		this.passphraseSet = passphraseSet;
 	}
 
 	/**

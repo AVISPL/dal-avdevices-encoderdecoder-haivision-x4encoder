@@ -66,6 +66,7 @@ public class OutputDeserializer extends StdDeserializer<OutputResponse> {
 			outputResponse.setEncryption(checkNoneInformation(infoNode, "encKeyLength"));
 			outputResponse.setPassphrase(checkNoneInformation(infoNode, "passphrase"));
 			outputResponse.setSrtListenerSecondPort(checkNoneInformation(infoNode, "srtListenerSecondPort"));
+			outputResponse.setPassphraseSet(checkNoneInformation(infoNode, "passphraseSet"));
 
 			JsonNode sap = infoNode.get("sap");
 			if (sap != null) {
