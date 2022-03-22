@@ -535,7 +535,7 @@ public class OutputResponse {
 				",\"adaptive\":\"" + adaptive + "\"" +
 				",\"latency\":\"" + latency + "\"" +
 				",\"encKeyLength\":\"" + encryption + "\"" +
-				passphraseValue +
+				 passphraseValue +
 				",\"srtListenerSecondPort\":\"" + srtListenerSecondPort + "\"" +
 				 srtRedundancyModeValue +
 				'}';
