@@ -1587,7 +1587,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					} else {
 						copyValue = (int) Float.parseFloat(value);
 					}
-					String copyHexValue = HaivisionConstant.HEX_PREFIX + String.format("%02X", (0xFF & copyValue));
+					String copyHexValue = HaivisionConstant.HEX_PREFIX + String.format("%02X", 0xFF & copyValue);
 					if (copyValue < Integer.parseInt(HaivisionConstant.MIN_OF_TOS, 16)) {
 						copyHexValue = HaivisionConstant.HEX_PREFIX + HaivisionConstant.MIN_OF_TOS;
 					}
@@ -1751,8 +1751,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			address = connectionAddress;
 		}
 		if (StringUtils.isNullOrEmpty(address)) {
-			if (!ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) || (ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) && !SRTModeDropdown.LISTENER.getName()
-					.equals(srtModeName))) {
+			if (!ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) || ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) && !SRTModeDropdown.LISTENER.getName()
+					.equals(srtModeName)){
 				throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 			}
 		} else {
@@ -1826,8 +1826,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (HaivisionConstant.ONE.equals(outputSAP.getAdvertise()) && StringUtils.isNullOrEmpty(outputSAP.getName())) {
 			throw new ResourceNotReachableException("Can't set transmit SAP, Please enter a SAP name");
 		}
-		if (StringUtils.isNullOrEmpty(outputResponseItem.getAddress()) && (!ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolName) || (ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolName)
-				&& !SRTModeDropdown.LISTENER.getName().equals(srtModeName)))) {
+		if (StringUtils.isNullOrEmpty(outputResponseItem.getAddress()) && (!ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolName) || ProtocolDropdown.TS_OVER_SRT.getName().equals(protocolName)
+				&& !SRTModeDropdown.LISTENER.getName().equals(srtModeName))) {
 			throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 		} else {
 			outputResponseItem.setSrtRedundancyMode(HaivisionConstant.ZERO);
@@ -3928,7 +3928,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		isCreateStreamCalled = true;
 		//Control Source Audio//Control Source Audio
 		if (propertyName.contains(CreateOutputStreamMetric.SOURCE_AUDIO.getName())) {
-			if (HaivisionConstant.NONE.equals(value) && (HaivisionConstant.SOURCE_AUDIO_0.equals(propertyName))) {
+			if (HaivisionConstant.NONE.equals(value) && HaivisionConstant.SOURCE_AUDIO_0.equals(propertyName)) {
 				updateExtendedStatistic.remove(property);
 				sourceAudio.remove(propertyName);
 				sourceAudio.put(propertyName, null);
@@ -4058,7 +4058,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						} else {
 							copyValue = (int) Float.parseFloat(value);
 						}
-						String copyHexValue = HaivisionConstant.HEX_PREFIX + String.format("%02X", (0xFF & copyValue));
+						String copyHexValue = HaivisionConstant.HEX_PREFIX + String.format("%02X", 0xFF & copyValue);
 						if (copyValue < Integer.parseInt(HaivisionConstant.MIN_OF_TOS, 16)) {
 							copyHexValue = HaivisionConstant.HEX_PREFIX + HaivisionConstant.MIN_OF_TOS;
 						}
