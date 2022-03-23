@@ -488,7 +488,7 @@ public class OutputResponse {
 	 *
 	 * @return payLoad the payload is String by OutputResponse
 	 */
-	public String payLoad() {
+	public String retrieveOutputResponsePayloadData() {
 		StringBuilder audioPayload = new StringBuilder();
 		audioPayload.append("[");
 		if (audio.size() > 0) {

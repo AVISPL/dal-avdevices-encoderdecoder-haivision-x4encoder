@@ -1613,7 +1613,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				OutputResponse outputResponse = convertOutputStreamByValue(extendedStatistics, streamName);
 
 				// sent request to apply all change for all metric
-				setOutputStreamApplyChange(outputResponse.payLoad(), outputResponse.getId());
+				setOutputStreamApplyChange(outputResponse.retrieveOutputResponsePayloadData(), outputResponse.getId());
 
 				//sent request to action for the metric
 				setActionOutputStreamControl(streamName, outputResponse);
@@ -2035,7 +2035,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		Map<String, String> extendedStatistics = localExtendedStatistics.getStatistics();
 		String action = extendedStatistics.get(streamName + HaivisionConstant.HASH + CreateOutputStreamMetric.ACTION.getName());
 		if (!HaivisionConstant.NONE.equals(action)) {
-			changeOutputStreamAction(action.toLowerCase(), streamNameToStreamResponse.get(streamName).getId(), outputResponse.payLoad());
+			changeOutputStreamAction(action.toLowerCase(), streamNameToStreamResponse.get(streamName).getId(), outputResponse.retrieveOutputResponsePayloadData());
 		}
 	}
 
@@ -4431,7 +4431,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					OutputResponse outputResponse = convertCreateOutputStreamByValue(prefixName);
 
 					// sent request to apply all change for all metric
-					setOutputStreamAction(outputResponse.payLoad());
+					setOutputStreamAction(outputResponse.retrieveOutputResponsePayloadData());
 					isCreateStreamCalled = false;
 					isEmergencyDelivery = false;
 					break;
