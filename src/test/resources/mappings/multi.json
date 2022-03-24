@@ -507,6 +507,58 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/streams/1"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Test&#32;to&#32;EU\",\n        \"id\": 1,\n        \"type\": \"1\",\n        \"encapsulation\": \"34\",\n        \"userData\": \"\",\n        \"address\": \"144.76.104.227\",\n        \"port\": \"6064\",\n        \"networkInterface\": \"\",\n        \"latency\": 250,\n        \"srtMode\": 0,\n        \"sourceport\": \"0\",\n        \"adaptive\": \"0\",\n        \"encKeyLength\": 0,\n        \"passphrase\": \"\",\n        \"passphraseSet\": false,\n        \"srtAccessControlPublishingIdType\": \"standard\",\n        \"srtAccessResourceName\": \"\",\n        \"srtAccessUserName\": \"\",\n        \"srtAccessPublishingID\": \"\",\n        \"srtRedundancyMode\": \"none\",\n        \"srtRedundancyPath2NetworkInterface\": \"\",\n        \"srtRedundancyPath1Address\": \"144.76.104.227\",\n        \"srtRedundancyPath2Address\": \"0.0.0.0\",\n        \"srtRedundancyPath1Role\": \"primary\",\n        \"LinkWeight\": 0,\n        \"SecLinkWeight\": 0,\n        \"srtRedundancyPath1Name\": \"\",\n        \"srtRedundancyPath2Name\": \"\",\n        \"srtRedundancyPath1Port\": 6064,\n        \"srtRedundancyPath2Port\": 0,\n        \"srtListenerSecondPort\": 0,\n        \"srtRedundancyPath1SourcePort\": 0,\n        \"srtRedundancyPath2SourcePort\": 0,\n        \"pcrPid\": \"33\",\n        \"pmtPid\": \"32\",\n        \"tsStreamId\": \"1\",\n        \"programNumber\": \"1\",\n        \"pcrPidAutoAssigned\": true,\n        \"pmtPidAutoAssigned\": true,\n        \"programNumberAutoAssigned\": true,\n        \"video\": [\n            {\n                \"id\": \"6\",\n                \"name\": \"Video Encoder 6\",\n                \"pid\": \"33\",\n                \"autoassigned\": true\n            }\n        ],\n        \"audio\": [],\n        \"metadata\": [],\n        \"sap\": {},\n        \"mtu\": \"1496\",\n        \"tos\": \"0x80\",\n        \"ttl\": \"64\",\n        \"shaping\": \"vbr\",\n        \"overheadPercentage\": \"25\",\n        \"bandwithEstimate\": \"6496\",\n        \"metadataBandwidth\": \"0\",\n        \"metadataBandwidthAutoAssigned\": false,\n        \"encryption\": \"0\",\n        \"fec\": \"0\",\n        \"idleCells\": \"0\",\n        \"delayedAudio\": \"0\",\n        \"metadataEncapsulation\": 0,\n        \"persistent\": 1,\n        \"stillImage\": \"\"\n    },\n    \"stats\": {\n        \"uptime\": \"19h55m49s\",\n        \"sourcePort\": \"0\",\n        \"sentPackets\": \"0\",\n        \"sentBytes\": \"0\",\n        \"bitrate\": \"0 kbps\",\n        \"srt\": {\n            \"state\": 3,\n            \"detectedRedundancyMode\": \"none\",\n            \"reconnections\": \"0\",\n            \"resentPackets\": \"0\",\n            \"resentBytes\": \"0\",\n            \"droppedPackets\": \"0\",\n            \"droppedBytes\": \"0\",\n            \"mss\": 0,\n            \"maxBandwidth\": \"0 kbps\",\n            \"localPort\": 0,\n            \"remotePort\": 0,\n            \"pathMaxBandwidth\": \"0 kbps\",\n            \"lostPackets\": \"0\",\n            \"recvACK\": \"0\",\n            \"recvNAK\": \"0\",\n            \"rtt\": 0,\n            \"buffer\": 0,\n            \"latency\": 0\n        },\n        \"state\": 3\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/apis/streams/1/start"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"info\": {\n        \"name\": \"Test&#32;to&#32;EU\",\n        \"id\": 1,\n        \"type\": \"1\",\n        \"encapsulation\": \"34\",\n        \"userData\": \"\",\n        \"address\": \"144.76.104.227\",\n        \"port\": \"6064\",\n        \"networkInterface\": \"\",\n        \"latency\": 250,\n        \"srtMode\": 0,\n        \"sourceport\": \"0\",\n        \"adaptive\": \"0\",\n        \"encKeyLength\": 0,\n        \"passphrase\": \"\",\n        \"passphraseSet\": false,\n        \"srtAccessControlPublishingIdType\": \"standard\",\n        \"srtAccessResourceName\": \"\",\n        \"srtAccessUserName\": \"\",\n        \"srtAccessPublishingID\": \"\",\n        \"srtRedundancyMode\": \"none\",\n        \"srtRedundancyPath2NetworkInterface\": \"\",\n        \"srtRedundancyPath1Address\": \"144.76.104.227\",\n        \"srtRedundancyPath2Address\": \"0.0.0.0\",\n        \"srtRedundancyPath1Role\": \"primary\",\n        \"LinkWeight\": 0,\n        \"SecLinkWeight\": 0,\n        \"srtRedundancyPath1Name\": \"\",\n        \"srtRedundancyPath2Name\": \"\",\n        \"srtRedundancyPath1Port\": 6064,\n        \"srtRedundancyPath2Port\": 0,\n        \"srtListenerSecondPort\": 0,\n        \"srtRedundancyPath1SourcePort\": 0,\n        \"srtRedundancyPath2SourcePort\": 0,\n        \"pcrPid\": \"33\",\n        \"pmtPid\": \"32\",\n        \"tsStreamId\": \"1\",\n        \"programNumber\": \"1\",\n        \"pcrPidAutoAssigned\": true,\n        \"pmtPidAutoAssigned\": true,\n        \"programNumberAutoAssigned\": true,\n        \"video\": [\n            {\n                \"id\": \"6\",\n                \"name\": \"Video Encoder 6\",\n                \"pid\": \"33\",\n                \"autoassigned\": true\n            }\n        ],\n        \"audio\": [],\n        \"metadata\": [],\n        \"sap\": {},\n        \"mtu\": \"1496\",\n        \"tos\": \"0x80\",\n        \"ttl\": \"64\",\n        \"shaping\": \"vbr\",\n        \"overheadPercentage\": \"25\",\n        \"bandwithEstimate\": \"6496\",\n        \"metadataBandwidth\": \"0\",\n        \"metadataBandwidthAutoAssigned\": false,\n        \"encryption\": \"0\",\n        \"fec\": \"0\",\n        \"idleCells\": \"0\",\n        \"delayedAudio\": \"0\",\n        \"metadataEncapsulation\": 0,\n        \"persistent\": 1,\n        \"stillImage\": \"\"\n    },\n    \"stats\": {\n        \"uptime\": \"19h55m49s\",\n        \"sourcePort\": \"0\",\n        \"sentPackets\": \"0\",\n        \"sentBytes\": \"0\",\n        \"bitrate\": \"0 kbps\",\n        \"srt\": {\n            \"state\": 3,\n            \"detectedRedundancyMode\": \"none\",\n            \"reconnections\": \"0\",\n            \"resentPackets\": \"0\",\n            \"resentBytes\": \"0\",\n            \"droppedPackets\": \"0\",\n            \"droppedBytes\": \"0\",\n            \"mss\": 0,\n            \"maxBandwidth\": \"0 kbps\",\n            \"localPort\": 0,\n            \"remotePort\": 0,\n            \"pathMaxBandwidth\": \"0 kbps\",\n            \"lostPackets\": \"0\",\n            \"recvACK\": \"0\",\n            \"recvNAK\": \"0\",\n            \"rtt\": 0,\n            \"buffer\": 0,\n            \"latency\": 0\n        },\n        \"state\": 3\n    }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/streams-all"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"data\": [\n    {\n    \"info\": {\n        \"name\": \"Ivan&#32;test&#32;02\",\n        \"id\": 11,\n        \"type\": \"1\",\n        \"encapsulation\": \"2\",\n        \"userData\": \"\",\n        \"address\": \"192.168.0.0\",\n        \"port\": \"10256\",\n        \"networkInterface\": \"\",\n        \"pcrPid\": \"33\",\n        \"pmtPid\": \"32\",\n        \"tsStreamId\": \"1\",\n        \"programNumber\": \"1\",\n        \"pcrPidAutoAssigned\": true,\n        \"pmtPidAutoAssigned\": true,\n        \"programNumberAutoAssigned\": true,\n        \"video\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Video Encoder 0\",\n                \"pid\": \"33\",\n                \"autoassigned\": true\n            }\n        ],\n        \"audio\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Audio Encoder 0\",\n                \"pid\": \"36\",\n                \"autoassigned\": true\n            }\n        ],\n        \"metadata\": [],\n        \"sap\": {\n            \"id\": 1,\n            \"advertise\": 1,\n            \"name\": \"Test\",\n            \"desc\": \"\",\n            \"author\": \"\",\n            \"keywords\": \"\",\n            \"copyright\": \"\",\n            \"addressConfigured\": \"\",\n            \"address\": \"224.2.127.254\",\n            \"port\": \"9875\"\n        },\n        \"mtu\": \"1496\",\n        \"tos\": \"0x80\",\n        \"ttl\": \"64\",\n        \"shaping\": \"vbr\",\n        \"overheadPercentage\": \"15\",\n        \"bandwithEstimate\": \"31929\",\n        \"metadataBandwidth\": \"0\",\n        \"metadataBandwidthAutoAssigned\": false,\n        \"encryption\": \"0\",\n        \"fec\": \"0\",\n        \"idleCells\": \"0\",\n        \"delayedAudio\": \"0\",\n        \"metadataEncapsulation\": 0,\n        \"persistent\": 1,\n        \"stillImage\": \"\"\n    },\n    \"stats\": {\n        \"sourcePort\": \"0\",\n        \"sentPackets\": \"0\",\n        \"sentBytes\": \"0\",\n        \"bitrate\": \"0 kbps\",\n        \"state\": 0\n    }\n}\n\n    ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/apis/streams/11"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n    \"data\": [\n    {\n    \"info\": {\n        \"name\": \"Ivan&#32;test&#32;02\",\n        \"id\": 11,\n        \"type\": \"1\",\n        \"encapsulation\": \"2\",\n        \"userData\": \"\",\n        \"address\": \"192.168.0.0\",\n        \"port\": \"10256\",\n        \"networkInterface\": \"\",\n        \"pcrPid\": \"33\",\n        \"pmtPid\": \"32\",\n        \"tsStreamId\": \"1\",\n        \"programNumber\": \"1\",\n        \"pcrPidAutoAssigned\": true,\n        \"pmtPidAutoAssigned\": true,\n        \"programNumberAutoAssigned\": true,\n        \"video\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Video Encoder 0\",\n                \"pid\": \"33\",\n                \"autoassigned\": true\n            }\n        ],\n        \"audio\": [\n            {\n                \"id\": \"0\",\n                \"name\": \"Audio Encoder 0\",\n                \"pid\": \"36\",\n                \"autoassigned\": true\n            }\n        ],\n        \"metadata\": [],\n        \"sap\": {\n            \"id\": 1,\n            \"advertise\": 1,\n            \"name\": \"Test\",\n            \"desc\": \"\",\n            \"author\": \"\",\n            \"keywords\": \"\",\n            \"copyright\": \"\",\n            \"addressConfigured\": \"\",\n            \"address\": \"224.2.127.254\",\n            \"port\": \"9875\"\n        },\n        \"mtu\": \"1496\",\n        \"tos\": \"0x80\",\n        \"ttl\": \"64\",\n        \"shaping\": \"vbr\",\n        \"overheadPercentage\": \"15\",\n        \"bandwithEstimate\": \"31929\",\n        \"metadataBandwidth\": \"0\",\n        \"metadataBandwidthAutoAssigned\": false,\n        \"encryption\": \"0\",\n        \"fec\": \"0\",\n        \"idleCells\": \"0\",\n        \"delayedAudio\": \"0\",\n        \"metadataEncapsulation\": 0,\n        \"persistent\": 1,\n        \"stillImage\": \"\"\n    },\n    \"stats\": {\n        \"sourcePort\": \"0\",\n        \"sentPackets\": \"0\",\n        \"sentBytes\": \"0\",\n        \"bitrate\": \"0 kbps\",\n        \"state\": 0\n    }\n}\n\n    ]\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }
