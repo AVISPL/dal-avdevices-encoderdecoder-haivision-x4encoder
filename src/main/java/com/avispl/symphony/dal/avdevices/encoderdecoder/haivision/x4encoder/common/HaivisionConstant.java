@@ -71,7 +71,7 @@ public class HaivisionConstant {
 	public static final String ZERO = "0";
 	public static final String EMPTY_STRING = "";
 	public static final String NUMBER_ONE = "1";
-	public static final String STREAM_CREATE_OUTPUT = "Stream Create Output";
+	public static final String STREAM_CREATE_OUTPUT = "CreateOutputStream";
 	public static final String CREATE = "Create";
 	public static final String PLUS = "+";
 	public static final String DEFAULT_MTU = "1496";
@@ -99,7 +99,6 @@ public class HaivisionConstant {
 	public static final String MAX_OF_TOS = "FF";
 	public static final String MIN_OF_TOS = "00";
 	public static final String AUDIO_ENCODER = "Audio Encoder ";
-	public static final int MIN_ADD_SOURCE_AUDIO = 7;
 	public static final String HEX_PREFIX = "0x";
 	public static final String ANY = "Any";
 

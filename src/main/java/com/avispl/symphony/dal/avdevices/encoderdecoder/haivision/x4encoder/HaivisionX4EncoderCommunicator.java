@@ -39,30 +39,19 @@ import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.api.dal.monitor.Monitorable;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoControllingMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AlgorithmDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AspectRatioDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AudioStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.BitRateDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CountingDropdown;
@@ -72,6 +61,7 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncryptionDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FrameRateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FramingDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.LanguageDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ProtocolDropdown;
@@ -86,9 +76,19 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoInputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.SystemInfoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
 import com.avispl.symphony.dal.communicator.RestCommunicator;
 import com.avispl.symphony.dal.util.StringUtils;
 
@@ -123,6 +123,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private Map<String, String> failedMonitor = new HashMap<>();
 	private boolean isEmergencyDelivery;
 	private boolean isCreateStreamCalled;
+	private boolean isConfigManagement;
 
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
@@ -130,6 +131,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private String streamNameFilter;
 	private String portNumberFilter;
 	private String streamStatusFilter;
+	private String configManagement;
 
 	private final List<String> streamNameList = new ArrayList<>();
 	private final List<Integer> portNumberList = new ArrayList<>();
@@ -234,6 +236,24 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
+	 * Retrieves {@code {@link #configManagement}}
+	 *
+	 * @return value of {@link #configManagement}
+	 */
+	public String getConfigManagement() {
+		return configManagement;
+	}
+
+	/**
+	 * Sets {@code configManagement}
+	 *
+	 * @param configManagement the {@code java.lang.String} field
+	 */
+	public void setConfigManagement(String configManagement) {
+		this.configManagement = configManagement;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * <p>
 	 * This method is called by Symphony to get the list of statistics to be displayed
@@ -267,7 +287,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (localCreateOutputStream == null) {
 			localCreateOutputStream = new ExtendedStatistics();
 		}
-
+		isConfigManagement = handleAdapterPropertyIsConfigManagementFromUser();
 		if (!isEmergencyDelivery) {
 			isAdapterFiltering();
 			populateInformationFromDevice(stats, advancedControllableProperties);
@@ -278,7 +298,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			localExtendedStatistics = extendedStatistics;
 		}
 
-		if (HaivisionConstant.ADMIN.equals(roleBased) || HaivisionConstant.OPERATOR.equals(roleBased) && !isCreateStreamCalled) {
+		if (HaivisionConstant.ADMIN.equals(roleBased) || HaivisionConstant.OPERATOR.equals(roleBased) && !isCreateStreamCalled && isConfigManagement) {
 			List<AdvancedControllableProperty> createStreamAdvancedControllable = new ArrayList<>();
 			streamCreateOutput(statsCreateOutputStream, createStreamAdvancedControllable);
 			localCreateOutputStream.setStatistics(statsCreateOutputStream);
@@ -287,7 +307,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			isCreateStreamCalled = true;
 		}
 
-		if (isCreateStreamCalled) {
+		if (isCreateStreamCalled && isConfigManagement) {
 			stats.putAll(localCreateOutputStream.getStatistics());
 			Map<String, String> currentStat = localExtendedStatistics.getStatistics();
 			Map<String, String> createOutputStat = localCreateOutputStream.getStatistics();
@@ -1866,6 +1886,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		outputResponseItem.setSrtListenerSecondPort(srtListenerSecondPort);
 		outputResponseItem.setAudio(audioList);
 		outputResponseItem.setEncapsulation(protocol);
+		if (name.contains("://") && protocolMap.containsKey(name.substring(0,name.indexOf("://")))) {
+			name = HaivisionConstant.EMPTY_STRING;
+		}
 		outputResponseItem.setName(name);
 		outputResponseItem.setSrtMode(srtMode);
 		if (StringUtils.isNullOrEmpty(latency)) {
@@ -2203,7 +2226,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addAudioDataStatisticsToStatisticsProperty(stats, audioResponses);
 			}
 		}
-		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
+		if ((HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) && isConfigManagement) {
 			for (AudioResponse audioResponses : audioResponseList) {
 				addAudioDataControlToProperty(stats, audioResponses, advancedControllableProperties);
 			}
@@ -2651,7 +2674,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
 			}
 		}
-		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
+		if ((HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) && isConfigManagement) {
 			for (VideoResponse videoResponse : videoResponseList) {
 				addVideoDataControlToProperty(stats, videoResponse, advancedControllableProperties);
 			}
@@ -2718,7 +2741,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			}
 			outputResponseControlList.addAll(outputResponseList);
 		}
-		if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
+		if ((HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) && isConfigManagement) {
 			sourceAudioResponse.clear();
 			streamNameToStreamResponse.clear();
 			for (OutputResponse outputResponses : outputResponseControlList) {
@@ -2772,6 +2795,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		String[] srtModeDropdown = DropdownList.Names(SRTModeDropdown.class);
 		String[] encryptionDropdown = DropdownList.Names(EncryptionDropdown.class);
 		Map<Integer, String> protocolMap = ProtocolDropdown.getNameToValueMap();
+		Map<String, Integer> protocolMapOption = ProtocolDropdown.getValueToNameMap();
 		Map<Integer, String> srtModeMap = SRTModeDropdown.getNameToValueMap();
 		Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
 		Map<Integer, String> encryptionMap = EncryptionDropdown.getNameToValueMap();
@@ -2797,7 +2821,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					break;
 				case CONTENT_NAME:
 					value = checkNoneStringValue(outputResponse.getName());
-					AdvancedControllableProperty contentNameControl = controlText(stats, streamName, convertStreamNameUnescapeHtml3(value));
+					String name = convertStreamNameUnescapeHtml3(value);
+					if (name.contains("://") && protocolMapOption.containsKey(name.substring(0,name.indexOf("://")))) {
+						name = HaivisionConstant.EMPTY_STRING;
+					}
+					AdvancedControllableProperty contentNameControl = controlText(stats, streamName, name);
 					addAdvanceControlProperties(advancedControllableProperties, contentNameControl);
 					break;
 				case DESTINATION_ADDRESS:
@@ -3040,9 +3068,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					advancedControllableProperties.add(controlButton(stats, streamName, HaivisionConstant.PLUS, HaivisionConstant.PLUS, 0));
 					break;
 				case SOURCE_AUDIO:
-					String name = HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputResponse.getName());
-					Map<String, Audio> sourceAudioMap = sourceAudioResponse.get(name);
-					editSourceAudioControlStream(name, sourceAudioMap, stats, advancedControllableProperties);
+					String audioName = HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputResponse.getName());
+					Map<String, Audio> sourceAudioMap = sourceAudioResponse.get(audioName);
+					editSourceAudioControlStream(audioName, sourceAudioMap, stats, advancedControllableProperties);
 					break;
 				case CANCEL:
 				case APPLY_CHANGE:
@@ -3091,19 +3119,25 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * @param advancedControllablePropertyList list AdvancedControllableProperty instance
 	 */
 	private void editSourceAudioCreateOutputStream(String streamName, Map<String, Audio> sourceAudio, Map<String, String> stats, List<AdvancedControllableProperty> advancedControllablePropertyList) {
+		audioNameToAudioResponse.put(HaivisionConstant.NONE, new AudioResponse());
 		List<String> audioName = new ArrayList<>(audioNameToAudioResponse.keySet());
 		Collections.sort(audioName);
 		String[] audioNames = audioName.toArray(new String[audioName.size()]);
 
 		Map<Integer, String> idAudioList = new HashMap<>();
+		int countSource = 0;
 		for (Map.Entry<String, Audio> audioKey : sourceAudio.entrySet()) {
 			if (audioKey.getValue() != null && audioKey.getValue().getId() != null) {
 				idAudioList.put(Integer.valueOf(audioKey.getValue().getId()), audioKey.getValue().getName());
+				countSource++;
 			}
+		}
+		if (countSource == HaivisionConstant.MAX_SOURCE_AUDIO_DROPDOWN) {
+			throw new ResourceNotReachableException("The audio source just assign max audio source is 7.");
 		}
 		for (Map.Entry<String, Audio> audioSourceKey : sourceAudio.entrySet()) {
 			String defaultAudioName = audioNames[0];
-			for (int i = 0; i < HaivisionConstant.MIN_ADD_SOURCE_AUDIO; i++) {
+			for (int i = 0; i < HaivisionConstant.MAX_SOURCE_AUDIO_DROPDOWN; i++) {
 				if (!idAudioList.containsKey(i)) {
 					defaultAudioName = audioIdToName.get(String.valueOf(i));
 					break;
@@ -3143,12 +3177,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				countSource++;
 			}
 		}
-		if(countSource == HaivisionConstant.MIN_ADD_SOURCE_AUDIO){
+		if (countSource == HaivisionConstant.MAX_SOURCE_AUDIO_DROPDOWN) {
 			throw new ResourceNotReachableException("The audio source just assign max audio source is 7.");
 		}
 		for (Map.Entry<String, Audio> element : sourceAudio.entrySet()) {
 			String defaultName = audioNames[0];
-			for (int i = 0; i <= HaivisionConstant.MIN_ADD_SOURCE_AUDIO; i++) {
+			for (int i = 0; i < HaivisionConstant.MAX_SOURCE_AUDIO_DROPDOWN; i++) {
 				if (!idAudioList.containsKey(i)) {
 					defaultName = audioIdToName.get(String.valueOf(i));
 					break;
@@ -3281,9 +3315,29 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			outputResponseList.clear();
 			outputForPortAndStatusList.clear();
 			outputStatisticsList.clear();
+			handleStreamNameIsEmpty(outputResponse.getData());
 			outputResponseList.addAll(outputResponse.getData());
 		} catch (Exception e) {
 			failedMonitor.put(HaivisionURL.OUTPUT_ENCODER.getName(), e.getMessage());
+		}
+	}
+
+	/**
+	 * Parsing stream name empty to default name ( {protocol}://{address}:{(port)} )
+	 *
+	 * @param outputStreamList list OutputResponse instance
+	 */
+	private void handleStreamNameIsEmpty(List<OutputResponse> outputStreamList) {
+		Map<Integer, String> protocolMap = ProtocolDropdown.getNameToValueMap();
+		for (OutputResponse output : outputStreamList) {
+			String streamName = convertStreamNameUnescapeHtml3(output.getName());
+			if (StringUtils.isNullOrEmpty(streamName)) {
+				String protocol = output.getEncapsulation();
+				String address = output.getAddress();
+				String port = output.getPort();
+				String streamNameConvert = protocolMap.get(Integer.parseInt(protocol)) + "://" + address + "(" + port + ")";
+				output.setName(streamNameConvert);
+			}
 		}
 	}
 
@@ -3296,8 +3350,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		try {
 			if (outputItem.getId() != null) {
 				OutputResponse data = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.STREAM) + HaivisionConstant.SLASH + outputItem.getId(), OutputResponse.class);
-				streamNameToStreamResponse.put(HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputItem.getName()), data);
-				outputItem = data;
+				outputItem.setOutputSAP(data.getOutputSAP());
+				streamNameToStreamResponse.put(HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputItem.getName()), outputItem);
 			}
 		} catch (Exception ex) {
 			streamNameToStreamResponse.put(HaivisionConstant.STREAM + HaivisionConstant.SPACE + convertStreamNameUnescapeHtml3(outputItem.getName()), outputItem);
@@ -3421,20 +3475,19 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterPortNumber() {
 		extractPortNumberList(this.portNumberFilter);
 		if (!portNumberList.isEmpty()) {
-			OutputResponse outputResponseFilter = null;
+			List<OutputResponse> portFilterSet = new ArrayList<>();
 			for (int portNumber : portNumberList) {
 				for (OutputResponse outputResponse : outputResponseList) {
 					if (portNumber == Integer.parseInt(outputResponse.getPort())) {
-						outputResponseFilter = outputResponse;
-						break;
+						portFilterSet.add(outputResponse);
 					}
 				}
-				if (outputResponseFilter != null) {
-					outputForPortAndStatusList.add(outputResponseFilter);
+				if (!portFilterSet.isEmpty()) {
+					outputForPortAndStatusList.addAll(portFilterSet);
 				}
 			}
-			filterPortNumberRange();
 		}
+		filterPortNumberRange();
 	}
 
 	/**
@@ -3443,22 +3496,18 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterPortNumberRange() {
 		for (String portNumberRange : portNumberRangeList) {
 			String[] rangeList = portNumberRange.split(HaivisionConstant.DASH);
-			int mixPort = Integer.parseInt(rangeList[0]);
-			int maxPort = Integer.parseInt(rangeList[1]);
-			OutputResponse outputResponseRangeFilter = null;
+			int mixPort = Integer.parseInt(rangeList[0].trim());
+			int maxPort = Integer.parseInt(rangeList[1].trim());
+			List<OutputResponse> portRangeFilterOutputSet = new ArrayList<>();
 			for (OutputResponse outputResponse : outputResponseList) {
 				int port = Integer.parseInt(outputResponse.getPort());
 				if (mixPort <= port && port <= maxPort) {
-					outputResponseRangeFilter = outputResponse;
-					break;
+					portRangeFilterOutputSet.add(outputResponse);
 				}
 			}
-			if (outputResponseRangeFilter != null) {
-				outputForPortAndStatusList.add(outputResponseRangeFilter);
+			if (!portRangeFilterOutputSet.isEmpty()) {
+				outputForPortAndStatusList.addAll(portRangeFilterOutputSet);
 			}
-		}
-		if (!outputForPortAndStatusList.isEmpty()) {
-			outputStatisticsList.addAll(outputForPortAndStatusList);
 		}
 	}
 
@@ -3466,18 +3515,16 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Filter the status of Stream
 	 */
 	private void filterStreamStatus() {
+		List<OutputResponse> outputStreamStatusFilterList = new ArrayList<>();
 		extractStreamStatus(this.streamStatusFilter);
 		if (!streamStatusList.isEmpty()) {
 			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
 			for (String streamStatus : streamStatusList) {
-				OutputResponse outputStreamStatusFilter = null;
-
 				if (outputForPortAndStatusList.isEmpty()) {
 					for (OutputResponse outputResponse : outputResponseList) {
 						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
 						if (streamStatus.equals(stateOutput)) {
-							outputStreamStatusFilter = outputResponse;
-							break;
+							outputStreamStatusFilterList.add(outputResponse);
 						}
 					}
 				} else {
@@ -3485,15 +3532,16 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					for (OutputResponse outputResponse : outputForPortAndStatusList) {
 						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
 						if (streamStatus.equals(stateOutput)) {
-							outputStreamStatusFilter = outputResponse;
-							break;
+							outputStreamStatusFilterList.add(outputResponse);
 						}
 					}
 				}
-				if (outputStreamStatusFilter != null) {
-					outputStatisticsList.add(outputStreamStatusFilter);
-				}
 			}
+		}
+		if (!outputStreamStatusFilterList.isEmpty()) {
+			outputStatisticsList.addAll(outputStreamStatusFilterList);
+		} else {
+			outputStatisticsList.addAll(outputForPortAndStatusList);
 		}
 	}
 
@@ -3525,8 +3573,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				} catch (Exception e) {
 					try {
 						int index = portNumberItem.trim().indexOf(HaivisionConstant.DASH);
-						Integer.parseInt(portNumberItem.substring(0, index));
-						Integer.parseInt(portNumberItem.substring(index + 1));
+						Integer.parseInt(portNumberItem.substring(0, index).trim());
+						Integer.parseInt(portNumberItem.substring(index + 1).trim());
 						portNumberRangeList.add(portNumberItem);
 					} catch (Exception ex) {
 						if (logger.isDebugEnabled()) {
@@ -3966,6 +4014,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				case DESTINATION_ADDRESS:
 					AdvancedControllableProperty textControlProperty = controlText(updateExtendedStatistic, property, value);
 					addAdvanceControlProperties(advancedControllableProperties, textControlProperty);
+					if (propertyName.equals(CreateOutputStreamMetric.CONNECTION_ADDRESS.getName())) {
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_ADDRESS.getName(), value);
+					} else {
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName(), value);
+					}
 					break;
 				case SAP_PORT:
 					AdvancedControllableProperty sapPortProperty = controlNumeric(updateExtendedStatistic, property, value);
@@ -3989,6 +4042,19 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					}
 					AdvancedControllableProperty portControlProperty = controlNumeric(updateExtendedStatistic, property, value);
 					addAdvanceControlProperties(advancedControllableProperties, portControlProperty);
+
+					if (propertyName.equals(CreateOutputStreamMetric.DESTINATION_PORT.getName())) {
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName(), value);
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName(), value);
+					}
+					if (propertyName.equals(CreateOutputStreamMetric.CONNECTION_PORT.getName())) {
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_PORT.getName(), value);
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName(), value);
+					}
+					if (propertyName.equals(CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName())) {
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName(), value);
+						localStatsStreamOutput.put(prefixName + HaivisionConstant.HASH + CreateOutputStreamMetric.DESTINATION_PORT.getName(), value);
+					}
 					break;
 				case SOURCE_ADD_AUDIO:
 					addSourceAudioCreateOutputStream(updateExtendedStatistic, advancedControllableProperties);
@@ -4002,38 +4068,38 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					addAdvanceControlProperties(advancedControllableProperties, transmitSapControl);
 
 					String keyProperty = prefixName + HaivisionConstant.HASH;
-					String sapName = keyProperty + CreateOutputStreamMetric.SAP_NAME.getName();
-					String keywordsName = keyProperty + CreateOutputStreamMetric.SAP_KEYWORDS.getName();
-					String descName = keyProperty + CreateOutputStreamMetric.SAP_DESCRIPTION.getName();
-					String authorName = keyProperty + CreateOutputStreamMetric.SAP_AUTHOR.getName();
-					String copyrightName = keyProperty + CreateOutputStreamMetric.SAP_COPYRIGHT.getName();
-					String connnectionAddressName = keyProperty + CreateOutputStreamMetric.SAP_ADDRESS.getName();
-					String connectionPortName = keyProperty + CreateOutputStreamMetric.SAP_PORT.getName();
+					String transmitSapName = keyProperty + CreateOutputStreamMetric.SAP_NAME.getName();
+					String transmitKeywordsName = keyProperty + CreateOutputStreamMetric.SAP_KEYWORDS.getName();
+					String transmitDescName = keyProperty + CreateOutputStreamMetric.SAP_DESCRIPTION.getName();
+					String transmitAuthorName = keyProperty + CreateOutputStreamMetric.SAP_AUTHOR.getName();
+					String transmitCopyrightName = keyProperty + CreateOutputStreamMetric.SAP_COPYRIGHT.getName();
+					String transmitAddressName = keyProperty + CreateOutputStreamMetric.SAP_ADDRESS.getName();
+					String transmitPortName = keyProperty + CreateOutputStreamMetric.SAP_PORT.getName();
 
 					if (HaivisionConstant.ONE.equals(value)) {
-						String authorValue = checkNullValue(localStatsStreamOutput.get(authorName));
-						String addressValue = checkNullValue(localStatsStreamOutput.get(connnectionAddressName));
-						String copyrightValue = checkNullValue(localStatsStreamOutput.get(copyrightName));
-						String descValue = checkNullValue(localStatsStreamOutput.get(descName));
-						String keywordsValue = checkNullValue(localStatsStreamOutput.get(keywordsName));
-						String sapValue = checkNullValue(localStatsStreamOutput.get(sapName));
-						String portValue = checkNullValue(localStatsStreamOutput.get(connectionPortName));
+						String authorValue = checkNullValue(localStatsStreamOutput.get(transmitAuthorName));
+						String addressValue = checkNullValue(localStatsStreamOutput.get(transmitAddressName));
+						String copyrightValue = checkNullValue(localStatsStreamOutput.get(transmitCopyrightName));
+						String descValue = checkNullValue(localStatsStreamOutput.get(transmitDescName));
+						String keywordsValue = checkNullValue(localStatsStreamOutput.get(transmitKeywordsName));
+						String sapValue = checkNullValue(localStatsStreamOutput.get(transmitSapName));
+						String portValue = checkNullValue(localStatsStreamOutput.get(transmitPortName));
 
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, connnectionAddressName, addressValue));
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, authorName, authorValue));
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, copyrightName, copyrightValue));
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, descName, descValue));
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, keywordsName, keywordsValue));
-						advancedControllableProperties.add(controlText(updateExtendedStatistic, sapName, sapValue));
-						advancedControllableProperties.add(controlNumeric(updateExtendedStatistic, connectionPortName, portValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitAddressName, addressValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitAuthorName, authorValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitCopyrightName, copyrightValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitDescName, descValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitKeywordsName, keywordsValue));
+						advancedControllableProperties.add(controlText(updateExtendedStatistic, transmitSapName, sapValue));
+						advancedControllableProperties.add(controlNumeric(updateExtendedStatistic, transmitPortName, portValue));
 					} else {
-						updateExtendedStatistic.remove(sapName);
-						updateExtendedStatistic.remove(keywordsName);
-						updateExtendedStatistic.remove(descName);
-						updateExtendedStatistic.remove(authorName);
-						updateExtendedStatistic.remove(copyrightName);
-						updateExtendedStatistic.remove(connnectionAddressName);
-						updateExtendedStatistic.remove(connectionPortName);
+						updateExtendedStatistic.remove(transmitSapName);
+						updateExtendedStatistic.remove(transmitKeywordsName);
+						updateExtendedStatistic.remove(transmitDescName);
+						updateExtendedStatistic.remove(transmitAuthorName);
+						updateExtendedStatistic.remove(transmitCopyrightName);
+						updateExtendedStatistic.remove(transmitAddressName);
+						updateExtendedStatistic.remove(transmitPortName);
 					}
 					break;
 				case CONNECTION_LATENCY:
@@ -4131,9 +4197,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					break;
 				case STREAMING_PROTOCOL:
 					keyProperty = prefixName + HaivisionConstant.HASH;
-					connnectionAddressName = keyProperty + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName();
-					connectionPortName = keyProperty + CreateOutputStreamMetric.CONNECTION_PORT.getName();
-					String desPortName = keyProperty + CreateOutputStreamMetric.DESTINATION_PORT.getName();
+					String connectionAddressName = keyProperty + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName();
+					String connectionPortName = keyProperty + CreateOutputStreamMetric.CONNECTION_PORT.getName();
+					String destinationPortName = keyProperty + CreateOutputStreamMetric.DESTINATION_PORT.getName();
 					String connectionModeName = keyProperty + CreateOutputStreamMetric.CONNECTION_MODE.getName();
 					String latencyName = keyProperty + CreateOutputStreamMetric.CONNECTION_LATENCY.getName();
 					String encryptionName = keyProperty + CreateOutputStreamMetric.CONNECTION_ENCRYPTION.getName();
@@ -4168,33 +4234,24 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						addAdvanceControlProperties(advancedControllableProperties, modeControl);
 
 						//Add address
-						value = checkNullValue(localStatsStreamOutput.get(destinationAddressName));
-						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connnectionAddressName, value);
+						value = checkNullValue(localStatsStreamOutput.get(connectionAddressName));
+						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connectionAddressName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionAddressControl);
 
 						//Add sourcePort => is SourcePort Response
-						value = checkNullValue(localStatsStreamOutput.get(alternatePortName));
-						if(StringUtils.isNullOrEmpty(value)){
-							value = checkNullValue(localStatsStreamOutput.get(connectionSourcePortName));
-						}
+						value = checkNullValue(localStatsStreamOutput.get(connectionSourcePortName));
 						AdvancedControllableProperty connectionSourcePort = controlNumeric(updateExtendedStatistic, connectionSourcePortName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionSourcePort);
 
 						//destinationSourcePort is port Response
-						value = checkNullValue(localStatsStreamOutput.get(desPortName));
-						if(StringUtils.isNullOrEmpty(value)){
-							value = checkNullValue(localStatsStreamOutput.get(connectionPortName));
-						}
-						if(StringUtils.isNullOrEmpty(value)){
-							value = checkNullValue(localStatsStreamOutput.get(connectDestinationPortName));
-						}
+						value = checkNullValue(localStatsStreamOutput.get(connectDestinationPortName));
 						AdvancedControllableProperty connectionDestinationPortControl = controlNumeric(updateExtendedStatistic, connectDestinationPortName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionDestinationPortControl);
 
 						if (SRTModeDropdown.RENDEZVOUS.getName().equals(connectionMode)) {
 
 							//Update sourcePort = DestinationPort and not accept control
-							value = checkNullValue(localStatsStreamOutput.get(connectionPortName));
+							value = checkNullValue(localStatsStreamOutput.get(destinationPortName));
 							updateExtendedStatistic.put(connectionSourcePortName, value);
 							advancedControllableProperties.removeIf(item -> item.getName().equals(connectionSourcePortName));
 						}
@@ -4202,14 +4259,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 							//remove port and alternatePort
 							updateExtendedStatistic.remove(connectionPortName);
+							updateExtendedStatistic.remove(connectionAddressName);
 							updateExtendedStatistic.remove(alternatePortName);
-							updateExtendedStatistic.remove(desPortName);
-							updateExtendedStatistic.remove(destinationAddressName);
 						}
 						if (SRTModeDropdown.LISTENER.getName().equals(connectionMode)) {
 
 							//Update Port
-							value = checkNullValue(localStatsStreamOutput.get(desPortName));
+							value = checkNullValue(localStatsStreamOutput.get(connectionPortName));
 							AdvancedControllableProperty connectionPortControl = controlNumeric(updateExtendedStatistic, connectionPortName, value);
 							addAdvanceControlProperties(advancedControllableProperties, connectionPortControl);
 
@@ -4221,7 +4277,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 							//remove sourcePort and destinationPort
 							updateExtendedStatistic.remove(connectionSourcePortName);
 							updateExtendedStatistic.remove(connectDestinationPortName);
-							updateExtendedStatistic.remove(connnectionAddressName);
+							updateExtendedStatistic.remove(connectionAddressName);
 						}
 
 						// NetworkAdpter
@@ -4271,6 +4327,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						updateExtendedStatistic.remove(sapPortName);
 						updateExtendedStatistic.remove(sapTransmitName);
 						updateExtendedStatistic.remove(destinationAddressName);
+						updateExtendedStatistic.remove(destinationPortName);
 						break;
 					} else {
 						//Add transmit
@@ -4311,25 +4368,26 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						}
 
 						//Add address
-						value = checkNullValue(localStatsStreamOutput.get(connnectionAddressName));
-						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connnectionAddressName, value);
+						value = checkNullValue(localStatsStreamOutput.get(destinationAddressName));
+						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, destinationAddressName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionAddressControl);
 
 						//Update Port
-						value = checkNullValue(localStatsStreamOutput.get(connectionPortName));
-						AdvancedControllableProperty connectionPortControl = controlNumeric(updateExtendedStatistic, connectionPortName, value);
+						value = checkNullValue(localStatsStreamOutput.get(destinationPortName));
+						AdvancedControllableProperty connectionPortControl = controlNumeric(updateExtendedStatistic, destinationPortName, value);
 						addAdvanceControlProperties(advancedControllableProperties, connectionPortControl);
 
 						updateExtendedStatistic.remove(connectionModeName);
 						updateExtendedStatistic.remove(connectDestinationPortName);
 						updateExtendedStatistic.remove(connectionSourcePortName);
 						updateExtendedStatistic.remove(networkAdapterName);
-						updateExtendedStatistic.remove(networkAdapterName);
 						updateExtendedStatistic.remove(encryptionName);
 						updateExtendedStatistic.remove(passPhraseName);
 						updateExtendedStatistic.remove(alternatePortName);
 						updateExtendedStatistic.remove(latencyName);
 						updateExtendedStatistic.remove(bandwidthOverHeadName);
+						updateExtendedStatistic.remove(connectionPortName);
+						updateExtendedStatistic.remove(connectionAddressName);
 					}
 					break;
 				case CONNECTION_MODE:
@@ -4338,7 +4396,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					addAdvanceControlProperties(advancedControllableProperties, modeControlProperty);
 
 					keyProperty = prefixName + HaivisionConstant.HASH;
-					connnectionAddressName = keyProperty + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName();
+					connectionAddressName = keyProperty + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName();
 					connectDestinationPortName = keyProperty + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName();
 					connectionSourcePortName = keyProperty + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName();
 					connectionPortName = keyProperty + CreateOutputStreamMetric.CONNECTION_PORT.getName();
@@ -4347,8 +4405,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					if (SRTModeDropdown.RENDEZVOUS.getName().equals(value)) {
 
 						//Add address
-						String addressValue = checkNullValue(localStatsStreamOutput.get(connnectionAddressName));
-						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connnectionAddressName, addressValue);
+						String addressValue = checkNullValue(localStatsStreamOutput.get(connectionAddressName));
+						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connectionAddressName, addressValue);
 						addAdvanceControlProperties(advancedControllableProperties, connectionAddressControl);
 
 						//Add sourcePort => is SourcePort Response
@@ -4362,8 +4420,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						addAdvanceControlProperties(advancedControllableProperties, connectionDestinationPortControl);
 
 						//Update sourcePort = DestinationPort and not accept control
-						String sourcePortValueRemove = checkNullValue(localStatsStreamOutput.get(connectionSourcePortName));
-						updateExtendedStatistic.put(connectionSourcePortName, sourcePortValueRemove);
+						updateExtendedStatistic.put(connectionSourcePortName, portValue);
 						advancedControllableProperties.removeIf(item -> item.getName().equals(connectionSourcePortName));
 
 						//remove port and alternatePort
@@ -4386,19 +4443,18 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						//remove sourcePort and destinationPort
 						updateExtendedStatistic.remove(connectionSourcePortName);
 						updateExtendedStatistic.remove(connectDestinationPortName);
-						updateExtendedStatistic.remove(connnectionAddressName);
+						updateExtendedStatistic.remove(connectionAddressName);
 					}
 
 					if (SRTModeDropdown.CALLER.getName().equals(value)) {
 
 						//Add address
-						String addressValue = checkNullValue(localStatsStreamOutput.get(connnectionAddressName));
-						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connnectionAddressName, addressValue);
+						String addressValue = checkNullValue(localStatsStreamOutput.get(connectionAddressName));
+						AdvancedControllableProperty connectionAddressControl = controlText(updateExtendedStatistic, connectionAddressName, addressValue);
 						addAdvanceControlProperties(advancedControllableProperties, connectionAddressControl);
 
-						//Add sourcePort => is SourcePort Response
-						String sourcePortValue = checkNullValue(localStatsStreamOutput.get(connectionSourcePortName));
-						AdvancedControllableProperty connectionSourcePortControl = controlNumeric(updateExtendedStatistic, connectionSourcePortName, sourcePortValue);
+						//Add sourcePort is Empty then change mode option
+						AdvancedControllableProperty connectionSourcePortControl = controlNumeric(updateExtendedStatistic, connectionSourcePortName, HaivisionConstant.EMPTY_STRING);
 						addAdvanceControlProperties(advancedControllableProperties, connectionSourcePortControl);
 
 						//destinationPort is port Response
@@ -4434,9 +4490,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					setOutputStreamAction(outputResponse.retrieveOutputResponsePayloadData());
 					isCreateStreamCalled = false;
 					isEmergencyDelivery = false;
+					localStatsStreamOutput.clear();
+					localCreateOutputStream = new ExtendedStatistics();
 					break;
 				case CANCEL:
 					isCreateStreamCalled = false;
+					localStatsStreamOutput.clear();
+					localCreateOutputStream = new ExtendedStatistics();
 					break;
 				default:
 					if (logger.isDebugEnabled()) {
@@ -4479,5 +4539,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		} catch (Exception e) {
 			throw new ResourceNotReachableException(HaivisionConstant.ERR_SET_CONTROL + e.getMessage());
 		}
+	}
+
+	/**
+	 * This method is used to handle  input from adapter properties in case is config management
+	 *
+	 * @return boolean is configManagement
+	 */
+	public boolean handleAdapterPropertyIsConfigManagementFromUser() {
+		return !StringUtils.isNullOrEmpty(configManagement) && HaivisionConstant.TRUE.equalsIgnoreCase(configManagement);
 	}
 }

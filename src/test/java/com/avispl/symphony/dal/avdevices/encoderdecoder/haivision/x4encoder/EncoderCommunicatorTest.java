@@ -87,6 +87,7 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.ROLE_BASED)).thenReturn(HaivisionURL.ROLE_BASED.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.STREAM)).thenReturn(HaivisionURL.STREAM.getUrl());
 		haivisionX4EncoderCommunicator = new HaivisionX4EncoderCommunicator();
+		haivisionX4EncoderCommunicator.setConfigManagement("True");
 		haivisionX4EncoderCommunicator.setTrustAllCertificates(false);
 		haivisionX4EncoderCommunicator.setProtocol(PROTOCOL);
 		haivisionX4EncoderCommunicator.setPort(wireMockRule.port());
@@ -4182,13 +4183,17 @@ class EncoderCommunicatorTest {
 		controllableProperty.setValue("Test");
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 
+		extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		stats = extendedStatistics.getStatistics();
 		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + HaivisionConstant.EDITED));
 		Assert.assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CANCEL.getName()));
-		Assert.assertNull(stats.get(propNameAddress));
-		Assert.assertNull(stats.get(propNamePort));
-		Assert.assertNull(stats.get(propName));
 	}
 
+	/**
+	 * Test protocol is UDP
+	 *
+	 * Expect change the value success with protocol is UDP and many filed is not mode UPD will be removed in the stats
+	 */
 	@Test
 	void testProtocolUDP() throws Exception {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUDIO_ENCODER)).thenReturn(HaivisionURL.AUDIO_ENCODER.getUrl());
@@ -4204,8 +4209,9 @@ class EncoderCommunicatorTest {
 		haivisionX4EncoderCommunicator.controlProperty(controllableProperty);
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName()));
-		assertNotNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName()));
+		assertEquals(propValue,stats.get(propName));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_PORT.getName()));
+		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_ADDRESS.getName()));
 		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_MODE.getName()));
 		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_DESTINATION_PORT.getName()));
 		assertNull(stats.get(HaivisionConstant.STREAM_CREATE_OUTPUT + HaivisionConstant.HASH + CreateOutputStreamMetric.CONNECTION_SOURCE_PORT.getName()));
