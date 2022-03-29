@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -159,12 +161,12 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * List of output statistics if the adapter not filter
 	 */
-	private List<OutputResponse> outputStatisticsList = new ArrayList<>();
+	private Set<OutputResponse> outputStatisticsList = new HashSet<>();
 
 	/**
 	 * List of output statistics for the adapter filter
 	 */
-	private List<OutputResponse> outputForPortAndStatusList = new ArrayList<>();
+	private Set<OutputResponse> outputForPortAndStatusList = new HashSet<>();
 
 	/**
 	 * List of audio Response
@@ -2722,17 +2724,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void populateOutputData(Map<String, String> stats, List<AdvancedControllableProperty> advancedControllableProperties) {
 		List<OutputResponse> outputResponseControlList = new ArrayList<>();
 		if (isAdapterFilter) {
-			if (!outputForPortAndStatusList.isEmpty()) {
-				for (OutputResponse outputResponses : outputForPortAndStatusList) {
-					addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
-				}
-				outputResponseControlList.addAll(outputForPortAndStatusList);
-			} else {
-				for (OutputResponse outputResponses : outputStatisticsList) {
-					addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
-				}
-				outputResponseControlList.addAll(outputStatisticsList);
+			for (OutputResponse outputResponses : outputStatisticsList) {
+				addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
 			}
+			outputResponseControlList.addAll(outputStatisticsList);
 		} else {
 			for (OutputResponse outputResponses : outputResponseList) {
 				addOutputStreamDataStatisticsToStatisticsProperty(stats, outputResponses);
@@ -3515,7 +3510,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Filter the status of Stream
 	 */
 	private void filterStreamStatus() {
-		List<OutputResponse> outputStreamStatusFilterList = new ArrayList<>();
+		Set<OutputResponse> outputStreamStatusFilterList = new HashSet<>();
 		extractStreamStatus(this.streamStatusFilter);
 		if (!streamStatusList.isEmpty()) {
 			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
