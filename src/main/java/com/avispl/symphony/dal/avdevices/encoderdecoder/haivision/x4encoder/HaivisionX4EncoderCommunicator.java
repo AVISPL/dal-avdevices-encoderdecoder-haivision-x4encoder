@@ -341,7 +341,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 		if (property.contains(HaivisionConstant.STREAM_CREATE_OUTPUT)) {
 			controlStreamCreateOutput(property, value, updateCreateOutputStream, advancedControllableCreateOutputProperties);
-			localStatsStreamOutput.putAll(updateCreateOutputStream);
+			if(!updateCreateOutputStream.isEmpty()){
+				localStatsStreamOutput.putAll(updateCreateOutputStream);
+			}
 		} else {
 			String propertiesAudioAndVideo = property.substring(0, HaivisionConstant.AUDIO.length());
 			if (HaivisionConstant.AUDIO.equals(propertiesAudioAndVideo)) {
@@ -4250,9 +4252,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 						if (SRTModeDropdown.CALLER.getName().equals(connectionMode) || SRTModeDropdown.RENDEZVOUS.getName().equals(connectionMode)) {
 
 							//remove port and alternatePort
-							updateExtendedStatistic.remove(connectionPortName);
-							updateExtendedStatistic.remove(connectionAddressName);
+							updateExtendedStatistic.remove(destinationPortName);
+							updateExtendedStatistic.remove(destinationAddressName);
 							updateExtendedStatistic.remove(alternatePortName);
+							updateExtendedStatistic.remove(connectionPortName);
 						}
 						if (SRTModeDropdown.LISTENER.getName().equals(connectionMode)) {
 
@@ -4483,11 +4486,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					isCreateStreamCalled = false;
 					isEmergencyDelivery = false;
 					localStatsStreamOutput.clear();
+					updateExtendedStatistic.clear();
 					localCreateOutputStream = new ExtendedStatistics();
 					break;
 				case CANCEL:
 					isCreateStreamCalled = false;
 					localStatsStreamOutput.clear();
+					updateExtendedStatistic.clear();
 					localCreateOutputStream = new ExtendedStatistics();
 					break;
 				default:
