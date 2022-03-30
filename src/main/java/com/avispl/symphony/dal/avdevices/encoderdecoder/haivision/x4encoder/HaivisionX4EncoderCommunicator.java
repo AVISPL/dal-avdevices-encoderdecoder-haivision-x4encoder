@@ -3482,7 +3482,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				}
 			}
 		}
-		filterPortNumberRange();
+		if (!portNumberRangeList.isEmpty()) {
+			filterPortNumberRange();
+		}
 	}
 
 	/**
@@ -3515,7 +3517,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (!streamStatusList.isEmpty()) {
 			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
 			for (String streamStatus : streamStatusList) {
-				if (outputForPortAndStatusList.isEmpty()) {
+				if (StringUtils.isNullOrEmpty(portNumberFilter)) {
 					for (OutputResponse outputResponse : outputResponseList) {
 						String stateOutput = stateMap.get(Integer.parseInt(outputResponse.getState()));
 						if (streamStatus.equals(stateOutput)) {
@@ -3532,10 +3534,11 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 					}
 				}
 			}
+			if (!outputStreamStatusFilterList.isEmpty()) {
+				outputStatisticsList.addAll(outputStreamStatusFilterList);
+			}
 		}
-		if (!outputStreamStatusFilterList.isEmpty()) {
-			outputStatisticsList.addAll(outputStreamStatusFilterList);
-		} else {
+		if (streamStatusList.isEmpty() && !outputForPortAndStatusList.isEmpty()) {
 			outputStatisticsList.addAll(outputForPortAndStatusList);
 		}
 	}
@@ -3599,15 +3602,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Filter list Audio statistics by output stream response
 	 */
 	private void filterAudioAndVideoStatisticsList() {
-		if (!outputForPortAndStatusList.isEmpty()) {
-			for (OutputResponse outputResponse : outputForPortAndStatusList) {
-				filterAudioAndVideo(outputResponse);
-			}
-		} else {
 			for (OutputResponse outputResponse : outputStatisticsList) {
 				filterAudioAndVideo(outputResponse);
 			}
-		}
 	}
 
 	/**
