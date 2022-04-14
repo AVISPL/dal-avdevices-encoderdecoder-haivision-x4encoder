@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -3486,7 +3485,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Filter the id of audio
+	 * Filter by audio id
 	 */
 	private void filterAudio() {
 		List<String> audioNameList = extractListNameFilter(this.audioFilter);
@@ -3502,7 +3501,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Filter the id of video
+	 * Filter by video id
 	 */
 	private void filterVideo() {
 		List<String> videoNameList = extractListNameFilter(this.videoFilter);
