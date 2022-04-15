@@ -3490,13 +3490,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterAudio() {
 		List<String> audioNameList = extractListNameFilter(this.audioFilter);
 		if(!StringUtils.isNullOrEmpty(audioFilter) && !audioNameList.isEmpty()){
-			List<AudioResponse> newAudioResponse = new ArrayList<>();
+			List<AudioResponse> newAudioResponseList = new ArrayList<>();
 			for (AudioResponse audioResponse : audioResponseList) {
 				if (audioNameList.contains(audioResponse.getId())) {
-					newAudioResponse.add(audioResponse);
+					newAudioResponseList.add(audioResponse);
 				}
 			}
-			audioResponseList = newAudioResponse;
+			audioResponseList = newAudioResponseList;
 		}
 	}
 
@@ -3506,13 +3506,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private void filterVideo() {
 		List<String> videoNameList = extractListNameFilter(this.videoFilter);
 		if(!StringUtils.isNullOrEmpty(videoFilter) && !videoNameList.isEmpty()){
-			List<VideoResponse> newVideoResponse = new ArrayList<>();
+			List<VideoResponse> newVideoResponseList = new ArrayList<>();
 			for (VideoResponse videoResponse : videoResponseList) {
 				if (videoNameList.contains(videoResponse.getId())) {
-					newVideoResponse.add(videoResponse);
+					newVideoResponseList.add(videoResponse);
 				}
 			}
-			videoResponseList = newVideoResponse;
+			videoResponseList = newVideoResponseList;
 		}
 	}
 
@@ -3648,13 +3648,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Get list name by adapter filter
 	 *
-	 * @param name the name is name of filter
+	 * @param filterName the name is name of filter
 	 * @return List<String> is split list of String
 	 */
-	private List<String> extractListNameFilter(String name) {
+	private List<String> extractListNameFilter(String filterName) {
 		List<String> listName = new ArrayList<>();
-		if (!StringUtils.isNullOrEmpty(name)) {
-			String[] nameStringFilter = name.split(HaivisionConstant.COMMA);
+		if (!StringUtils.isNullOrEmpty(filterName)) {
+			String[] nameStringFilter = filterName.split(HaivisionConstant.COMMA);
 			for (String listNameItem : nameStringFilter) {
 				listName.add(listNameItem.trim());
 			}
