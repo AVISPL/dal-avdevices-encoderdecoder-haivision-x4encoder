@@ -470,22 +470,22 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS)).thenReturn(HaivisionURL.SYSTEM_INFO_STATUS.getUrl());
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		Assert.assertEquals("OK", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_STATUS.getName()));
-		Assert.assertEquals("HAI-031743040010", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.SERIAL_NUMBER.getName()));
-		Assert.assertEquals("-001G", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
-		Assert.assertEquals("0", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
-		Assert.assertEquals("A", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_REVISION.getName()));
-		Assert.assertEquals("4 (Official, Internal flash)", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CPL_REVISION.getName()));
+		Assert.assertEquals("OK", stats.get(SystemMonitoringMetric.CARD_STATUS.getName()));
+		Assert.assertEquals("HAI-031743040010", stats.get(SystemMonitoringMetric.SERIAL_NUMBER.getName()));
+		Assert.assertEquals("-001G", stats.get(SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
+		Assert.assertEquals("0", stats.get(SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
+		Assert.assertEquals("A", stats.get(SystemMonitoringMetric.HARDWARE_REVISION.getName()));
+		Assert.assertEquals("4 (Official, Internal flash)", stats.get(SystemMonitoringMetric.CPL_REVISION.getName()));
 		Assert.assertEquals("U-Boot 2018.01 (May 24 2019 - 18:24:54 -0400)",
-				stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.BOOT_VERSION.getName()));
-		Assert.assertEquals("Makito X4 SDI Encoder", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_TYPE.getName()));
-		Assert.assertEquals("B-MX4E-SDI4", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.PART_NUMBER.getName()));
-		Assert.assertEquals("Aug 24 2020", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_DATE.getName()));
-		Assert.assertEquals("1.2.0-14", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
-		Assert.assertEquals("None", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
-		Assert.assertEquals("0 days 21:51:28", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.UPTIME.getName()));
-		Assert.assertEquals("4", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CHIPSET_LOAD.getName()));
-		Assert.assertEquals("54", stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.TEMPERATURE.getName()));
+				stats.get(SystemMonitoringMetric.BOOT_VERSION.getName()));
+		Assert.assertEquals("Makito X4 SDI Encoder", stats.get(SystemMonitoringMetric.CARD_TYPE.getName()));
+		Assert.assertEquals("B-MX4E-SDI4", stats.get(SystemMonitoringMetric.PART_NUMBER.getName()));
+		Assert.assertEquals("Aug 24 2020", stats.get(SystemMonitoringMetric.FIRMWARE_DATE.getName()));
+		Assert.assertEquals("1.2.0-14", stats.get(SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
+		Assert.assertEquals("None", stats.get(SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
+		Assert.assertEquals("0 days 21:51:28", stats.get(SystemMonitoringMetric.UPTIME.getName()));
+		Assert.assertEquals("4", stats.get(SystemMonitoringMetric.CHIPSET_LOAD.getName()));
+		Assert.assertEquals("54", stats.get(SystemMonitoringMetric.TEMPERATURE.getName()));
 	}
 
 	/**
@@ -500,21 +500,21 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS)).thenReturn("/apis/status-empty-data");
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_STATUS.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.SERIAL_NUMBER.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_REVISION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CPL_REVISION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.BOOT_VERSION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_TYPE.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.PART_NUMBER.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_DATE.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.UPTIME.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CHIPSET_LOAD.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.TEMPERATURE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CARD_STATUS.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.SERIAL_NUMBER.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.HARDWARE_REVISION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CPL_REVISION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.BOOT_VERSION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CARD_TYPE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.PART_NUMBER.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_DATE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.UPTIME.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CHIPSET_LOAD.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.TEMPERATURE.getName()));
 	}
 
 	/**
@@ -530,21 +530,21 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS)).thenReturn("/apis/status-unknown-url");
 		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
 		Map<String, String> stats = extendedStatistics.getStatistics();
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_STATUS.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.SERIAL_NUMBER.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.HARDWARE_REVISION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CPL_REVISION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.BOOT_VERSION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CARD_TYPE.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.PART_NUMBER.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_DATE.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.UPTIME.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.CHIPSET_LOAD.getName()));
-		Assert.assertEquals(HaivisionConstant.NONE, stats.get(HaivisionURL.SYSTEM_INFO_STATUS.getName() + HaivisionConstant.HASH + SystemMonitoringMetric.TEMPERATURE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CARD_STATUS.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.SERIAL_NUMBER.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.HARDWARE_COMPATIBILITY.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.MEZZANINE_PRESENT.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.HARDWARE_REVISION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CPL_REVISION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.BOOT_VERSION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CARD_TYPE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.PART_NUMBER.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_DATE.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_VERSION.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.FIRMWARE_OPTIONS.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.UPTIME.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.CHIPSET_LOAD.getName()));
+		Assert.assertEquals(HaivisionConstant.NONE, stats.get(SystemMonitoringMetric.TEMPERATURE.getName()));
 	}
 
 	/**
@@ -4420,5 +4420,155 @@ class EncoderCommunicatorTest {
 		stats = extendedStatistics.getStatistics();
 		assertEquals("True", stats.get(editedName));
 		assertEquals(udpProtocolValue, stats.get(udpProtocol));
+	}
+
+	/**
+	 * Test audioFilter with id 1
+	 *
+	 * Expect filter successfully with audio 1
+	 */
+	@Test
+	void testFilterWithAudioId() throws Exception {
+		haivisionX4EncoderCommunicator.setAudioFilter("1");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_PTS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BYTES.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STC_SOURCE_INTERFACE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_ERRORS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BITRATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE.getName()));
+		Assert.assertEquals("Working", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STATE.getName()));
+		Assert.assertEquals("0x000000000", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_PTS.getName()));
+		Assert.assertEquals("0", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BYTES.getName()));
+		Assert.assertEquals("None", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STC_SOURCE_INTERFACE.getName()));
+		Assert.assertEquals("0", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_ERRORS.getName()));
+		Assert.assertEquals("0", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BITRATE.getName()));
+		Assert.assertEquals("0", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE.getName()));
+		Assert.assertEquals("0", stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE.getName()));
+	}
+
+	/**
+	 * Test audioFilter with id not exits
+	 *
+	 * Expect filter successfully with audio statistics is empty
+	 */
+	@Test
+	void testFilterWithAudioNotExits() throws Exception {
+		haivisionX4EncoderCommunicator.setAudioFilter("20");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_PTS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BYTES.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STC_SOURCE_INTERFACE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_ERRORS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BITRATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_PTS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BYTES.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.STC_SOURCE_INTERFACE.getName()));
+		Assert.assertNull( stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODER_ERRORS.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BITRATE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE.getName()));
+		Assert.assertNull(stats.get("Audio Encoder 1" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.MAX_SAMPLE_VALUE_PERCENTAGE.getName()));
+	}
+
+	/**
+	 * Test videoFilter with id 0
+	 *
+	 * Expect filter successfully with video 0
+	 */
+	@Test
+	void testFilterWithVideoId() throws Exception {
+		haivisionX4EncoderCommunicator.setVideoFilter("0");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertEquals("Working",
+				stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.STATE.getName()));
+		Assert.assertEquals("17 day(s) 13 hour(s) 4 minute(s) 5 second(s)",
+				stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.UPTIME.getName()));
+		Assert.assertEquals("1", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_PRESENT.getName()));
+		Assert.assertEquals("3840x2160p60", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT.getName()));
+		Assert.assertEquals("3840x2160p60", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_SHORT.getName()));
+		Assert.assertEquals("9223372052962009208", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_U64.getName()));
+		Assert.assertEquals("9223372052962009088",
+				stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_WITHOUT_FRAMERATE_U64.getName()));
+		Assert.assertEquals("true", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_DETAILED.getName()));
+		Assert.assertEquals("3840", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_WIDTH.getName()));
+		Assert.assertEquals("2160", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_HEIGHT.getName()));
+		Assert.assertEquals("60", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_FRAMERATE.getName()));
+		Assert.assertEquals("false", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_INTERLACED.getName()));
+		Assert.assertEquals("true", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_PROGRESSIVE.getName()));
+		Assert.assertEquals("1920x1080p", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION.getName()));
+		Assert.assertEquals("1920", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_WIDTH.getName()));
+		Assert.assertEquals("1080", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_HEIGHT.getName()));
+		Assert.assertEquals("0", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_FRAMERATE.getName()));
+		Assert.assertEquals("false", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_IS_INTERLACED.getName()));
+		Assert.assertEquals("true", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_IS_PROGRESSIVE.getName()));
+		Assert.assertEquals("16:9", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ASPECT_RATIO.getName()));
+		Assert.assertEquals("26406030", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_FRAMES_VIDEO.getName()));
+		Assert.assertEquals("0", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.DROPPED_FRAMERATE.getName()));
+		Assert.assertEquals("166222146368", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + AudioMonitoringMetric.ENCODED_BYTES.getName()));
+		Assert.assertEquals("60", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_FRAMERATE.getName()));
+		Assert.assertEquals("0", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODER_RESETS.getName()));
+		Assert.assertEquals("2954", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_BITRATE_VIDEO.getName()));
+		Assert.assertEquals("25", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODER_LOAD.getName()));
+		Assert.assertEquals("0", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.CLOSED_CAPTIONING.getName()));
+		Assert.assertEquals("None", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.CC_ERRORS.getName()));
+		Assert.assertEquals("None", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.EXTRACTED_CSD_BYTES.getName()));
+		Assert.assertEquals("None", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_COLOUR_PRIMARIES.getName()));
+		Assert.assertEquals("BT.709", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_COLOR_PRIMARIES.getName()));
+		Assert.assertEquals("BT.709", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_TRANSFER_CHARACTERISTICS.getName()));
+		Assert.assertEquals("BT.709", stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_MATRIX_COEFFICIENTS.getName()));
+	}
+
+	/**
+	 * Test videoFilter with id not exits
+	 *
+	 * Expect filter successfully with audio statistics is empty
+	 */
+	@Test
+	void testFilterWithVideoIdNotExits() throws Exception {
+		haivisionX4EncoderCommunicator.setVideoFilter("20");
+		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+		Map<String, String> stats = extendedStatistics.getStatistics();
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.STATE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.UPTIME.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_PRESENT.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_SHORT.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_U64.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_WITHOUT_FRAMERATE_U64.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_DETAILED.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_WIDTH.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_HEIGHT.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_FRAMERATE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_INTERLACED.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_FORMAT_IS_PROGRESSIVE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_WIDTH.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_HEIGHT.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_FRAMERATE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_IS_INTERLACED.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.RESOLUTION_IS_PROGRESSIVE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ASPECT_RATIO.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_FRAMES_VIDEO.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.DROPPED_FRAMERATE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_BYTES_VIDEO.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_FRAMERATE.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODER_RESETS.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODED_BITRATE_VIDEO.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.ENCODER_LOAD.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.CLOSED_CAPTIONING.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.CC_ERRORS.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.EXTRACTED_CSD_BYTES.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_COLOUR_PRIMARIES.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_TRANSFER_CHARACTERISTICS.getName()));
+		Assert.assertNull(stats.get("Video Encoder 0" + HaivisionConstant.SPACE + HaivisionConstant.STATISTICS + "#" + VideoMonitoringMetric.INPUT_MATRIX_COEFFICIENTS.getName()));
 	}
 }
