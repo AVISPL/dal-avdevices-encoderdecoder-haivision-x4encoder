@@ -41,30 +41,19 @@ import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.api.dal.monitor.Monitorable;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionURL;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.OutputMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.SystemMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.CreateOutputStreamMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoControllingMetric;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.VideoMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AlgorithmDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AspectRatioDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.AudioStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.BitRateDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChannelModeDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ChromaSubSampling;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CodecAlgorithm;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.CountingDropdown;
@@ -74,6 +63,7 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.EncryptionDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FrameRateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.FramingDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.InputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.LanguageDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.OutputStateDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.ProtocolDropdown;
@@ -88,9 +78,19 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.drop
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoInputDropdown;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dropdownlist.VideoStateDropdown;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.AudioResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.OutputResponseWrapper;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.SystemInfoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponse;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.VideoResponseWrapper;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.AudioStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
 import com.avispl.symphony.dal.communicator.RestCommunicator;
 import com.avispl.symphony.dal.util.StringUtils;
 
@@ -133,12 +133,14 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private String streamNameFilter;
 	private String portNumberFilter;
 	private String streamStatusFilter;
+	private String audioFilter;
+	private String videoFilter;
 	private String configManagement;
 
-	private final List<String> streamNameList = new ArrayList<>();
+	private List<String> streamNameList = new ArrayList<>();
 	private final List<Integer> portNumberList = new ArrayList<>();
 	private final List<String> portNumberRangeList = new ArrayList<>();
-	private final List<String> streamStatusList = new ArrayList<>();
+	private List<String> streamStatusList = new ArrayList<>();
 
 	private Map<String, AudioResponse> audioNameToAudioResponse = new HashMap<>();
 	private Map<String, VideoResponse> videoNameToVideoResponse = new HashMap<>();
@@ -238,6 +240,42 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
+	 * Retrieves {@code {@link #audioFilter}}
+	 *
+	 * @return value of {@link #audioFilter}
+	 */
+	public String getAudioFilter() {
+		return audioFilter;
+	}
+
+	/**
+	 * Sets {@code audioFilter}
+	 *
+	 * @param audioFilter the {@code java.lang.String} field
+	 */
+	public void setAudioFilter(String audioFilter) {
+		this.audioFilter = audioFilter;
+	}
+
+	/**
+	 * Retrieves {@code {@link #videoFilter}}
+	 *
+	 * @return value of {@link #videoFilter}
+	 */
+	public String getVideoFilter() {
+		return videoFilter;
+	}
+
+	/**
+	 * Sets {@code videoFilter}
+	 *
+	 * @param videoFilter the {@code java.lang.String} field
+	 */
+	public void setVideoFilter(String videoFilter) {
+		this.videoFilter = videoFilter;
+	}
+
+	/**
 	 * Retrieves {@code {@link #configManagement}}
 	 *
 	 * @return value of {@link #configManagement}
@@ -285,7 +323,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		if (localCreateOutputStream == null) {
 			localCreateOutputStream = new ExtendedStatistics();
 		}
-		
+
 		isConfigManagement = handleAdapterPropertyIsConfigManagementFromUser();
 		if (!isEmergencyDelivery) {
 			localExtendedStatistics = new ExtendedStatistics();
@@ -3362,9 +3400,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		try {
 			SystemInfoResponse responseData = doGet(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.SYSTEM_INFO_STATUS), SystemInfoResponse.class);
 			if (responseData != null) {
-				String name = HaivisionConstant.SYSTEM_INFO_STATUS;
 				for (SystemMonitoringMetric systemInfoMetric : SystemMonitoringMetric.values()) {
-					stats.put(name + HaivisionConstant.HASH + systemInfoMetric.getName(), checkForNullData(responseData.getValueByMetric(systemInfoMetric)));
+					stats.put(systemInfoMetric.getName(), checkForNullData(responseData.getValueByMetric(systemInfoMetric)));
 				}
 			} else {
 				contributeNoneValueForSystemInfo(stats);
@@ -3382,7 +3419,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void contributeNoneValueForSystemInfo(Map<String, String> stats) {
 		for (SystemMonitoringMetric systemInfoMetric : SystemMonitoringMetric.values()) {
-			stats.put(HaivisionConstant.SYSTEM_INFO_STATUS + HaivisionConstant.HASH + systemInfoMetric.getName(), HaivisionConstant.NONE);
+			stats.put(systemInfoMetric.getName(), HaivisionConstant.NONE);
 		}
 	}
 
@@ -3437,6 +3474,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * Filter the list of aggregated devices based on filter option in Adapter Properties
 	 */
 	private void getFilteredForEncoderStatistics() {
+		filterAudio();
+		filterVideo();
 		filterStreamName();
 		filterPortNumber();
 		filterStreamStatus();
@@ -3446,10 +3485,43 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
+	 * Filter by audio id
+	 */
+	private void filterAudio() {
+		List<String> audioNameList = extractListNameFilter(this.audioFilter);
+		if(!StringUtils.isNullOrEmpty(audioFilter) && !audioNameList.isEmpty()){
+			List<AudioResponse> newAudioResponseList = new ArrayList<>();
+			for (AudioResponse audioResponse : audioResponseList) {
+				if (audioNameList.contains(audioResponse.getId())) {
+					newAudioResponseList.add(audioResponse);
+				}
+			}
+			audioResponseList = newAudioResponseList;
+		}
+	}
+
+	/**
+	 * Filter by video id
+	 */
+	private void filterVideo() {
+		List<String> videoNameList = extractListNameFilter(this.videoFilter);
+		if(!StringUtils.isNullOrEmpty(videoFilter) && !videoNameList.isEmpty()){
+			List<VideoResponse> newVideoResponseList = new ArrayList<>();
+			for (VideoResponse videoResponse : videoResponseList) {
+				if (videoNameList.contains(videoResponse.getId())) {
+					newVideoResponseList.add(videoResponse);
+				}
+			}
+			videoResponseList = newVideoResponseList;
+		}
+	}
+
+	/**
 	 * Filter the name of Stream
 	 */
 	private void filterStreamName() {
-		extractStreamNameList(this.streamNameFilter);
+		streamNameList.clear();
+		streamNameList = extractListNameFilter(this.streamNameFilter);
 		if (!streamNameList.isEmpty()) {
 			for (String streamName : streamNameList) {
 				OutputResponse outputResponseFilter = null;
@@ -3515,7 +3587,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	private void filterStreamStatus() {
 		Set<OutputResponse> outputStreamStatusFilterList = new HashSet<>();
-		extractStreamStatus(this.streamStatusFilter);
+		streamStatusList.clear();
+		streamStatusList = extractListNameFilter(this.streamStatusFilter);
 		if (!streamStatusList.isEmpty()) {
 			Map<Integer, String> stateMap = OutputStateDropdown.getNameToValueMap();
 			for (String streamStatus : streamStatusList) {
@@ -3542,20 +3615,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 		if (streamStatusList.isEmpty() && !outputForPortAndStatusList.isEmpty()) {
 			outputStatisticsList.addAll(outputForPortAndStatusList);
-		}
-	}
-
-	/**
-	 * Get streamName list from the streamNameFilter string
-	 *
-	 * @param streamName the portNumber is the name of stream
-	 */
-	private void extractStreamNameList(String streamName) {
-		if (!StringUtils.isNullOrEmpty(streamName)) {
-			String[] streamNameListString = streamName.split(HaivisionConstant.COMMA);
-			for (String streamNameItem : streamNameListString) {
-				streamNameList.add(streamNameItem.trim());
-			}
 		}
 	}
 
@@ -3587,17 +3646,20 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	/**
-	 * Get streamStatus list from the streamStatusFilter string
+	 * Get list name by adapter filter
 	 *
-	 * @param streamStatus the streamStatus is the state of stream
+	 * @param filterName the name is name of filter
+	 * @return List<String> is split list of String
 	 */
-	private void extractStreamStatus(String streamStatus) {
-		if (!StringUtils.isNullOrEmpty(streamStatus)) {
-			String[] streamNameFilterString = streamStatusFilter.split(HaivisionConstant.COMMA);
-			for (String portNumberItem : streamNameFilterString) {
-				streamStatusList.add(portNumberItem.trim());
+	private List<String> extractListNameFilter(String filterName) {
+		List<String> listName = new ArrayList<>();
+		if (!StringUtils.isNullOrEmpty(filterName)) {
+			String[] nameStringFilter = filterName.split(HaivisionConstant.COMMA);
+			for (String listNameItem : nameStringFilter) {
+				listName.add(listNameItem.trim());
 			}
 		}
+		return listName;
 	}
 
 	/**
