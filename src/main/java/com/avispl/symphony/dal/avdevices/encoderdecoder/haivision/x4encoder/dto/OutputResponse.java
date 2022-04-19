@@ -10,9 +10,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.audio.Audio;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputDeserializer;
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputStatistic;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.Video;
-import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.output.OutputSAP;
 import com.avispl.symphony.dal.util.StringUtils;
 
 /**
@@ -49,6 +49,7 @@ public class OutputResponse {
 	private String passphrase;
 	private String srtListenerSecondPort;
 	private String srtRedundancyMode;
+	private String fecRtp;
 	private OutputStatistic outputStatistic;
 
 	/**
@@ -484,36 +485,61 @@ public class OutputResponse {
 	}
 
 	/**
+	 * Retrieves {@code {@link #fecRtp}}
+	 *
+	 * @return value of {@link #fecRtp}
+	 */
+	public String getFecRtp() {
+		return fecRtp;
+	}
+
+	/**
+	 * Sets {@code fecRtp}
+	 *
+	 * @param fecRtp the {@code java.lang.String} field
+	 */
+	public void setFecRtp(String fecRtp) {
+		this.fecRtp = fecRtp;
+	}
+
+	/**
 	 * Convert OutputResponse
 	 *
 	 * @return payLoad the payload is String by OutputResponse
 	 */
 	public String retrieveOutputResponsePayloadData() {
 		StringBuilder audioPayload = new StringBuilder();
+		StringBuilder videoPayload = new StringBuilder();
+		String passphraseValue = "";
+		String fecRtpValue = "";
+		String srtRedundancyModeValue = "";
+		String encKeyLengthValue = "";
 		audioPayload.append("[");
 		if (audio.size() > 0) {
 			for (Audio audioItem : audio) {
 				audioPayload.append("{\"id\":\"" + audioItem.getId() + "\"}");
-				if (!audioItem.equals(audio.get(audio.size()-1))) {
+				if (!audioItem.equals(audio.get(audio.size() - 1))) {
 					audioPayload.append(",");
 				}
 			}
 		}
 		audioPayload.append("]");
-
-		StringBuilder videoPayload = new StringBuilder();
 		videoPayload.append("[");
 		if (video.size() > 0) {
 			videoPayload.append("{\"id\":\"" + video.get(0).getId() + "\"}");
 		}
 		videoPayload.append("]");
-		String srtRedundancyModeValue = "";
 		if (!StringUtils.isNullOrEmpty(srtRedundancyMode)) {
 			srtRedundancyModeValue = ",\"srtRedundancyMode\":\"" + srtRedundancyMode + "\"";
 		}
-		String passphraseValue = "";
-		if(!HaivisionConstant.ZERO.equals(encryption) && !StringUtils.isNullOrEmpty(passphrase)){
+		if (!HaivisionConstant.ZERO.equals(encryption) && !StringUtils.isNullOrEmpty(passphrase)) {
 			passphraseValue = ",\"passphrase\":\"" + passphrase + "\"";
+		}
+		if (fecRtp != null) {
+			fecRtpValue = ",\"fecRtp\":\"\"";
+		}
+		if (encryption != null) {
+			encKeyLengthValue = ",\"encKeyLength\":\"" + encryption + "\"";
 		}
 		return "{" +
 				"\"id\":\"" + id + "\"" +
@@ -534,10 +560,11 @@ public class OutputResponse {
 				",\"sourcePort\":\"" + sourcePort + "\"" +
 				",\"adaptive\":\"" + adaptive + "\"" +
 				",\"latency\":\"" + latency + "\"" +
-				",\"encKeyLength\":\"" + encryption + "\"" +
-				 passphraseValue +
 				",\"srtListenerSecondPort\":\"" + srtListenerSecondPort + "\"" +
-				 srtRedundancyModeValue +
+				encKeyLengthValue +
+				passphraseValue +
+				srtRedundancyModeValue +
+				fecRtpValue +
 				'}';
 	}
 }

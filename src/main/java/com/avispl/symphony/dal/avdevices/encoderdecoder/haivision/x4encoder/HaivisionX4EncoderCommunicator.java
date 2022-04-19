@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -1815,12 +1815,15 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			address = connectionAddress;
 		}
 		if (StringUtils.isNullOrEmpty(address)) {
-			if (!ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) || ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulationName) && !SRTModeDropdown.LISTENER.getName()
-					.equals(srtModeName)){
+			if (!ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulation) || ProtocolDropdown.TS_OVER_SRT.getName().equals(encapsulation) && !SRTModeDropdown.LISTENER.getName()
+					.equals(srtModeName)) {
 				throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 			}
 		} else {
 			outputItem.setSrtRedundancyMode(HaivisionConstant.ZERO);
+		}
+		if (ProtocolDropdown.TS_OVER_RTP.getName().equals(encapsulation)) {
+			outputItem.setFecRtp(HaivisionConstant.EMPTY_STRING);
 		}
 		outputItem.setAddress(address);
 		outputItem.setMtu(mtu);
@@ -1895,6 +1898,9 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			throw new ResourceNotReachableException("Can't edit stream output encoder, Please enter a address name");
 		} else {
 			outputResponseItem.setSrtRedundancyMode(HaivisionConstant.ZERO);
+		}
+		if (ProtocolDropdown.TS_OVER_RTP.getName().equals(protocolName)) {
+			outputResponseItem.setFecRtp(HaivisionConstant.EMPTY_STRING);
 		}
 		String portSAP = outputSAP.getPort();
 		if (HaivisionConstant.NONE.equals(portSAP)) {
