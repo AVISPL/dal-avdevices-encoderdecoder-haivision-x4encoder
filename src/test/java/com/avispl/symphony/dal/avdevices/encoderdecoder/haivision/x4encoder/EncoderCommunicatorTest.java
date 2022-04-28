@@ -91,7 +91,7 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
 		haivisionX4EncoderCommunicator = new HaivisionX4EncoderCommunicator();
-		haivisionX4EncoderCommunicator.setConfigManagement("True");
+//		haivisionX4EncoderCommunicator.setConfigManagement("True");
 		haivisionX4EncoderCommunicator.setTrustAllCertificates(false);
 		haivisionX4EncoderCommunicator.setProtocol(PROTOCOL);
 		haivisionX4EncoderCommunicator.setPort(wireMockRule.port());
@@ -4357,29 +4357,29 @@ class EncoderCommunicatorTest {
 		assertNull(stats.get(editedName));
 	}
 
-	/**
-	 * Test config management is false
-	 *
-	 * Expect controlling data is null
-	 */
-	@Test
-	void testConfigManagementIsFalse() throws Exception {
-		haivisionX4EncoderCommunicator.setConfigManagement("False");
-		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
-		assertEquals(0, extendedStatistics.getControllableProperties().size());
-	}
-
-	/**
-	 * Test config management is true
-	 *
-	 * Expect controlling data different empty
-	 */
-	@Test
-	void testConfigManagementIsTrue() throws Exception {
-		haivisionX4EncoderCommunicator.setConfigManagement("true");
-		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
-		assertEquals(123, extendedStatistics.getControllableProperties().size());
-	}
+//	/**
+//	 * Test config management is false
+//	 *
+//	 * Expect controlling data is null
+//	 */
+//	@Test
+//	void testConfigManagementIsFalse() throws Exception {
+//		haivisionX4EncoderCommunicator.setConfigManagement("False");
+//		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+//		assertEquals(0, extendedStatistics.getControllableProperties().size());
+//	}
+//
+//	/**
+//	 * Test config management is true
+//	 *
+//	 * Expect controlling data different empty
+//	 */
+//	@Test
+//	void testConfigManagementIsTrue() throws Exception {
+//		haivisionX4EncoderCommunicator.setConfigManagement("true");
+//		ExtendedStatistics extendedStatistics = (ExtendedStatistics) haivisionX4EncoderCommunicator.getMultipleStatistics().get(0);
+//		assertEquals(123, extendedStatistics.getControllableProperties().size());
+//	}
 
 	/**
 	 * Test edit stream with protocol is UDP and SRT
