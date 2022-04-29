@@ -91,6 +91,7 @@ class EncoderCommunicatorTest {
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION)).thenReturn(HaivisionURL.AUTHENTICATION.getUrl());
 		mock.when(() -> HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.OUTPUT_ENCODER)).thenReturn(HaivisionURL.OUTPUT_ENCODER.getUrl());
 		haivisionX4EncoderCommunicator = new HaivisionX4EncoderCommunicator();
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		haivisionX4EncoderCommunicator.setConfigManagement("True");
 		haivisionX4EncoderCommunicator.setTrustAllCertificates(false);
 		haivisionX4EncoderCommunicator.setProtocol(PROTOCOL);
@@ -4357,6 +4358,7 @@ class EncoderCommunicatorTest {
 		assertNull(stats.get(editedName));
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Test config management is false
 //	 *
