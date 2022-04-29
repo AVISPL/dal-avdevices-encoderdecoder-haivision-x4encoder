@@ -7,7 +7,6 @@ package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
-//import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,8 +18,6 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
-
-//import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.swing.text.html.HTMLDocument;
@@ -32,13 +29,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
 import com.avispl.symphony.api.dal.control.Controller;
-//import com.avispl.symphony.api.dal.dto.control.AdvancedControllableProperty;
 import com.avispl.symphony.api.dal.dto.control.ControllableProperty;
 import com.avispl.symphony.api.dal.dto.monitor.ExtendedStatistics;
 import com.avispl.symphony.api.dal.dto.monitor.Statistics;
 import com.avispl.symphony.api.dal.error.ResourceNotReachableException;
 import com.avispl.symphony.api.dal.monitor.Monitorable;
-//import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioControllingMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.AudioMonitoringMetric;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionConstant;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.common.HaivisionStatisticsUtil;
@@ -89,15 +84,17 @@ import com.avispl.symphony.dal.util.StringUtils;
 public class HaivisionX4EncoderCommunicator extends RestCommunicator implements Monitorable, Controller {
 
 	private String sessionID;
-//	private String roleBased;
 	private boolean isAdapterFilter;
 	private Integer countMonitoringNumber = null;
 	private ExtendedStatistics localExtendedStatistics;
-//	private ExtendedStatistics localCreateOutputStream;
 	private Map<String, String> failedMonitor = new HashMap<>();
+
+//  ToDo: comment out controlling capabilities, filtering and config management
+//	private ExtendedStatistics localCreateOutputStream;
 //	private boolean isEmergencyDelivery;
 //	private boolean isCreateStreamCalled;
 //	private boolean isConfigManagement;
+//	private String roleBased;
 
 	private final String uuidDay = UUID.randomUUID().toString().replace(HaivisionConstant.DASH, "");
 
@@ -107,6 +104,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private String streamStatusFilter;
 	private String audioFilter;
 	private String videoFilter;
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	private String configManagement;
 
 	private List<String> streamNameList = new ArrayList<>();
@@ -116,11 +115,13 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	private Map<String, AudioResponse> audioNameToAudioResponse = new HashMap<>();
 	private Map<String, VideoResponse> videoNameToVideoResponse = new HashMap<>();
+	private Map<String, String> audioIdToName = new HashMap<>();
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	private Map<String, OutputResponse> streamNameToStreamResponse = new HashMap<>();
 //	private Map<String, Map<String, Audio>> sourceAudioResponse = new HashMap<>();
 //	private Map<String, Audio> sourceAudio = new HashMap<>();
 //	private Map<String, String> localStatsStreamOutput = new HashMap<>();
-	private Map<String, String> audioIdToName = new HashMap<>();
 
 	/**
 	 * List of audio statistics filter
@@ -247,6 +248,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		this.videoFilter = videoFilter;
 	}
 
+//ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Retrieves {@code {@link #configManagement}}
 //	 *
@@ -280,33 +282,44 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 		ExtendedStatistics extendedStatistics = new ExtendedStatistics();
 		Map<String, String> stats = new HashMap<>();
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		Map<String, String> statsCreateOutputStream = new HashMap<>();
 //		List<AdvancedControllableProperty> advancedControllableProperties = new ArrayList<>();
 
 		if (sessionID == null) {
 			if (!StringUtils.isNullOrEmpty(getPassword()) && !StringUtils.isNullOrEmpty(getLogin())) {
 				sessionID = retrieveSessionID();
+//  ToDo: comment out controlling capabilities, filtering and config management
 //				roleBased = retrieveUserRole();
 			} else {
 				sessionID = HaivisionConstant.AUTHORIZED;
 			}
 		}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		if (localCreateOutputStream == null) {
 //			localCreateOutputStream = new ExtendedStatistics();
 //		}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		isConfigManagement = handleAdapterPropertyIsConfigManagementFromUser();
 //		if (!isEmergencyDelivery) {
 			localExtendedStatistics = new ExtendedStatistics();
 			isAdapterFiltering();
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //			populateInformationFromDevice(stats, advancedControllableProperties);
 			populateInformationFromDevice(stats);
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //			if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
 //				extendedStatistics.setControllableProperties(advancedControllableProperties);
 //			}
 			extendedStatistics.setStatistics(stats);
 			localExtendedStatistics = extendedStatistics;
+
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		}
 //
 //		if (HaivisionConstant.ADMIN.equals(roleBased) || HaivisionConstant.OPERATOR.equals(roleBased) && !isCreateStreamCalled && isConfigManagement) {
@@ -317,7 +330,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 //			localStatsStreamOutput.putAll(statsCreateOutputStream);
 //			isCreateStreamCalled = true;
 //		}
-
 //		if (isCreateStreamCalled && isConfigManagement) {
 //			stats.putAll(localCreateOutputStream.getStatistics());
 //			Map<String, String> currentStat = localExtendedStatistics.getStatistics();
@@ -343,6 +355,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			logger.debug("controlProperty property" + property);
 			logger.debug("controlProperty value" + value);
 		}
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		if (localStatsStreamOutput == null || localCreateOutputStream == null) {
 //			return;
 //		}
@@ -404,6 +417,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		return super.putExtraRequestHeaders(httpMethod, uri, headers);
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Control Audio encoder
 //	 *
@@ -2168,6 +2182,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Retrieve data and add to stats
 	 */
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	private void populateInformationFromDevice(Map<String, String> stats, List<AdvancedControllableProperty> advancedControllableProperties) {
 	private void populateInformationFromDevice(Map<String, String> stats) {
 		for (HaivisionURL haivisionURL : HaivisionURL.values()) {
@@ -2191,14 +2206,17 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		getFilteredForEncoderStatistics();
 		for (HaivisionURL haivisionURL : HaivisionURL.values()) {
 			if (HaivisionURL.AUDIO_ENCODER.equals(haivisionURL)) {
+//  ToDo: comment out controlling capabilities, filtering and config management
 //				populateAudioData(stats, advancedControllableProperties);
 				populateAudioData(stats);
 			}
 			if (HaivisionURL.VIDEO_ENCODER.equals(haivisionURL)) {
+//  ToDo: comment out controlling capabilities, filtering and config management
 //				populateVideoData(stats, advancedControllableProperties);
 				populateVideoData(stats);
 			}
 			if (HaivisionURL.OUTPUT_ENCODER.equals(haivisionURL)) {
+//  ToDo: comment out controlling capabilities, filtering and config management
 //				populateOutputData(stats, advancedControllableProperties);
 				populateOutputData(stats);
 			}
@@ -2233,6 +2251,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Add audio data to statistics property
 //	 *
@@ -2319,6 +2338,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		return value.replace(HaivisionConstant.COMMA, HaivisionConstant.EMPTY_STRING);
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Add audio data to statistics property
 //	 *
@@ -2719,6 +2739,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 				addVideoDataStatisticsToStatisticsProperty(stats, videoResponses);
 			}
 		}
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		if ((HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) && isConfigManagement) {
 //			for (VideoResponse videoResponse : videoResponseList) {
 //				addVideoDataControlToProperty(stats, videoResponse, advancedControllableProperties);
@@ -2760,6 +2781,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Add output data to statistics property
 //	 *
@@ -2785,6 +2807,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			}
 			outputResponseControlList.addAll(outputResponseList);
 		}
+//  ToDo: comment out controlling capabilities, filtering and config management
 //		if ((HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) && isConfigManagement) {
 //			sourceAudioResponse.clear();
 //			streamNameToStreamResponse.clear();
@@ -2813,6 +2836,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 //		}
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Add Output Stream data to property
 //	 *
@@ -3387,6 +3411,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		}
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * Retrieve output stream encoder by id
 //	 *
@@ -3755,6 +3780,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		return countMonitoringMetric;
 	}
 
+//  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * This method is used to retrieve User Role by send GET request to http://{IP_Address}/apis/accounts/{username}
 //	 *
