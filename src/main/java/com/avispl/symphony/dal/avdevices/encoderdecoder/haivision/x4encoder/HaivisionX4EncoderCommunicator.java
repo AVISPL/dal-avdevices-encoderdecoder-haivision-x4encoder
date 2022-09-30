@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.statistics.DynamicStatisticsDefinitions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
@@ -186,6 +187,29 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	private List<OutputResponse> outputResponseList = new ArrayList<>();
 
 	/**
+	 * Configurable property for historical properties, comma separated values
+	 * */
+	private String historicalProperties;
+
+	/**
+	 * Retrieves {@link #historicalProperties}
+	 *
+	 * @return value of {@link #historicalProperties}
+	 */
+	public String getHistoricalProperties() {
+		return historicalProperties;
+	}
+
+	/**
+	 * Sets {@link #historicalProperties} value
+	 *
+	 * @param historicalProperties new value of {@link #historicalProperties}
+	 */
+	public void setHistoricalProperties(String historicalProperties) {
+		this.historicalProperties = historicalProperties;
+	}
+
+	/**
 	 * Retrieves {@code {@link #streamNameFilter}}
 	 *
 	 * @return value of {@link #streamNameFilter}
@@ -332,7 +356,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 			if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
 				extendedStatistics.setControllableProperties(advancedControllableProperties);
 			}
-			extendedStatistics.setStatistics(stats);
+			provisionTypedStatistics(stats, extendedStatistics);
 			localExtendedStatistics = extendedStatistics;
 		}
 
@@ -4613,5 +4637,27 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 */
 	public boolean handleAdapterPropertyIsConfigManagementFromUser() {
 		return !StringUtils.isNullOrEmpty(configManagement) && HaivisionConstant.TRUE.equalsIgnoreCase(configManagement);
+	}
+
+	/**
+	 * Add a property as a regular statistics property, or as dynamic one, based on the {@link #historicalProperties} configuration
+	 * and DynamicStatisticsDefinitions static definitions.
+	 *
+	 * @param statistics map of all device properties
+	 * @param extendedStatistics device statistics object
+	 * */
+	private void provisionTypedStatistics(Map<String, String> statistics, ExtendedStatistics extendedStatistics) {
+		Map<String, String> dynamicStatistics = new HashMap<>();
+		Map<String, String> staticStatistics = new HashMap<>();
+		statistics.forEach((s, s2) -> {
+			if (!StringUtils.isNullOrEmpty(historicalProperties) && historicalProperties.contains(s)
+					&& DynamicStatisticsDefinitions.checkIfExists(s)) {
+				dynamicStatistics.put(s, s2);
+			} else {
+				staticStatistics.put(s, s2);
+			}
+		});
+		extendedStatistics.setDynamicStatistics(dynamicStatistics);
+		extendedStatistics.setStatistics(staticStatistics);
 	}
 }
