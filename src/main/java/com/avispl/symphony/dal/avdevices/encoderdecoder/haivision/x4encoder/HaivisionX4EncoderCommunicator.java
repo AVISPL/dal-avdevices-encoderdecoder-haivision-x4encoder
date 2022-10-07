@@ -180,7 +180,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	/**
 	 * Configurable property for historical properties, comma separated values kept as set
 	 * */
-	private Set<String> historicalProperties;
+	private Set<String> historicalProperties = new HashSet<>();
 
 	/**
 	 * Retrieves {@link #historicalProperties}
