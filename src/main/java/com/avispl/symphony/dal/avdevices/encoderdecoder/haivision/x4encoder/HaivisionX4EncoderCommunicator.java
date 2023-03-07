@@ -5,6 +5,7 @@
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.statistics.DynamicStatisticsDefinitions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
@@ -157,6 +159,32 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	 * List of audio Response
 	 */
 	private List<OutputResponse> outputResponseList = new ArrayList<>();
+
+	/**
+	 * Configurable property for historical properties, comma separated values kept as set
+	 * */
+	private Set<String> historicalProperties = new HashSet<>();
+
+	/**
+	 * Retrieves {@link #historicalProperties}
+	 *
+	 * @return value of {@link #historicalProperties}
+	 */
+	public String getHistoricalProperties() {
+		return String.join(",", this.historicalProperties);
+	}
+
+	/**
+	 * Sets {@link #historicalProperties} value
+	 *
+	 * @param historicalProperties new value of {@link #historicalProperties}
+	 */
+	public void setHistoricalProperties(String historicalProperties) {
+		this.historicalProperties.clear();
+		Arrays.asList(historicalProperties.split(",")).forEach(propertyName -> {
+			this.historicalProperties.add(propertyName.trim());
+		});
+	}
 
 	/**
 	 * Retrieves {@code {@link #streamNameFilter}}
@@ -316,7 +344,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 //			if (HaivisionConstant.OPERATOR.equals(roleBased) || HaivisionConstant.ADMIN.equals(roleBased)) {
 //				extendedStatistics.setControllableProperties(advancedControllableProperties);
 //			}
-		extendedStatistics.setStatistics(stats);
+		provisionTypedStatistics(stats, extendedStatistics);
 		localExtendedStatistics = extendedStatistics;
 
 //  ToDo: comment out controlling capabilities, filtering and config management
@@ -3780,6 +3808,36 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		return countMonitoringMetric;
 	}
 
+	/**
+	 * Add a property as a regular statistics property, or as dynamic one, based on the {@link #historicalProperties} configuration
+	 * and DynamicStatisticsDefinitions static definitions.
+	 *
+	 * @param statistics map of all device properties
+	 * @param extendedStatistics device statistics object
+	 * */
+	private void provisionTypedStatistics(Map<String, String> statistics, ExtendedStatistics extendedStatistics) {
+		Map<String, String> dynamicStatistics = new HashMap<>();
+		Map<String, String> staticStatistics = new HashMap<>();
+		statistics.forEach((propertyName, propertyValue) -> {
+			// To ignore the group properties are in, we need to split it
+			// whenever there's a hash involved and take the 2nd part
+			boolean propertyListed = false;
+			if (!historicalProperties.isEmpty()) {
+				if (propertyName.contains(HaivisionConstant.HASH)) {
+					propertyListed = historicalProperties.contains(propertyName.split(HaivisionConstant.HASH)[1]);
+				} else {
+					propertyListed = historicalProperties.contains(propertyName);
+				}
+			}
+			if (propertyListed && DynamicStatisticsDefinitions.checkIfExists(propertyName)) {
+				dynamicStatistics.put(propertyName, propertyValue);
+			} else {
+				staticStatistics.put(propertyName, propertyValue);
+			}
+		});
+		extendedStatistics.setDynamicStatistics(dynamicStatistics);
+		extendedStatistics.setStatistics(staticStatistics);
+	}
 //  ToDo: comment out controlling capabilities, filtering and config management
 //	/**
 //	 * This method is used to retrieve User Role by send GET request to http://{IP_Address}/apis/accounts/{username}

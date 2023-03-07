@@ -47,7 +47,7 @@ public enum VideoMonitoringMetric {
 	INPUT_COLOUR_PRIMARIES("InputColourPrimaries"),
 	INPUT_TRANSFER_CHARACTERISTICS("InputTransferCharacteristics"),
 	INPUT_MATRIX_COEFFICIENTS("InputMatrixCoefficients"),
-	OCCURRED("Occurred");;
+	OCCURRED("Occurred");
 
 	private final String name;
 
