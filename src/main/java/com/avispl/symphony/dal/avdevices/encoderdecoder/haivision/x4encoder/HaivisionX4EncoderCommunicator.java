@@ -1,9 +1,10 @@
 /*
- *  * Copyright (c) 2022 AVI-SPL, Inc. All Rights Reserved.
+ *  * Copyright (c) 2022-2025 AVI-SPL, Inc. All Rights Reserved.
  */
 
 package com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -19,16 +20,12 @@ import java.util.UUID;
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.statistics.DynamicStatisticsDefinitions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.CollectionUtils;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 
 import com.avispl.symphony.api.dal.control.Controller;
 import com.avispl.symphony.api.dal.dto.control.ControllableProperty;
@@ -62,6 +59,7 @@ import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.
 import com.avispl.symphony.dal.avdevices.encoderdecoder.haivision.x4encoder.dto.video.VideoStatistic;
 import com.avispl.symphony.dal.communicator.RestCommunicator;
 import com.avispl.symphony.dal.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * An implementation of RestCommunicator to provide communication and interaction with Haivision Makito X4 Encoders
@@ -84,6 +82,37 @@ import com.avispl.symphony.dal.util.StringUtils;
  */
 
 public class HaivisionX4EncoderCommunicator extends RestCommunicator implements Monitorable, Controller {
+	/**
+	 * API header interceptor instance
+	 * @since 1.1.1
+	 * */
+	private ClientHttpRequestInterceptor haivisionInterceptor = new HaivisionX4EncoderInterceptor();
+
+	/**
+	 * HttpRequest interceptor to intercept cookie header and further use it for authentication
+	 *
+	 * @author Maksym.Rossiitsev/Symphony Team
+	 * @since 1.1.1
+	 * */
+	class HaivisionX4EncoderInterceptor implements ClientHttpRequestInterceptor {
+		@Override
+		public ClientHttpResponse intercept(org.springframework.http.HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+
+			ClientHttpResponse response = execution.execute(request, body);
+
+			if (request.getURI().getPath().contains(HaivisionURL.AUTHENTICATION.getUrl())) {
+				HttpHeaders headers = response.getHeaders();
+				String sessionId = headers.getFirst(HaivisionConstant.SET_COOKIE);
+				if (StringUtils.isNotNullOrEmpty(sessionId)) {
+					sessionID = sessionId;
+				} else {
+					sessionID = HaivisionConstant.AUTHORIZED;
+					throw new ResourceNotReachableException(HaivisionConstant.ERR_RETRIEVE_SESSION);
+				}
+			}
+			return response;
+		}
+	}
 
 	private String sessionID;
 	private boolean isAdapterFilter;
@@ -317,7 +346,7 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 		if (sessionID == null) {
 			if (!StringUtils.isNullOrEmpty(getPassword()) && !StringUtils.isNullOrEmpty(getLogin())) {
-				sessionID = retrieveSessionID();
+				authenticate();
 //  ToDo: comment out controlling capabilities, filtering and config management
 //				roleBased = retrieveUserRole();
 			} else {
@@ -376,6 +405,17 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 	}
 
 	@Override
+	protected RestTemplate obtainRestTemplate() throws Exception {
+		RestTemplate restTemplate = super.obtainRestTemplate();
+		List<ClientHttpRequestInterceptor> restTemplateInterceptors = restTemplate.getInterceptors();
+
+		if (!restTemplateInterceptors.contains(haivisionInterceptor))
+			restTemplateInterceptors.add(haivisionInterceptor);
+
+		return restTemplate;
+	}
+
+	@Override
 	public void controlProperty(ControllableProperty controllableProperty) throws Exception {
 		String property = controllableProperty.getProperty();
 		String value = String.valueOf(controllableProperty.getValue());
@@ -428,7 +468,10 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 
 	@Override
 	protected void authenticate() throws Exception {
-		//TODO
+		Map<String, String> request = new HashMap<>();
+		request.put(HaivisionConstant.USER_NAME, getLogin());
+		request.put(HaivisionConstant.PASSWORD, getPassword());
+		doPost(this.buildPathToLogin(), request);
 	}
 
 	/**
@@ -2160,38 +2203,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 //	}
 
 	/**
-	 * Retrieve SessionID from the Device
-	 *
-	 * @return sessionId of the device
-	 * @throws Exception if get sessionID failed
-	 */
-	private String retrieveSessionID() throws Exception {
-		HttpClient client = this.obtainHttpClient(true);
-
-		StringBuilder stringBuilder = new StringBuilder();
-		HttpPost httpPost = new HttpPost(this.buildPathToLogin());
-
-		ObjectNode request = JsonNodeFactory.instance.objectNode();
-		request.put(HaivisionConstant.USER_NAME, getLogin());
-		request.put(HaivisionConstant.PASSWORD, getPassword());
-
-		StringEntity entity = new StringEntity(request.toString());
-		httpPost.setEntity(entity);
-		HttpResponse response = null;
-		try {
-			response = client.execute(httpPost);
-			Header headers = response.getFirstHeader(HaivisionConstant.SET_COOKIE);
-			if (headers == null) {
-				throw new ResourceNotReachableException("Login to the device failed,user unauthorized");
-			}
-			stringBuilder.append(headers.getValue());
-			return stringBuilder.toString();
-		} catch (Exception e) {
-			throw new ResourceNotReachableException(e.getMessage());
-		}
-	}
-
-	/**
 	 * Build full path to login for the device
 	 *
 	 * @return String full path of the device
@@ -2200,8 +2211,6 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.getProtocol()).append(HaivisionConstant.COLON_SLASH);
 		stringBuilder.append(getHost());
-		stringBuilder.append(HaivisionConstant.COLON);
-		stringBuilder.append(getPort());
 		stringBuilder.append(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION));
 
 		return stringBuilder.toString();
