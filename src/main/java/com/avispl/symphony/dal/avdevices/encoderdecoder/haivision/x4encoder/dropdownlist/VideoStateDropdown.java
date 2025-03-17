@@ -61,7 +61,7 @@ public enum VideoStateDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (VideoStateDropdown stateOutputDropdown : VideoStateDropdown.values()) {
+		for (VideoStateDropdown stateOutputDropdown : values()) {
 			nameToValue.put(stateOutputDropdown.getValue(), stateOutputDropdown.getName());
 		}
 		return nameToValue;

@@ -64,7 +64,7 @@ public enum OutputStateDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (OutputStateDropdown stateDropdown : OutputStateDropdown.values()) {
+		for (OutputStateDropdown stateDropdown : values()) {
 			nameToValue.put(stateDropdown.getValue(), stateDropdown.getName());
 		}
 		return nameToValue;

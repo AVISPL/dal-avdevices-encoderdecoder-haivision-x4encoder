@@ -65,7 +65,7 @@ public enum VideoControllingMetric {
 	 * @throws Exception if can not find the enum with name
 	 */
 	public static VideoControllingMetric getByName(String name) {
-		for (VideoControllingMetric metric : VideoControllingMetric.values()) {
+		for (VideoControllingMetric metric : values()) {
 			if (metric.getName().equals(name)) {
 				return metric;
 			}

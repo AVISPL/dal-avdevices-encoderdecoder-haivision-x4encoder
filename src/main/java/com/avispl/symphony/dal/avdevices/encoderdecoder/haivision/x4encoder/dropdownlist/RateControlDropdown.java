@@ -58,7 +58,7 @@ public enum RateControlDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (RateControlDropdown rateControlDropdown : RateControlDropdown.values()) {
+		for (RateControlDropdown rateControlDropdown : values()) {
 			nameToValue.put(rateControlDropdown.getValue(), rateControlDropdown.getName());
 		}
 		return nameToValue;
@@ -71,7 +71,7 @@ public enum RateControlDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (RateControlDropdown rateControlDropdown : RateControlDropdown.values()) {
+		for (RateControlDropdown rateControlDropdown : values()) {
 			valueToName.put(rateControlDropdown.getName(), rateControlDropdown.getValue());
 		}
 		return valueToName;

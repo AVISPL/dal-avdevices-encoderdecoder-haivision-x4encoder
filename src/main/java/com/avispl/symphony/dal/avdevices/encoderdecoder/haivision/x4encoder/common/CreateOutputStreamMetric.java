@@ -78,7 +78,7 @@ public enum CreateOutputStreamMetric {
 	 * @throws Exception if can not find the enum with name
 	 */
 	public static CreateOutputStreamMetric getByName(String name) {
-		for (CreateOutputStreamMetric metric : CreateOutputStreamMetric.values()) {
+		for (CreateOutputStreamMetric metric : values()) {
 			if (metric.getName().equals(name)) {
 				return metric;
 			}

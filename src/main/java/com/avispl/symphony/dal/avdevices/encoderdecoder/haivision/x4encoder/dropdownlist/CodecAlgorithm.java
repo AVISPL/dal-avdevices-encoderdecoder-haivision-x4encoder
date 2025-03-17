@@ -57,7 +57,7 @@ public enum CodecAlgorithm {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (CodecAlgorithm codecAlgorithmDropdown : CodecAlgorithm.values()) {
+		for (CodecAlgorithm codecAlgorithmDropdown : values()) {
 			nameToValue.put(codecAlgorithmDropdown.getValue(), codecAlgorithmDropdown.getName());
 		}
 		return nameToValue;
@@ -70,7 +70,7 @@ public enum CodecAlgorithm {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (CodecAlgorithm codecAlgorithmDropdown : CodecAlgorithm.values()) {
+		for (CodecAlgorithm codecAlgorithmDropdown : values()) {
 			valueToName.put(codecAlgorithmDropdown.getName(), codecAlgorithmDropdown.getValue());
 		}
 		return valueToName;

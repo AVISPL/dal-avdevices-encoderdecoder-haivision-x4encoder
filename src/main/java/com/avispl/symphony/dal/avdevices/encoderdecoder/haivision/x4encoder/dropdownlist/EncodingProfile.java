@@ -88,7 +88,7 @@ public enum EncodingProfile {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (EncodingProfile encodingProfileDropdown : EncodingProfile.values()) {
+		for (EncodingProfile encodingProfileDropdown : values()) {
 			nameToValue.put(encodingProfileDropdown.getValue(), encodingProfileDropdown.getName());
 		}
 		return nameToValue;
@@ -101,7 +101,7 @@ public enum EncodingProfile {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (EncodingProfile encodingProfileDropdown : EncodingProfile.values()) {
+		for (EncodingProfile encodingProfileDropdown : values()) {
 			valueToName.put(encodingProfileDropdown.getName(), encodingProfileDropdown.getValue());
 		}
 		return valueToName;
@@ -114,7 +114,7 @@ public enum EncodingProfile {
 	 */
 	public static String[] namesIsAVG() {
 		List<String> list = new LinkedList<>();
-		for (EncodingProfile encodingProfile : EncodingProfile.values()) {
+		for (EncodingProfile encodingProfile : values()) {
 			if (encodingProfile.isAVG()) {
 				list.add(encodingProfile.getName());
 			}
@@ -129,7 +129,7 @@ public enum EncodingProfile {
 	 */
 	public static String[] namesIsHEVC() {
 		List<String> list = new LinkedList<>();
-		for (EncodingProfile encodingProfile : EncodingProfile.values()) {
+		for (EncodingProfile encodingProfile : values()) {
 			if (encodingProfile.isHEVC()) {
 				list.add(encodingProfile.getName());
 			}
