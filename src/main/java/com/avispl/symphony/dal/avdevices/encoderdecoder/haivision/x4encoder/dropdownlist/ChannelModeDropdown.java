@@ -59,7 +59,7 @@ public enum ChannelModeDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (ChannelModeDropdown channelModeDropdown : ChannelModeDropdown.values()) {
+		for (ChannelModeDropdown channelModeDropdown : values()) {
 			nameToValue.put(channelModeDropdown.getValue(), channelModeDropdown.getName());
 		}
 		return nameToValue;
@@ -72,7 +72,7 @@ public enum ChannelModeDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (ChannelModeDropdown channelModeDropdown : ChannelModeDropdown.values()) {
+		for (ChannelModeDropdown channelModeDropdown : values()) {
 			valueToName.put(channelModeDropdown.getName(), channelModeDropdown.getValue());
 		}
 		return valueToName;

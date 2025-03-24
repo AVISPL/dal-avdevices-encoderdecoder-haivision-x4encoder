@@ -64,7 +64,7 @@ public enum AspectRatioDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (AspectRatioDropdown aspectRatioDropdown : AspectRatioDropdown.values()) {
+		for (AspectRatioDropdown aspectRatioDropdown : values()) {
 			nameToValue.put(aspectRatioDropdown.getValue(), aspectRatioDropdown.getName());
 		}
 		return nameToValue;
@@ -77,7 +77,7 @@ public enum AspectRatioDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (AspectRatioDropdown aspectRatioDropdown : AspectRatioDropdown.values()) {
+		for (AspectRatioDropdown aspectRatioDropdown : values()) {
 			valueToName.put(aspectRatioDropdown.getName(), aspectRatioDropdown.getValue());
 		}
 		return valueToName;

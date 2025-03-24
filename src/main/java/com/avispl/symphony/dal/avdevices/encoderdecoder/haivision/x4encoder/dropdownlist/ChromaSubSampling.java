@@ -84,7 +84,7 @@ public enum ChromaSubSampling {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (ChromaSubSampling chromaSubSamplingDropdown : ChromaSubSampling.values()) {
+		for (ChromaSubSampling chromaSubSamplingDropdown : values()) {
 			nameToValue.put(chromaSubSamplingDropdown.getValue(), chromaSubSamplingDropdown.getName());
 		}
 		return nameToValue;
@@ -97,7 +97,7 @@ public enum ChromaSubSampling {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (ChromaSubSampling chromaSubSamplingDropdown : ChromaSubSampling.values()) {
+		for (ChromaSubSampling chromaSubSamplingDropdown : values()) {
 			valueToName.put(chromaSubSamplingDropdown.getName(), chromaSubSamplingDropdown.getValue());
 		}
 		return valueToName;
@@ -110,7 +110,7 @@ public enum ChromaSubSampling {
 	 */
 	public static String[] namesIsMain10OrHigh10() {
 		List<String> list = new LinkedList<>();
-		for (ChromaSubSampling chromaSubSampling : ChromaSubSampling.values()) {
+		for (ChromaSubSampling chromaSubSampling : values()) {
 			if (chromaSubSampling.isMain10OrHigh10()) {
 				list.add(chromaSubSampling.getName());
 			}
@@ -125,7 +125,7 @@ public enum ChromaSubSampling {
 	 */
 	public static String[] namesIsBaselineOrMainOrHigh() {
 		List<String> list = new LinkedList<>();
-		for (ChromaSubSampling chromaSubSampling : ChromaSubSampling.values()) {
+		for (ChromaSubSampling chromaSubSampling : values()) {
 			if (chromaSubSampling.isBaselineOrMainOrHigh()) {
 				list.add(chromaSubSampling.getName());
 			}

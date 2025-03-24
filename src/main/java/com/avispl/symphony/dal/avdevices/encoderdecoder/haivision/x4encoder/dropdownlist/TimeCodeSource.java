@@ -58,7 +58,7 @@ public enum TimeCodeSource {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+		for (TimeCodeSource timeCodeSource : values()) {
 			nameToValue.put(timeCodeSource.getValue(), timeCodeSource.getName());
 		}
 		return nameToValue;
@@ -72,7 +72,7 @@ public enum TimeCodeSource {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (TimeCodeSource timeCodeSource : TimeCodeSource.values()) {
+		for (TimeCodeSource timeCodeSource : values()) {
 			valueToName.put(timeCodeSource.getName(), timeCodeSource.getValue());
 		}
 		return valueToName;

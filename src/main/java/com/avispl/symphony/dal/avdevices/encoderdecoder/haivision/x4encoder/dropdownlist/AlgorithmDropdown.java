@@ -58,7 +58,7 @@ public enum AlgorithmDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (AlgorithmDropdown algorithmDropdown : AlgorithmDropdown.values()) {
+		for (AlgorithmDropdown algorithmDropdown : values()) {
 			nameToValue.put(algorithmDropdown.getValue(), algorithmDropdown.getName());
 		}
 		return nameToValue;
@@ -71,7 +71,7 @@ public enum AlgorithmDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (AlgorithmDropdown algorithmDropdown : AlgorithmDropdown.values()) {
+		for (AlgorithmDropdown algorithmDropdown : values()) {
 			valueToName.put(algorithmDropdown.getName(), algorithmDropdown.getValue());
 		}
 		return valueToName;

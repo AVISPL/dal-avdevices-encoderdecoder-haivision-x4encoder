@@ -58,7 +58,7 @@ public enum SRTModeDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (SRTModeDropdown srtModeDropdown : SRTModeDropdown.values()) {
+		for (SRTModeDropdown srtModeDropdown : values()) {
 			nameToValue.put(srtModeDropdown.getValue(), srtModeDropdown.getName());
 		}
 		return nameToValue;
@@ -71,7 +71,7 @@ public enum SRTModeDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (SRTModeDropdown srtModeDropdown : SRTModeDropdown.values()) {
+		for (SRTModeDropdown srtModeDropdown : values()) {
 			valueToName.put(srtModeDropdown.getName(), srtModeDropdown.getValue());
 		}
 		return valueToName;

@@ -113,7 +113,7 @@ public enum LanguageDropdown {
 	 */
 	public static Map<String, String> getNameToValueMap() {
 		Map<String, String> nameToValue = new HashMap<>();
-		for (LanguageDropdown languageDropdown : LanguageDropdown.values()) {
+		for (LanguageDropdown languageDropdown : values()) {
 			nameToValue.put(languageDropdown.getValue(), languageDropdown.getName());
 		}
 		return nameToValue;
@@ -126,7 +126,7 @@ public enum LanguageDropdown {
 	 */
 	public static Map<String, String> getValueToNameMap() {
 		Map<String, String> valueToName = new HashMap<>();
-		for (LanguageDropdown languageDropdown : LanguageDropdown.values()) {
+		for (LanguageDropdown languageDropdown : values()) {
 			valueToName.put(languageDropdown.getName(), languageDropdown.getValue());
 		}
 		return valueToName;

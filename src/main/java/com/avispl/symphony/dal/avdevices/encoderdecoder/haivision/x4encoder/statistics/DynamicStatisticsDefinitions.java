@@ -43,7 +43,7 @@ public enum DynamicStatisticsDefinitions {
      * @return true if definition exists, false otherwise
      * */
     public static boolean checkIfExists(String name) {
-        Optional<DynamicStatisticsDefinitions> dynamicStatisticsProperty = Arrays.stream(DynamicStatisticsDefinitions.values()).filter(c -> name.endsWith(c.getName())).findFirst();
+        Optional<DynamicStatisticsDefinitions> dynamicStatisticsProperty = Arrays.stream(values()).filter(c -> name.endsWith(c.getName())).findFirst();
         if (dynamicStatisticsProperty.isPresent()) {
             return true;
         }

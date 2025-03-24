@@ -70,7 +70,7 @@ public enum ProtocolDropdown {
      */
     public static Map<Integer, String> getNameToValueMap() {
         Map<Integer, String> nameToValue = new HashMap<>();
-        for (ProtocolDropdown protocolDropdown : ProtocolDropdown.values()) {
+        for (ProtocolDropdown protocolDropdown : values()) {
             nameToValue.put(protocolDropdown.getValue(), protocolDropdown.getName());
         }
         return nameToValue;
@@ -83,7 +83,7 @@ public enum ProtocolDropdown {
      */
     public static Map<String, Integer> getValueToNameMap() {
         Map<String, Integer> valueToName = new HashMap<>();
-        for (ProtocolDropdown protocolDropdown : ProtocolDropdown.values()) {
+        for (ProtocolDropdown protocolDropdown : values()) {
             valueToName.put(protocolDropdown.getName(), protocolDropdown.getValue());
         }
         return valueToName;

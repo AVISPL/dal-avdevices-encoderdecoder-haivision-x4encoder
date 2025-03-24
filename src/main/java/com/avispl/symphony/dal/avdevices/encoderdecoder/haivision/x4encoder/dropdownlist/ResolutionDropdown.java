@@ -98,7 +98,7 @@ public enum ResolutionDropdown {
 	 */
 	public static Map<String, String> getNameToValueMap() {
 		Map<String, String> nameToValue = new HashMap<>();
-		for (ResolutionDropdown resolutionDropdown : ResolutionDropdown.values()) {
+		for (ResolutionDropdown resolutionDropdown : values()) {
 			nameToValue.put(resolutionDropdown.getValue(), resolutionDropdown.getName());
 		}
 		return nameToValue;
@@ -111,7 +111,7 @@ public enum ResolutionDropdown {
 	 */
 	public static Map<String, String> getValueToNameMap() {
 		Map<String, String> valueToName = new HashMap<>();
-		for (ResolutionDropdown resolutionDropdown : ResolutionDropdown.values()) {
+		for (ResolutionDropdown resolutionDropdown : values()) {
 			valueToName.put(resolutionDropdown.getName(), resolutionDropdown.getValue());
 		}
 		return valueToName;
@@ -124,7 +124,7 @@ public enum ResolutionDropdown {
 	 */
 	public static List<String> getDropdownListNotCropping() {
 		List<String> list = new LinkedList<>();
-		for (ResolutionDropdown resolutionDropdown : ResolutionDropdown.values()) {
+		for (ResolutionDropdown resolutionDropdown : values()) {
 			if (!resolutionDropdown.isCropping()) {
 				list.add(resolutionDropdown.getName());
 			}
@@ -140,7 +140,7 @@ public enum ResolutionDropdown {
 	 */
 	public static boolean checkIsCropping(String name) {
 		boolean isCropping = false;
-		for (ResolutionDropdown resolution : ResolutionDropdown.values()) {
+		for (ResolutionDropdown resolution : values()) {
 			if (resolution.getName().equals(name)) {
 				isCropping = resolution.isCropping();
 				break;

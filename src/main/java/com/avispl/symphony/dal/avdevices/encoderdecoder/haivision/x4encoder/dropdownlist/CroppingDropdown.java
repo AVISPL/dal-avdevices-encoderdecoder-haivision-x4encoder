@@ -57,7 +57,7 @@ public enum CroppingDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (CroppingDropdown cropping : CroppingDropdown.values()) {
+		for (CroppingDropdown cropping : values()) {
 			nameToValue.put(cropping.getValue(), cropping.getName());
 		}
 		return nameToValue;
@@ -70,7 +70,7 @@ public enum CroppingDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (CroppingDropdown cropping : CroppingDropdown.values()) {
+		for (CroppingDropdown cropping : values()) {
 			valueToName.put(cropping.getName(), cropping.getValue());
 		}
 		return valueToName;

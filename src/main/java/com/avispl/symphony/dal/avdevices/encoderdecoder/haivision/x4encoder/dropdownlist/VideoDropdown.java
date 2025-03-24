@@ -73,7 +73,7 @@ public enum VideoDropdown {
      */
     public static String getDefault() {
         String defaultValue = "";
-        for (VideoDropdown videoDropdown : VideoDropdown.values()) {
+        for (VideoDropdown videoDropdown : values()) {
             if (videoDropdown != NONE) {
                 defaultValue = videoDropdown.getName();
                 break;
