@@ -23,7 +23,7 @@ jobs:
       - id: date
         run: echo "date=$(date +'%y%m%d' | cut -c 2-)" >> $GITHUB_OUTPUT
       - id: shortrev
-        run: echo "date=$(date +'%y%m%d' | cut -c 2-)" >> $GITHUB_OUTPUT
+        run: echo "rev=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - id: pversion
         run: echo "ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout| sed -e 's/-SNAPSHOT//g')" >> $GITHUB_OUTPUT
   versiongenerate:
