@@ -386,6 +386,8 @@ public class HaivisionX4EncoderCommunicator extends RestCommunicator implements 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.getProtocol()).append(HaivisionConstant.COLON_SLASH);
 		stringBuilder.append(getHost());
+		stringBuilder.append(HaivisionConstant.COLON);
+		stringBuilder.append(getPort());
 		stringBuilder.append(HaivisionStatisticsUtil.getMonitorURL(HaivisionURL.AUTHENTICATION));
 
 		return stringBuilder.toString();
