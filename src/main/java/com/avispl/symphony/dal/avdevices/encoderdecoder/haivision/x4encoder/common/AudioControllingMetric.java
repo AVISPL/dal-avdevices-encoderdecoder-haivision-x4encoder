@@ -50,7 +50,7 @@ public enum AudioControllingMetric {
 	 * @throws Exception if can not find the enum with name
 	 */
 	public static AudioControllingMetric getByName(String name) {
-		for (AudioControllingMetric metric : AudioControllingMetric.values()) {
+		for (AudioControllingMetric metric : values()) {
 			if (metric.getName().equals(name)) {
 				return metric;
 			}

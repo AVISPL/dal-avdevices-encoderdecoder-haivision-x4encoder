@@ -78,7 +78,7 @@ public enum ReSyncHourDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (ReSyncHourDropdown resyncHourDropdown : ReSyncHourDropdown.values()) {
+		for (ReSyncHourDropdown resyncHourDropdown : values()) {
 			nameToValue.put(resyncHourDropdown.getValue(), resyncHourDropdown.getName());
 		}
 		return nameToValue;
@@ -91,7 +91,7 @@ public enum ReSyncHourDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (ReSyncHourDropdown resyncHourDropdown : ReSyncHourDropdown.values()) {
+		for (ReSyncHourDropdown resyncHourDropdown : values()) {
 			valueToName.put(resyncHourDropdown.getName(), resyncHourDropdown.getValue());
 		}
 		return valueToName;

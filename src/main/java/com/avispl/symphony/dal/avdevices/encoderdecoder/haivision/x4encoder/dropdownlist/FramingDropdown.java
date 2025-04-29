@@ -61,7 +61,7 @@ public enum FramingDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+		for (FramingDropdown framingDropdown : values()) {
 			nameToValue.put(framingDropdown.getValue(), framingDropdown.getName());
 		}
 		return nameToValue;
@@ -75,7 +75,7 @@ public enum FramingDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (FramingDropdown framingDropdown : FramingDropdown.values()) {
+		for (FramingDropdown framingDropdown : values()) {
 			valueToName.put(framingDropdown.getName(), framingDropdown.getValue());
 		}
 		return valueToName;

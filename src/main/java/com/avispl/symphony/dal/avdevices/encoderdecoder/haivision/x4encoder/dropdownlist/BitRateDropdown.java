@@ -103,7 +103,7 @@ public enum BitRateDropdown {
 	 */
 	public static String[] namesIsStereo() {
 		List<String> list = new LinkedList<>();
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.isStereo()) {
 				list.add(bitRateDropdown.getName());
 			}
@@ -118,7 +118,7 @@ public enum BitRateDropdown {
 	 */
 	public static String[] namesIsMono() {
 		List<String> list = new LinkedList<>();
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.isMono()) {
 				list.add(bitRateDropdown.getName());
 			}
@@ -133,7 +133,7 @@ public enum BitRateDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			nameToValue.put(bitRateDropdown.getValue(), bitRateDropdown.getName());
 		}
 		return nameToValue;
@@ -146,7 +146,7 @@ public enum BitRateDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			valueToName.put(bitRateDropdown.getName(), bitRateDropdown.getValue());
 		}
 		return valueToName;
@@ -158,7 +158,7 @@ public enum BitRateDropdown {
 	 * @param value value of BitRate
 	 */
 	public static boolean checkIsStereoByValue(int value) {
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.getValue() == value && bitRateDropdown.isStereo()) {
 				return true;
 			}
@@ -172,7 +172,7 @@ public enum BitRateDropdown {
 	 * @param value value of BitRate
 	 */
 	public static boolean checkIsMonoByValue(int value) {
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.getValue() == value && bitRateDropdown.isMono()) {
 				return true;
 			}
@@ -187,7 +187,7 @@ public enum BitRateDropdown {
 	 */
 	public static int getDefaultValueOfMono() {
 		int defaultValue = 0;
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.isMono()) {
 				defaultValue = bitRateDropdown.value;
 				break;
@@ -203,7 +203,7 @@ public enum BitRateDropdown {
 	 */
 	public static int getDefaultValueOfStereo() {
 		int defaultValue = 0;
-		for (BitRateDropdown bitRateDropdown : BitRateDropdown.values()) {
+		for (BitRateDropdown bitRateDropdown : values()) {
 			if (bitRateDropdown.isStereo()) {
 				defaultValue = bitRateDropdown.value;
 				break;
@@ -220,7 +220,7 @@ public enum BitRateDropdown {
 	 */
 	public static String getNameFromValue(int value) {
 		String name = "";
-		for (BitRateDropdown bitrate : BitRateDropdown.values()) {
+		for (BitRateDropdown bitrate : values()) {
 			if (bitrate.getValue() == value) {
 				name = bitrate.getName();
 				break;

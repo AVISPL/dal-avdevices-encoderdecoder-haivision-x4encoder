@@ -58,7 +58,7 @@ public enum EncryptionDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (EncryptionDropdown encryptionDropdown : EncryptionDropdown.values()) {
+		for (EncryptionDropdown encryptionDropdown : values()) {
 			nameToValue.put(encryptionDropdown.getValue(), encryptionDropdown.getName());
 		}
 		return nameToValue;
@@ -72,7 +72,7 @@ public enum EncryptionDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (EncryptionDropdown encryptionDropdown : EncryptionDropdown.values()) {
+		for (EncryptionDropdown encryptionDropdown : values()) {
 			valueToName.put(encryptionDropdown.getName(), encryptionDropdown.getValue());
 		}
 		return valueToName;

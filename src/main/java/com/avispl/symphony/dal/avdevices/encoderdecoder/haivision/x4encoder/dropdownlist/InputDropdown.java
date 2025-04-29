@@ -91,7 +91,7 @@ public enum InputDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (InputDropdown inputDropdown : InputDropdown.values()) {
+		for (InputDropdown inputDropdown : values()) {
 			nameToValue.put(inputDropdown.getValue(), inputDropdown.getName());
 		}
 		return nameToValue;
@@ -104,7 +104,7 @@ public enum InputDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (InputDropdown inputDropdown : InputDropdown.values()) {
+		for (InputDropdown inputDropdown : values()) {
 			valueToName.put(inputDropdown.getName(), inputDropdown.getValue());
 		}
 		return valueToName;

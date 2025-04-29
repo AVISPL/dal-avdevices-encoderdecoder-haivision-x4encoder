@@ -59,7 +59,7 @@ public enum AudioStateDropdown {
 	 */
 	public static Map<Integer, String> getNameToValueMap() {
 		Map<Integer, String> nameToValue = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
+		for (AudioStateDropdown stateDropdown : values()) {
 			nameToValue.put(stateDropdown.getValue(), stateDropdown.getName());
 		}
 		return nameToValue;
@@ -72,7 +72,7 @@ public enum AudioStateDropdown {
 	 */
 	public static Map<String, Integer> getValueToNameMap() {
 		Map<String, Integer> valueToName = new HashMap<>();
-		for (AudioStateDropdown stateDropdown : AudioStateDropdown.values()) {
+		for (AudioStateDropdown stateDropdown : values()) {
 			valueToName.put(stateDropdown.getName(), stateDropdown.getValue());
 		}
 		return valueToName;

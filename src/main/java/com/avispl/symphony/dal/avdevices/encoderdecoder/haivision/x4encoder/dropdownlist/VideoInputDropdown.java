@@ -59,7 +59,7 @@ public enum VideoInputDropdown {
      */
     public static Map<Integer, String> getNameToValueMap() {
         Map<Integer, String> nameToValue = new HashMap<>();
-        for (VideoInputDropdown videoInputDropdown : VideoInputDropdown.values()) {
+        for (VideoInputDropdown videoInputDropdown : values()) {
             nameToValue.put(videoInputDropdown.getValue(), videoInputDropdown.getName());
         }
         return nameToValue;
@@ -72,7 +72,7 @@ public enum VideoInputDropdown {
      */
     public static Map<String, Integer> getValueToNameMap() {
         Map<String, Integer> valueToName = new HashMap<>();
-        for (VideoInputDropdown videoInputDropdown : VideoInputDropdown.values()) {
+        for (VideoInputDropdown videoInputDropdown : values()) {
             valueToName.put(videoInputDropdown.getName(), videoInputDropdown.getValue());
         }
         return valueToName;
